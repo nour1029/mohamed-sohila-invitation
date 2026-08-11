@@ -242,13 +242,58 @@ function lockScroll(locked) {
   document.body.classList.toggle('is-gated', locked);
 }
 
-/* ---------- 6 · Boot --------------------------------------- */
+/* ---------- 6 · Scroll reveals (Phase 4) -------------------
+   Fades elements up as they arrive, once each. Anything marked
+   `data-reveal` moves on its own; `data-reveal-stagger` cascades
+   its children.
+   ----------------------------------------------------------- */
+
+function initReveals() {
+  const targets = document.querySelectorAll('[data-reveal], [data-reveal-stagger]');
+  if (!targets.length) return;
+
+  const revealNow = (el) => el.classList.add('is-revealed');
+
+  // No observer, or the guest asked for stillness: show everything outright.
+  if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+    targets.forEach(revealNow);
+    return;
+  }
+
+  // Number the children so CSS can space their delays out.
+  document.querySelectorAll('[data-reveal-stagger]').forEach((group) => {
+    [...group.children].forEach((child, i) => {
+      child.style.setProperty('--reveal-i', i);
+    });
+  });
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      revealNow(entry.target);
+      obs.unobserve(entry.target);      // fires once; scrolling back up is calm
+    });
+  }, {
+    threshold: 0.12,
+    // The huge top margin counts anything already scrolled past as arrived.
+    // Without it, a guest who jumps down the page — a deep link, a fast
+    // fling, a find-in-page — leaves every skipped section stranded at
+    // opacity 0 permanently, because it never intersects on the way back.
+    // The bottom margin holds a reveal off until the element is properly
+    // in, rather than the instant its first pixel crosses the fold.
+    rootMargin: '9999px 0px -8% 0px',
+  });
+
+  targets.forEach((el) => observer.observe(el));
+}
+
+/* ---------- 7 · Boot --------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
   initGate();
+  initReveals();
 
-  // Phase 4  · scroll reveals
   // Phase 6  · countdown tick
   // Phase 7  · schedule from WEDDING.schedule
   // Phase 10 · RSVP modal + submit

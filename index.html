@@ -18,6 +18,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Ovo&family=Pinyon+Script&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
+
+<!-- Marks that scripting is available, before first paint. The reveal styles
+     hang off this, so a failed script leaves content visible rather than
+     stranding the whole invitation at opacity 0. -->
+<script>document.documentElement.classList.add('js');</script>
 </head>
 
 <body>
@@ -56,44 +61,73 @@
 <main id="invitation">
 
 
-  <!-- 2 · Hero — Phase 3 -->
-  <section id="hero" class="band band--full" data-phase="Phase 3">
-    <h2 class="band__label">Hero — names, columns, swans</h2>
+  <!-- 2 · Hero — Phase 3. tabindex allows the gate to land focus here. -->
+  <section id="hero" class="hero" tabindex="-1">
+
+    <!-- TODO Phase 14: swap in the lake / swans background -->
+    <div class="hero__scene slot" aria-hidden="true">Lake &amp; swans<br>background</div>
+
+    <!-- TODO Phase 14: swap in stone column + rose garland art -->
+    <div class="hero__column hero__column--start slot" aria-hidden="true">Column</div>
+    <div class="hero__column hero__column--end slot" aria-hidden="true">Column</div>
+
+    <div class="hero__inner">
+      <p class="hero__eyebrow caps" data-reveal>Wedding Day</p>
+      <p class="hero__date display" data-reveal>
+        <time data-wedding="date"></time>
+      </p>
+
+      <h1 class="heading heading--names hero__names" data-reveal>
+        <span data-wedding="couple.one"></span>
+        <span class="amp" aria-hidden="true">&amp;</span>
+        <span data-wedding="couple.two"></span>
+      </h1>
+    </div>
+
+    <!-- TODO Phase 14: swap in watercolour floral clusters -->
+    <div class="hero__corner hero__corner--start slot" aria-hidden="true">Floral</div>
+    <div class="hero__corner hero__corner--end slot" aria-hidden="true">Floral</div>
+
+    <p class="hero__cue cue cue--down" aria-hidden="true">
+      <span class="cue__chevron"></span>
+      <span class="cue__label script">Scroll down</span>
+    </p>
+
   </section>
 
   <!-- 3 · Bismillah / invitation — Phase 5 -->
   <section id="invitation-card" class="band" data-phase="Phase 5">
-    <h2 class="band__label">Bismillah &amp; invitation</h2>
+    <h2 class="band__label" data-reveal>Bismillah &amp; invitation</h2>
   </section>
 
   <!-- 4 · Countdown — Phase 6 -->
   <section id="countdown" class="band" data-phase="Phase 6">
-    <h2 class="band__label">Countdown</h2>
+    <h2 class="band__label" data-reveal>Countdown</h2>
   </section>
 
   <!-- 5 · Schedule — Phase 7 -->
   <section id="schedule" class="band" data-phase="Phase 7">
-    <h2 class="band__label">Schedule of events</h2>
+    <h2 class="band__label" data-reveal>Schedule of events</h2>
   </section>
 
   <!-- 6 · Venue + map — Phase 8 -->
   <section id="venue" class="band" data-phase="Phase 8">
-    <h2 class="band__label">Location &amp; map</h2>
+    <h2 class="band__label" data-reveal>Location &amp; map</h2>
   </section>
 
   <!-- 7 · Dress code & gift — Phase 9 -->
   <section id="details" class="band" data-phase="Phase 9">
-    <h2 class="band__label">Dress code &amp; gift</h2>
+    <h2 class="band__label" data-reveal>Dress code &amp; gift</h2>
   </section>
 
   <!-- 8 · RSVP — Phase 10 -->
   <section id="rsvp" class="band" data-phase="Phase 10">
-    <h2 class="band__label">RSVP</h2>
+    <h2 class="band__label" data-reveal>RSVP</h2>
   </section>
 
   <!-- 9 · Closing — Phase 12 -->
   <section id="closing" class="band" data-phase="Phase 12">
-    <h2 class="band__label">Closing</h2>
+    <h2 class="band__label" data-reveal>Closing</h2>
   </section>
 
 </main>

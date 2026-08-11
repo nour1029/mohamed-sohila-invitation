@@ -83,12 +83,12 @@ The first thing every guest sees. Worth over-investing in.
 
 ### Phase 3 · Hero `M`
 
-- [ ] Names in giant gold script, `&` between
-- [ ] Stone column + rose garland frame — placeholder slots left/right
-- [ ] Swan/lake background slot
-- [ ] Corner floral cluster slots
-- [ ] `Wedding Day` + date at top, `Scroll down` + chevron at bottom
-- [ ] Holds up from 320px to desktop
+- [x] Names in giant gold script, `&` between
+- [x] Stone column + rose garland frame — placeholder slots left/right
+- [x] Swan/lake background slot
+- [x] Corner floral cluster slots
+- [x] `Wedding Day` + date at top, `Scroll down` + chevron at bottom
+- [x] Holds up from 320px to desktop
 
 ---
 
@@ -96,10 +96,12 @@ The first thing every guest sees. Worth over-investing in.
 
 Built once, applies to every section after it.
 
-- [ ] `IntersectionObserver`, fade-up ~0.7s ease-out
-- [ ] `data-reveal-stagger` for element-by-element cascade within a section
-- [ ] Fires once, doesn't re-trigger on scroll-up
-- [ ] `prefers-reduced-motion` → everything simply visible
+- [x] `IntersectionObserver`, fade-up ~0.7s ease-out
+- [x] `data-reveal-stagger` for element-by-element cascade within a section
+- [x] Fires once, doesn't re-trigger on scroll-up
+- [x] `prefers-reduced-motion` → everything simply visible
+- [x] Anything scrolled past counts as arrived, so a jump down the page
+      cannot strand a section invisible
 
 ---
 

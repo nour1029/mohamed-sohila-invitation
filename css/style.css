@@ -681,7 +681,140 @@ body.is-gated {
   .gate.is-open { transform: none; }
 }
 
-/* ---------- 7 · Scaffold bands (Phase 0 only) -------------
+/* ============================================================
+   7 · Hero (Phase 3)
+   ============================================================ */
+
+.hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: var(--space-6) var(--gutter) var(--space-5);
+  overflow: hidden;
+}
+
+.hero:focus { outline: none; }   /* focus lands here from the gate, silently */
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--col);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .hero__inner { max-width: var(--col-wide); }
+}
+
+.hero__eyebrow { display: block; margin-bottom: var(--space-1); }
+
+.hero__date {
+  font-size: var(--t-display-md);
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: var(--ink);
+  margin-bottom: var(--space-4);
+}
+
+.hero__names { margin-bottom: var(--space-2); }
+
+/* ---------- 7.1 · Placeholder art ------------------------- */
+
+/* The lake and swans sit behind everything, faded so the names stay legible
+   once a real photograph lands here. */
+.hero__scene {
+  position: absolute;
+  inset: 12% 0 22%;
+  z-index: 0;
+  opacity: 0.5;
+  /* Placeholder caption to the top, out from behind the names. */
+  place-items: start center;
+  padding-top: var(--space-2);
+}
+
+.hero__column {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: clamp(38px, 12vw, 84px);
+  height: min(52vh, 400px);
+  translate: 0 -50%;
+}
+
+.hero__column--start { left: 0; }
+.hero__column--end   { right: 0; }
+
+/* Columns crowd the names on the narrowest phones — the names win. */
+@media (max-width: 400px) {
+  .hero__column { display: none; }
+}
+
+.hero__corner {
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  width: clamp(110px, 34vw, 220px);
+  height: clamp(90px, 26vw, 190px);
+}
+
+.hero__corner--start { left: 0; }
+.hero__corner--end   { right: 0; }
+
+.hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-3);
+  z-index: 2;
+  translate: -50% 0;
+}
+
+.hero__cue .cue__label { font-size: var(--t-script-md); }
+
+/* ============================================================
+   8 · Scroll reveals (Phase 4)
+
+   Built once, used by every section after it. Mark an element
+   `data-reveal`, or a container `data-reveal-stagger` to cascade
+   its children one after another.
+   ============================================================ */
+
+/* Everything here hangs off `.js`, set by an inline script in <head>.
+   Keyed the other way round, a script that fails to load would leave the
+   whole invitation invisible — the content must never depend on it. */
+
+.js [data-reveal],
+.js [data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity   var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+}
+
+.js [data-reveal].is-revealed,
+.js [data-reveal-stagger].is-revealed > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* --reveal-i is set per child by the observer. */
+.js [data-reveal-stagger] > * {
+  transition-delay: calc(var(--reveal-i, 0) * var(--stagger));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal],
+  .js [data-reveal-stagger] > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- 9 · Scaffold bands (Phase 0 only) -------------
    Placeholder styling so the skeleton is legible and scrollable.
    Every rule in this block gets deleted as its phase lands.
    ---------------------------------------------------------- */
@@ -724,7 +857,7 @@ body.is-gated {
   color: var(--ink-soft);
 }
 
-/* ---------- 8 · Motion preferences ------------------------ */
+/* ---------- 10 · Motion preferences ----------------------- */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
