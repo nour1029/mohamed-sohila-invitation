@@ -287,15 +287,93 @@ function initReveals() {
   targets.forEach((el) => observer.observe(el));
 }
 
-/* ---------- 7 · Boot --------------------------------------- */
+/* ---------- 7 · Countdown (Phase 6) ------------------------
+   Counts down to WEDDING_DATE — the same value the hero prints,
+   so the two can never disagree the way the reference's did.
+   ----------------------------------------------------------- */
+
+const MS = { second: 1000, minute: 60000, hour: 3600000, day: 86400000 };
+
+function initCountdown() {
+  const clock = document.getElementById('countdown-clock');
+  const after = document.getElementById('countdown-after');
+  if (!clock) return;
+
+  const fields = {};
+  clock.querySelectorAll('[data-count]').forEach((el) => {
+    fields[el.dataset.count] = el;
+  });
+
+  let timer = null;
+
+  const tick = () => {
+    const remaining = WEDDING_DATE.getTime() - Date.now();
+
+    if (remaining <= 0) {
+      // The celebration is under way or done. Say something warm rather
+      // than showing a clock stuck on zero.
+      const sinceStart = -remaining;
+      after.textContent = sinceStart < MS.day
+        ? "Today's the day"
+        : 'Thank you for celebrating with us';
+      after.hidden = false;
+      clock.hidden = true;
+      if (timer) clearInterval(timer);
+      return;
+    }
+
+    const pad = (n) => String(n).padStart(2, '0');
+    fields.days.textContent    = Math.floor(remaining / MS.day);
+    fields.hours.textContent   = pad(Math.floor(remaining / MS.hour)   % 24);
+    fields.minutes.textContent = pad(Math.floor(remaining / MS.minute) % 60);
+    fields.seconds.textContent = pad(Math.floor(remaining / MS.second) % 60);
+  };
+
+  tick();
+  timer = window.setInterval(tick, MS.second);
+}
+
+/* ---------- 8 · Schedule (Phase 7) ------------------------- */
+
+function initSchedule() {
+  const list = document.getElementById('schedule-list');
+  if (!list) return;
+
+  const stops = WEDDING.schedule.map(({ time, event }) => {
+    const li = document.createElement('li');
+    li.className = 'timeline__stop';
+
+    const t = document.createElement('span');
+    t.className = 'timeline__time';
+    t.textContent = time;
+
+    const node = document.createElement('span');
+    node.className = 'timeline__node';
+    node.setAttribute('aria-hidden', 'true');
+
+    const e = document.createElement('span');
+    e.className = 'timeline__event';
+    e.textContent = event;
+
+    li.append(t, node, e);
+    return li;
+  });
+
+  list.replaceChildren(...stops);
+}
+
+/* ---------- 9 · Boot --------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
   initGate();
+
+  // Schedule stops must exist before the observer numbers them for stagger.
+  initSchedule();
+  initCountdown();
+
   initReveals();
 
-  // Phase 6  · countdown tick
-  // Phase 7  · schedule from WEDDING.schedule
   // Phase 10 · RSVP modal + submit
   // Phase 11 · music player
 });

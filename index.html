@@ -15,7 +15,9 @@
   Script font: Pinyon Script is the working default. All four candidates render
   side by side in _fonts.html — swap the pick here and in --font-script.
 -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Ovo&family=Pinyon+Script&display=swap" rel="stylesheet">
+<!-- Amiri is a proper Naskh face — the Bismillah must not fall back to a
+     system font that mangles its diacritics. -->
+<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cinzel:wght@400;500;600&family=Ovo&family=Pinyon+Script&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -96,18 +98,74 @@
   </section>
 
   <!-- 3 · Bismillah / invitation — Phase 5 -->
-  <section id="invitation-card" class="band" data-phase="Phase 5">
-    <h2 class="band__label" data-reveal>Bismillah &amp; invitation</h2>
+  <section id="invitation-card" class="section">
+    <div class="section__inner">
+      <article class="card invite" data-reveal-stagger>
+
+        <!-- TODO Phase 14: swap in trailing ivy + roses -->
+        <span class="invite__ivy invite__ivy--start slot" aria-hidden="true">Ivy</span>
+        <span class="invite__ivy invite__ivy--end slot" aria-hidden="true">Ivy</span>
+
+        <p class="bismillah" lang="ar" dir="rtl">بِسْمِ ٱللّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</p>
+
+        <p class="invite__line script">Two Souls</p>
+        <p class="invite__line script">One destiny</p>
+        <p class="invite__line script">A Lifetime written by Allah</p>
+
+        <p class="invite__greeting">Dear Friends and Family</p>
+        <p class="invite__body">
+          Join us for an evening of love, laughter, duas, and unforgettable
+          memories as we begin our forever.
+        </p>
+
+      </article>
+    </div>
   </section>
 
-  <!-- 4 · Countdown — Phase 6 -->
-  <section id="countdown" class="band" data-phase="Phase 6">
-    <h2 class="band__label" data-reveal>Countdown</h2>
+  <!-- 4 · Countdown — Phase 6. Sits on the plain cream ground, no card. -->
+  <section id="countdown" class="section countdown">
+    <div class="section__inner">
+      <h2 class="heading" data-reveal><span>The Celebration Begins In</span></h2>
+
+      <div class="countdown__clock" id="countdown-clock" data-reveal>
+        <div class="count">
+          <span class="count__value" data-count="days">--</span>
+          <span class="count__label">Days</span>
+        </div>
+        <span class="count__sep" aria-hidden="true">:</span>
+        <div class="count">
+          <span class="count__value" data-count="hours">--</span>
+          <span class="count__label">Hours</span>
+        </div>
+        <span class="count__sep" aria-hidden="true">:</span>
+        <div class="count">
+          <span class="count__value" data-count="minutes">--</span>
+          <span class="count__label">Minutes</span>
+        </div>
+        <span class="count__sep" aria-hidden="true">:</span>
+        <div class="count">
+          <span class="count__value" data-count="seconds">--</span>
+          <span class="count__label">Seconds</span>
+        </div>
+      </div>
+
+      <!-- Shown once the date has passed; the clock is hidden then. -->
+      <p class="countdown__after script" id="countdown-after" hidden></p>
+    </div>
   </section>
 
   <!-- 5 · Schedule — Phase 7 -->
-  <section id="schedule" class="band" data-phase="Phase 7">
-    <h2 class="band__label" data-reveal>Schedule of events</h2>
+  <section id="schedule" class="section">
+    <div class="section__inner">
+      <article class="card">
+        <h2 class="heading heading--flourished" data-reveal>
+          <span>Schedule of Events</span>
+        </h2>
+
+        <!-- Stops are generated from WEDDING.schedule -->
+        <ol class="timeline" id="schedule-list" role="list" data-reveal-stagger></ol>
+      </article>
+    </div>
   </section>
 
   <!-- 6 · Venue + map — Phase 8 -->

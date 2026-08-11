@@ -111,21 +111,22 @@ With Parts A and B done, these go quickly — they're compositions of existing p
 **Largely independent of each other**, so order here is flexible.
 
 ### Phase 5 · Bismillah / invitation card `S`
-- [ ] Torn-paper card, ivy + roses in top corners
-- [ ] Arabic بِسْمِ ٱللّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ in gold, correct RTL rendering and font
-- [ ] Three script lines + the invitation paragraph
+- [x] Torn-paper card, ivy + roses in top corners
+- [x] Arabic بِسْمِ ٱللّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ in gold, correct RTL rendering and font (Amiri)
+- [x] Three script lines + the invitation paragraph
 
 ### Phase 6 · Countdown `S`
-- [ ] Live D:H:M:S from `WEDDING.date`, ticking every second
-- [ ] Cinzel numerals, `:` separators, small labels beneath
-- [ ] Graceful state for when the date has passed ("Today's the day" / post-wedding message)
-- [ ] No layout jitter as digits change (tabular figures)
+- [x] Live D:H:M:S from `WEDDING.date`, ticking every second
+- [x] Cinzel numerals, `:` separators, small labels beneath
+- [x] Graceful state for when the date has passed ("Today's the day" / post-wedding message)
+      — both branches verified against a shifted clock
+- [x] No layout jitter as digits change (tabular figures + fixed column width)
 
 ### Phase 7 · Schedule timeline `M`
-- [ ] Torn-paper card, script heading with filigree flourishes
-- [ ] Vertical gold rule, rose bud at top, diamond nodes per stop
-- [ ] Time left / event right, generated from the `WEDDING.schedule` array
-- [ ] Reveals stop-by-stop as you scroll
+- [x] Torn-paper card, script heading with filigree flourishes
+- [x] Vertical gold rule, rose bud at top, diamond nodes per stop
+- [x] Time left / event right, generated from the `WEDDING.schedule` array
+- [x] Reveals stop-by-stop as you scroll
 
 ### Phase 8 · Venue + map `M`
 - [ ] Venue name (Cinzel) + address
