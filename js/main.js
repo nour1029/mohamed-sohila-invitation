@@ -12,6 +12,12 @@
 
 /* ---------- 1 · Config -------------------------------------
    PLACEHOLDER CONTENT — replaced wholesale in Phase 13.
+
+   What lives here: anything the code reasons about, or anything
+   printed in more than one place — names, the date, the venue,
+   the schedule. What lives in index.html instead: one-off prose
+   (the invitation paragraph, the dress code, the gift note).
+   Keeping a sentence in both files is how it drifts.
    ----------------------------------------------------------- */
 
 const WEDDING = {
@@ -56,9 +62,6 @@ const WEDDING = {
     { time: '8 PM', event: 'Dinner'          },
     { time: '9 PM', event: 'Dance'           },
   ],
-
-  dressCode: 'We kindly ask guests to avoid deep red and maroon attire for the celebration.',
-  giftPreference: 'Kindly, no boxed gifts please.',
 
   // Phase 10 fills this in after the Apps Script is deployed.
   rsvpEndpoint: '',
@@ -132,9 +135,6 @@ const WEDDING_TEXT = {
   // Anchored at noon UTC so the date-only deadline lands on the intended
   // calendar day once re-expressed in the venue's timezone.
   'rsvp.deadline': fmt.monthDay(new Date(`${WEDDING.rsvpDeadline}T12:00:00Z`)),
-
-  'dressCode':      WEDDING.dressCode,
-  'giftPreference': WEDDING.giftPreference,
 };
 
 /* ---------- 3 · Binding ------------------------------------
@@ -362,7 +362,42 @@ function initSchedule() {
   list.replaceChildren(...stops);
 }
 
-/* ---------- 9 · Boot --------------------------------------- */
+/* ---------- 9 · Venue and map (Phase 8) --------------------
+   Coordinates live only in WEDDING.venue; both the embed and the
+   directions link are built from them here.
+   ----------------------------------------------------------- */
+
+function initVenue() {
+  const { lat, lng, name, addressLines } = WEDDING.venue;
+  const coords = `${lat},${lng}`;
+  const fullAddress = [name, ...addressLines].join(', ');
+
+  // Plain embed URL — no API key, no billing account to keep alive.
+  const map = document.getElementById('venue-map');
+  if (map) {
+    map.src = `https://maps.google.com/maps?q=${encodeURIComponent(coords)}&z=16&output=embed`;
+    map.title = `Map showing ${name}`;
+  }
+
+  const link = document.getElementById('venue-directions');
+  if (!link) return;
+
+  // Apple Maps is the native handler on iOS and iPadOS; sending those guests
+  // to a google.com URL bounces them through the browser or a store page.
+  // iPadOS reports itself as a Mac, so touch support disambiguates.
+  const ua = navigator.userAgent;
+  const isApple = /iPad|iPhone|iPod/.test(ua) ||
+                  (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+
+  link.href = isApple
+    ? `https://maps.apple.com/?q=${encodeURIComponent(fullAddress)}&ll=${coords}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coords)}`;
+
+  link.target = '_blank';
+  link.rel = 'noopener';
+}
+
+/* ---------- 10 · Boot -------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
@@ -371,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Schedule stops must exist before the observer numbers them for stagger.
   initSchedule();
   initCountdown();
+  initVenue();
 
   initReveals();
 

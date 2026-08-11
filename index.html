@@ -169,13 +169,60 @@
   </section>
 
   <!-- 6 · Venue + map — Phase 8 -->
-  <section id="venue" class="band" data-phase="Phase 8">
-    <h2 class="band__label" data-reveal>Location &amp; map</h2>
+  <section id="venue" class="section venue">
+    <div class="section__inner">
+      <h2 class="heading heading--flourished" data-reveal><span>Location</span></h2>
+
+      <!-- TODO Phase 14: swap in the gold line-art building illustration -->
+      <div class="venue__art slot" data-reveal aria-hidden="true">Venue line-art</div>
+
+      <p class="venue__name display" data-wedding="venue.name" data-reveal></p>
+      <p class="venue__address" data-wedding="venue.address" data-reveal></p>
+
+      <div class="frame venue__frame" data-reveal>
+        <div class="frame__inner">
+          <!-- src is set from WEDDING.venue so the coordinates live in one
+               place; loading=lazy keeps the heaviest thing on the page off
+               the critical path. -->
+          <iframe
+            class="venue__map"
+            id="venue-map"
+            title="Map showing the wedding venue"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <p class="venue__actions" data-reveal>
+        <a class="link-caps" id="venue-directions" href="#">Open in Maps</a>
+      </p>
+    </div>
   </section>
 
   <!-- 7 · Dress code & gift — Phase 9 -->
-  <section id="details" class="band" data-phase="Phase 9">
-    <h2 class="band__label" data-reveal>Dress code &amp; gift</h2>
+  <section id="details" class="section">
+    <div class="section__inner">
+      <article class="card details" data-reveal-stagger>
+
+        <!-- TODO Phase 14: swap in trailing rose vines -->
+        <span class="details__vine slot" aria-hidden="true">Rose<br>vine</span>
+
+        <div class="details__block">
+          <h2 class="heading"><span>Dress Code</span></h2>
+          <p>
+            We kindly ask guests to avoid deep red and maroon attire
+            for the celebration.
+          </p>
+        </div>
+
+        <div class="details__block">
+          <h2 class="heading"><span>Gift Preference</span></h2>
+          <p>Kindly, no boxed gifts please.</p>
+        </div>
+
+      </article>
+    </div>
   </section>
 
   <!-- 8 · RSVP — Phase 10 -->

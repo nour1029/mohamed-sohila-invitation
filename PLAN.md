@@ -129,14 +129,14 @@ With Parts A and B done, these go quickly — they're compositions of existing p
 - [x] Reveals stop-by-stop as you scroll
 
 ### Phase 8 · Venue + map `M`
-- [ ] Venue name (Cinzel) + address
-- [ ] Gold line-art building illustration slot
-- [ ] Google Map embed inside the ornate frame from Phase 1
-- [ ] `Open in Maps` link that opens Apple Maps on iOS, Google Maps on Android
-- [ ] Map loads lazily — it's the heaviest thing on the page
+- [x] Venue name (Cinzel) + address
+- [x] Gold line-art building illustration slot
+- [x] Google Map embed inside the ornate frame from Phase 1 (keyless embed URL)
+- [x] `Open in Maps` link that opens Apple Maps on iOS, Google Maps on Android
+- [x] Map loads lazily — it's the heaviest thing on the page
 
 ### Phase 9 · Dress code & gift `S`
-- [ ] One torn-paper card, both blocks, rose vines down the right edge
+- [x] One torn-paper card, both blocks, rose vines down the right edge
 
 ---
 

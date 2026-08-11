@@ -995,7 +995,89 @@ body.is-gated {
   box-shadow: 0 0 0 3px var(--paper);   /* punches a gap in the rule behind */
 }
 
-/* ---------- 9.4 · Scaffold bands (Phase 0 only) -----------
+/* ---------- 9.4 · Venue + map (Phase 8) ------------------- */
+
+.venue { text-align: center; }
+
+.venue__art {
+  width: clamp(150px, 46vw, 240px);
+  height: clamp(100px, 30vw, 160px);
+  margin: var(--space-3) auto var(--space-2);
+}
+
+.venue__name {
+  font-size: var(--t-display-md);
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.venue__address {
+  font-size: var(--t-body);
+  color: var(--ink-soft);
+  margin-top: var(--space-1);
+  text-wrap: pretty;
+}
+
+.venue__frame { margin-top: var(--space-4); }
+
+.venue__map {
+  display: block;
+  width: 100%;
+  height: clamp(200px, 52vw, 300px);
+  border: 0;
+  /* The embed paints white before it loads; cream keeps the gap warm. */
+  background: var(--paper);
+}
+
+.venue__actions { margin-top: var(--space-3); }
+
+/* A gold caps link with a rule that draws itself under on hover. */
+.link-caps {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--t-caps);
+  letter-spacing: var(--track-caps);
+  text-indent: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  padding-bottom: 3px;
+  background: linear-gradient(var(--gold), var(--gold)) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.35s var(--ease-out);
+}
+
+.link-caps:hover,
+.link-caps:focus-visible { background-size: 100% 1px; }
+
+/* ---------- 9.5 · Dress code & gift (Phase 9) ------------- */
+
+.details { text-align: center; }
+
+.details__block + .details__block { margin-top: var(--space-4); }
+
+.details__block p {
+  margin-top: var(--space-1);
+  text-wrap: pretty;
+}
+
+/* Trails down the right edge. Kept narrow, and the card carries enough
+   inline padding on both sides to clear it — copy running underneath the
+   vine was the first thing that went wrong here. */
+.details {
+  padding-inline: clamp(2.5rem, 12vw, 4rem);
+}
+
+.details__vine {
+  position: absolute;
+  top: var(--tear);
+  right: 2px;
+  width: clamp(34px, 10vw, 56px);
+  height: clamp(120px, 34vw, 190px);
+}
+
+/* ---------- 9.6 · Scaffold bands (Phase 0 only) -----------
    Placeholder styling so the skeleton is legible and scrollable.
    Every rule in this block gets deleted as its phase lands.
    ---------------------------------------------------------- */
