@@ -66,15 +66,16 @@ The two moments that make or break the whole thing.
 
 The first thing every guest sees. Worth over-investing in.
 
-- [ ] Full-viewport envelope, embossed floral vine (tone-on-tone shadow/highlight, no color)
-- [ ] Diagonal flap seams meeting at center, `R&Z` seal at the junction
-- [ ] `^` + `TAP TO OPEN` in wide-tracked gold caps
-- [ ] **Open animation:** flaps rotate on 3D X-axis, golden light blooms from the seam,
+- [x] Full-viewport envelope, embossed floral vine (tone-on-tone shadow/highlight, no color)
+- [x] Diagonal flap seams meeting at center, `R&Z` seal at the junction
+- [x] `^` + `TAP TO OPEN` in wide-tracked gold caps
+- [x] **Open animation:** flaps rotate on 3D X-axis, golden light blooms from the seam,
       envelope lifts away
-- [ ] Page scroll locked until opened, unlocked after
-- [ ] Triggers the music (see Phase 11)
-- [ ] Respects `prefers-reduced-motion` — instant, dignified fade instead
-- [ ] Decide: `localStorage` so a returning guest isn't re-gated? *(reference doesn't)*
+- [x] Page scroll locked until opened, unlocked after
+- [x] Triggers the music (see Phase 11) — dispatches a `wedding:open` event to listen for
+- [x] Respects `prefers-reduced-motion` — instant, dignified fade instead
+- [x] Decided: remembered for the **browser session** (`WEDDING.gate.remember`), so a
+      returning guest mid-session isn't re-gated but a fresh visit still gets the moment
 
 **Done when:** it feels like opening a real envelope on an actual phone, not a div rotating.
 

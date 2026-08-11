@@ -65,6 +65,15 @@ const WEDDING = {
 
   // Phase 11. Relative path into assets/audio/.
   audioSrc: '',
+
+  gate: {
+    // How long the envelope remembers it has been opened:
+    //   'session' — a guest who already opened it this browsing session goes
+    //               straight in, but a fresh visit gets the moment again
+    //   'never'   — always gate (what the reference does)
+    //   'forever' — opened once, never gated again on this device
+    remember: 'session',
+  },
 };
 
 /* ---------- 2 · Derived values -----------------------------
@@ -149,12 +158,96 @@ function bindWeddingText(root = document) {
   });
 }
 
-/* ---------- 4 · Boot --------------------------------------- */
+/* ---------- 4 · Shared helpers ------------------------------ */
+
+const prefersReducedMotion = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Storage that shrugs rather than throws — Safari private mode blocks it. */
+const store = {
+  get(key) {
+    try {
+      return sessionStorage.getItem(key) ?? localStorage.getItem(key);
+    } catch { return null; }
+  },
+  set(key, value, scope) {
+    try {
+      (scope === 'forever' ? localStorage : sessionStorage).setItem(key, value);
+    } catch { /* not worth bothering the guest about */ }
+  },
+};
+
+/* ---------- 5 · Envelope gate (Phase 2) --------------------
+   Timings here mirror the transitions in css/style.css §6.5.
+   ----------------------------------------------------------- */
+
+const GATE_KEY = 'wedding.gate.opened';
+const FLAP_MS = 1050;   /* .gate__flap transition */
+const LIFT_MS = 1100;   /* .gate transition       */
+
+function initGate() {
+  const gate = document.getElementById('gate');
+  const main = document.getElementById('invitation');
+  if (!gate) return;
+
+  const wasOpened =
+    WEDDING.gate.remember !== 'never' && store.get(GATE_KEY) === '1';
+
+  if (wasOpened) {
+    gate.hidden = true;
+    return;                       // straight in, no lock, no animation
+  }
+
+  lockScroll(true);
+  if (main) main.inert = true;    // keep tab focus out of the page behind
+
+  let opening = false;
+
+  const open = () => {
+    if (opening) return;
+    opening = true;
+
+    if (WEDDING.gate.remember !== 'never') {
+      store.set(GATE_KEY, '1', WEDDING.gate.remember);
+    }
+
+    // Phase 11 listens for this: audio may only start from a real gesture.
+    document.dispatchEvent(new CustomEvent('wedding:open'));
+
+    const flapTime = prefersReducedMotion() ? 0 : FLAP_MS;
+
+    gate.classList.add('is-opening');
+
+    // The flap swings, then the envelope lifts away, then it is gone.
+    window.setTimeout(() => {
+      gate.classList.add('is-open');
+      lockScroll(false);
+      if (main) main.inert = false;
+
+      window.setTimeout(() => {
+        gate.hidden = true;
+        // Land the guest at the top of the invitation, not mid-page.
+        document.getElementById('hero')?.focus({ preventScroll: true });
+      }, LIFT_MS);
+    }, flapTime * 0.62);          // overlap: the lift starts mid-swing
+  };
+
+  gate.addEventListener('click', open);
+  gate.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+  });
+}
+
+function lockScroll(locked) {
+  document.body.classList.toggle('is-gated', locked);
+}
+
+/* ---------- 6 · Boot --------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
+  initGate();
 
-  // Phase 2  · envelope gate
   // Phase 4  · scroll reveals
   // Phase 6  · countdown tick
   // Phase 7  · schedule from WEDDING.schedule

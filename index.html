@@ -27,12 +27,34 @@
      band; the phase that fills it is named in the badge.
      ============================================================ -->
 
+<!-- 1 · Envelope gate — Phase 2. Outside <main>: it covers the page
+     rather than being part of the document flow. -->
+<div class="gate" id="gate">
+  <div class="gate__envelope">
+
+    <div class="gate__glow" aria-hidden="true"></div>
+
+    <div class="gate__pocket gate__paper" aria-hidden="true"></div>
+
+    <div class="gate__flap" aria-hidden="true">
+      <span class="gate__flap-face gate__paper"></span>
+    </div>
+
+    <button class="gate__seal seal seal--monogram" type="button" id="gate-open">
+      <span class="seal__mark" data-wedding="couple.monogram" aria-hidden="true"></span>
+      <span class="visually-hidden">Open the invitation</span>
+    </button>
+
+  </div>
+
+  <p class="gate__cue cue" aria-hidden="true">
+    <span class="cue__chevron"></span>
+    <span class="cue__label caps">Tap to open</span>
+  </p>
+</div>
+
 <main id="invitation">
 
-  <!-- 1 · Envelope gate — Phase 2 -->
-  <section id="envelope" class="band band--full" data-phase="Phase 2">
-    <h2 class="band__label">Envelope gate</h2>
-  </section>
 
   <!-- 2 · Hero — Phase 3 -->
   <section id="hero" class="band band--full" data-phase="Phase 3">
