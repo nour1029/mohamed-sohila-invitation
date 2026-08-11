@@ -31,7 +31,9 @@
   /* Type scale — fluid, mobile floor to desktop ceiling.
      Script runs deliberately large; it is the personality of the design. */
   --t-script-xl:  clamp(4.25rem, 17vw, 7.5rem);   /* couple's names */
-  --t-script-lg:  clamp(2.5rem, 9.5vw, 4rem);     /* section headings */
+  /* Section headings must clear their flanking flourishes on one line at
+     360px — "Schedule of Events" is the longest we have. */
+  --t-script-lg:  clamp(2rem, 8vw, 3.5rem);       /* section headings */
   --t-script-md:  clamp(1.75rem, 6.5vw, 2.5rem);  /* "Scroll down" */
   --t-display-lg: clamp(2.25rem, 9vw, 3.5rem);    /* countdown numerals */
   --t-display-md: clamp(1rem, 3.6vw, 1.25rem);    /* venue name */
@@ -152,7 +154,323 @@ body {
   white-space: nowrap;
 }
 
-/* ---------- 5 · Scaffold bands (Phase 0 only) -------------
+/* ============================================================
+   5 · Design primitives (Phase 1)
+
+   Every ornament on this site is built here, once. Nothing is
+   copied from the reference — the wax, the torn edge, and the
+   filigree are all CSS gradients and inline SVG.
+   ============================================================ */
+
+/* ---------- 5.1 · Headings -------------------------------- */
+
+.heading {
+  font-family: var(--font-script);
+  color: var(--gold);
+  font-size: var(--t-script-lg);
+  font-weight: 400;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.heading--names {
+  font-size: var(--t-script-xl);
+  line-height: 1.02;
+}
+
+/* The `&` between the names sits smaller and tucked in. */
+.heading--names .amp {
+  display: block;
+  font-size: 0.42em;
+  margin-block: -0.08em;
+}
+
+/* Gold filigree flanking a script heading. Requires the heading text to be
+   wrapped in a <span> — a bare text node becomes an anonymous flex item,
+   which cannot be told to hold its ground, so it wraps to two lines and
+   leaves the ornaments straddling both.
+
+   The ornaments take only the space the text leaves over (basis 0, grow 1),
+   so a long heading like "Schedule of Events" stays on one line and the
+   flourishes quietly get shorter instead. */
+.heading--flourished {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.4rem, 2.5vw, 1rem);
+}
+
+.heading--flourished > span {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.heading--flourished::before,
+.heading--flourished::after {
+  content: "";
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 92px;
+  height: 20px;
+  background: var(--filigree) center / contain no-repeat;
+}
+
+.heading--flourished::before { transform: scaleX(-1); }
+
+/* Below this a flourish is a stub, not an ornament — drop it entirely. */
+@media (max-width: 360px) {
+  .heading--flourished::before,
+  .heading--flourished::after { display: none; }
+}
+
+/* ---------- 5.2 · Wax seal --------------------------------
+   One component, two dresses: a script monogram (R&Z) or
+   tracked Cinzel caps (RSVP). Set --seal-size to scale it.
+
+   The lobed edge is a clip-path polygon, so an inset box-shadow
+   would trace the element's *rectangle* and get sliced off by the
+   clip. All the depth here is radial gradients instead, which
+   follow the wax shape whatever it is.
+   ---------------------------------------------------------- */
+
+.seal {
+  --seal-size: 118px;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--seal-size);
+  aspect-ratio: 1;
+  isolation: isolate;
+
+  clip-path: polygon(
+    99.13% 50.00%, 97.10% 52.85%, 94.83% 55.44%, 93.33% 57.94%, 90.89% 60.08%,
+    91.46% 62.92%, 92.57% 66.14%, 93.89% 69.75%, 93.05% 72.59%, 91.35% 75.00%,
+    87.08% 75.60%, 84.44% 76.98%, 82.16% 78.49%, 81.14% 81.14%, 80.52% 84.45%,
+    79.51% 87.66%, 77.80% 90.28%, 74.71% 90.87%, 71.26% 90.50%, 67.64% 89.19%,
+    65.20% 90.07%, 63.11% 92.07%, 60.90% 94.23%, 58.58% 96.83%, 55.84% 98.14%,
+    52.87% 97.43%, 50.00% 95.33%, 47.37% 93.53%, 44.90% 91.96%, 42.24% 92.34%,
+    38.95% 94.83%, 35.80% 95.56%, 32.59% 95.92%, 30.53% 93.26%, 29.05% 89.92%,
+    27.71% 86.87%, 26.06% 84.68%, 23.20% 84.21%, 19.89% 83.98%, 15.87% 84.13%,
+    13.95% 81.94%, 12.21% 79.61%, 12.05% 76.19%, 12.68% 72.56%, 12.60% 69.63%,
+    10.72% 67.68%,  7.56% 66.10%,  4.63% 64.14%,  2.44% 61.72%,  3.18% 58.58%,
+     4.91% 55.48%,  6.61% 52.62%,  7.61% 50.00%,  6.30% 47.36%,  4.18% 44.44%,
+     3.62% 41.50%,  3.00% 38.42%,  4.97% 35.97%,  7.83% 34.01%, 10.05% 32.02%,
+    12.25% 30.19%, 13.09% 27.69%, 12.42% 24.06%, 12.79% 20.85%, 13.21% 17.41%,
+    16.11% 16.11%, 19.37% 15.43%, 22.90% 15.41%, 25.92% 15.12%, 27.63% 12.99%,
+    28.75%  9.52%, 30.49%  6.64%, 32.88%  4.86%, 35.72%  4.17%, 39.18%  6.11%,
+    42.24%  7.68%, 44.86%  7.67%, 47.40%  6.94%, 50.00%  4.67%, 52.85%  2.88%,
+    55.81%  2.17%, 58.60%  3.08%, 61.03%  5.24%, 62.84%  8.79%, 65.22%  9.86%,
+    67.71% 10.64%, 71.15%  9.71%, 74.62%  9.28%, 77.38% 10.33%, 79.19% 12.74%,
+    79.89% 16.26%, 80.46% 19.54%, 82.07% 21.59%, 84.56% 22.92%, 88.01% 23.76%,
+    90.64% 25.43%, 92.94% 27.47%, 93.41% 30.46%, 92.82% 33.76%, 91.06% 37.21%,
+    90.81% 39.94%, 93.26% 42.07%, 94.93% 44.54%, 97.80% 47.11%
+  );
+
+  background:
+    /* top-left highlight, as if lit from a window */
+    radial-gradient(circle at 33% 27%,
+      color-mix(in srgb, var(--maroon) 78%, #fff) 0%,
+      transparent 46%),
+    /* the dome: lighter in the middle, deepening to the rim */
+    radial-gradient(circle at 50% 46%,
+      color-mix(in srgb, var(--maroon) 92%, #fff) 0%,
+      var(--maroon) 40%,
+      var(--maroon-deep) 88%);
+
+  filter: drop-shadow(0 3px 5px var(--shadow-warm));
+}
+
+/* The stamped recess — a true circle, so a real inset shadow works. */
+.seal::before {
+  content: "";
+  position: absolute;
+  inset: 11%;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 2px 3px color-mix(in srgb, var(--maroon-deep) 85%, transparent),
+    inset 0 -1px 1px color-mix(in srgb, #fff 22%, transparent);
+}
+
+.seal__mark {
+  position: relative;
+  z-index: 1;
+  color: var(--gold-light);
+  text-shadow: 0 1px 1px color-mix(in srgb, var(--maroon-deep) 70%, transparent);
+  line-height: 1;
+}
+
+/* Dress 1 — script monogram, e.g. R&Z */
+.seal--monogram .seal__mark {
+  font-family: var(--font-script);
+  font-size: calc(var(--seal-size) * 0.38);
+  /* script glyphs sit high in the em box; nudge them onto the optical centre */
+  margin-top: calc(var(--seal-size) * 0.04);
+}
+
+/* Dress 2 — tracked caps, e.g. RSVP */
+.seal--label .seal__mark {
+  font-family: var(--font-display);
+  font-size: calc(var(--seal-size) * 0.15);
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
+  text-transform: uppercase;
+}
+
+/* A hairline flourish under a label seal. */
+.seal--label .seal__mark::after {
+  content: "";
+  display: block;
+  width: 46%;
+  height: 3px;
+  margin: 0.35em auto 0;
+  background: var(--seal-rule) center / contain no-repeat;
+  opacity: 0.85;
+}
+
+button.seal { padding: 0; transition: transform 0.25s var(--ease-out); }
+button.seal:hover { transform: translateY(-2px) scale(1.02); }
+button.seal:active { transform: translateY(0) scale(0.99); }
+
+/* ---------- 5.3 · Torn-paper card -------------------------
+   Deckled top and bottom edges, cut with a tiling SVG mask so
+   the card is genuinely transparent at the tear — it reads
+   correctly over any ground, not just cream.
+   ---------------------------------------------------------- */
+
+.card {
+  --tear: 14px;
+
+  position: relative;
+  padding: calc(var(--tear) + var(--space-4)) var(--space-3);
+  background: var(--paper);
+
+  -webkit-mask-image: var(--torn-top), var(--torn-bottom), linear-gradient(#000, #000);
+          mask-image: var(--torn-top), var(--torn-bottom), linear-gradient(#000, #000);
+  -webkit-mask-repeat: repeat-x, repeat-x, no-repeat;
+          mask-repeat: repeat-x, repeat-x, no-repeat;
+  -webkit-mask-position: top left, bottom left, center;
+          mask-position: top left, bottom left, center;
+  -webkit-mask-size: auto var(--tear), auto var(--tear), 100% calc(100% - (2 * var(--tear)));
+          mask-size: auto var(--tear), auto var(--tear), 100% calc(100% - (2 * var(--tear)));
+}
+
+/* Paper grain. Sits under the content, above the fill. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--paper-grain);
+  opacity: 0.055;
+  pointer-events: none;
+}
+
+.card > * { position: relative; }
+
+/* ---------- 5.4 · Ornate frame ----------------------------
+   Double gold rule with a filigree crest breaking the line at
+   top and bottom centre. Wraps the map in Phase 8.
+   ---------------------------------------------------------- */
+
+.frame {
+  position: relative;
+  padding: 7px;
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  background: var(--cream);
+  box-shadow: inset 0 0 0 3px var(--cream), inset 0 0 0 4px var(--gold-soft);
+}
+
+.frame__inner {
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+.frame::before,
+.frame::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 56px;
+  height: 16px;
+  translate: -50% 0;
+  background: var(--cream) var(--crest) center / contain no-repeat;
+}
+
+.frame::before { top: -8px; }
+.frame::after  { bottom: -8px; rotate: 180deg; }
+
+/* ---------- 5.5 · Chevron + label cue ---------------------
+   The `^` + "Tap to open" / "Scroll down" unit.
+   ---------------------------------------------------------- */
+
+.cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.cue__chevron {
+  width: 15px;
+  height: 15px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  rotate: 45deg;
+  /* the rotated square hangs low; lift it back onto the baseline */
+  margin-bottom: -3px;
+}
+
+.cue--down { flex-direction: column-reverse; }
+.cue--down .cue__chevron { rotate: 225deg; margin-bottom: 0; margin-top: -3px; }
+
+.cue__label { line-height: 1.2; }
+
+/* ---------- 5.6 · Art slots -------------------------------
+   Where the real florals and photos drop in. The dashed box is
+   visible only while a slot is still empty.
+   ---------------------------------------------------------- */
+
+.slot {
+  display: grid;
+  place-items: center;
+  min-height: 60px;
+  padding: var(--space-1);
+  border: 1px dashed var(--gold-soft);
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: var(--t-small);
+  line-height: 1.3;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.slot:has(img) { border: 0; padding: 0; min-height: 0; }
+
+/* ---------- 5.7 · Ornament sources ------------------------
+   Inline SVG, kept together so the artwork is in one place.
+   ---------------------------------------------------------- */
+
+:root {
+  /* Deckled tear, generated to tile seamlessly under repeat-x. */
+  --torn-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 16'%3E%3Cpath fill='%23000' d='M0,16 L0,11.3 Q0,11.3 4,6.5 Q8,1.6 12,6.6 Q16,11.6 20,8 Q24,4.4 28,6.9 Q32,9.4 36,6.9 Q40,4.3 44,7.7 Q48,11 52,7.2 Q56,3.5 60,7 Q64,10.6 68,7 Q72,3.4 76,6.3 Q80,9.3 84,6.5 Q88,3.6 92,7.7 Q96,11.7 100,7.3 Q104,3 108,7.5 Q112,12.1 116,8.1 Q120,4.2 124,7.8 Q128,11.5 132,8.2 Q136,5 140,8.5 Q144,12 148,7.7 Q152,3.5 156,7.4 L160,11.3 L160,16 Z'/%3E%3C/svg%3E");
+
+  --torn-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 16'%3E%3Cg transform='translate(0,16) scale(1,-1)'%3E%3Cpath fill='%23000' d='M0,16 L0,11.3 Q0,11.3 4,6.5 Q8,1.6 12,6.6 Q16,11.6 20,8 Q24,4.4 28,6.9 Q32,9.4 36,6.9 Q40,4.3 44,7.7 Q48,11 52,7.2 Q56,3.5 60,7 Q64,10.6 68,7 Q72,3.4 76,6.3 Q80,9.3 84,6.5 Q88,3.6 92,7.7 Q96,11.7 100,7.3 Q104,3 108,7.5 Q112,12.1 116,8.1 Q120,4.2 124,7.8 Q128,11.5 132,8.2 Q136,5 140,8.5 Q144,12 148,7.7 Q152,3.5 156,7.4 L160,11.3 L160,16 Z'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* Paper fibre. Turbulence is cheap here — one 140px tile, reused. */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+
+  /* Filigree: a tapering vine, a curl above and below, one leaf. */
+  --filigree: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 20'%3E%3Cg fill='none' stroke='%23B08D3E' stroke-width='0.9' stroke-linecap='round'%3E%3Cpath d='M1,10 C14,10 22,4 33,4 C44,4 47.5,10 42,12 C37.5,13.6 35,9.5 39,7.8'/%3E%3Cpath d='M1,10 C14,10 22,16 33,16 C44,16 47.5,10 42,8 C37.5,6.4 35,10.5 39,12.2'/%3E%3C/g%3E%3Cpath fill='%23B08D3E' d='M7,10 C11,6.6 17,6.6 20.5,9.2 C16.5,12.2 10.5,12.2 7,10 Z'/%3E%3Ccircle cx='1.6' cy='10' r='1.5' fill='%23B08D3E'/%3E%3C/svg%3E");
+
+  /* Frame crest: diamond with scrolled wings. */
+  --crest: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 16'%3E%3Cg fill='none' stroke='%23B08D3E' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M2,8 C10,8 14,3 20,5'/%3E%3Cpath d='M54,8 C46,8 42,3 36,5'/%3E%3C/g%3E%3Cpath fill='%23B08D3E' d='M28,1.5 L32.5,8 L28,14.5 L23.5,8 Z'/%3E%3Ccircle cx='20.5' cy='8' r='1.4' fill='%23B08D3E'/%3E%3Ccircle cx='35.5' cy='8' r='1.4' fill='%23B08D3E'/%3E%3C/svg%3E");
+
+  /* Hairline rule under a seal label. */
+  --seal-rule: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 4'%3E%3Cg fill='none' stroke='%23D4B36A' stroke-width='0.8' stroke-linecap='round'%3E%3Cpath d='M2,2 C8,2 10,0.6 14,2'/%3E%3Cpath d='M38,2 C32,2 30,0.6 26,2'/%3E%3C/g%3E%3Ccircle cx='20' cy='2' r='1.3' fill='%23D4B36A'/%3E%3C/svg%3E");
+}
+
+/* ---------- 6 · Scaffold bands (Phase 0 only) -------------
    Placeholder styling so the skeleton is legible and scrollable.
    Every rule in this block gets deleted as its phase lands.
    ---------------------------------------------------------- */
@@ -195,7 +513,7 @@ body {
   color: var(--ink-soft);
 }
 
-/* ---------- 6 · Motion preferences ------------------------ */
+/* ---------- 7 · Motion preferences ------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

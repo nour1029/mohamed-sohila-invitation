@@ -44,14 +44,14 @@ This is what keeps the rest of the build fast and consistent.
 
 **Files:** `css/style.css`, plus a throwaway `_components.html` preview page
 
-- [ ] **Wax seal** — pure CSS/SVG. Wavy clip-path edge, radial gradient depth, inset
+- [x] **Wax seal** — pure CSS/SVG. Wavy clip-path edge, radial gradient depth, inset
       shadow, gold monogram centered. Parameterized so `R&Z` and `RSVP` are one component
-- [ ] **Torn-paper card** — irregular deckled top and bottom edges (SVG mask), paper texture
-- [ ] **Gold filigree flourish** — the flanking ornaments beside script headings
-- [ ] **Ornate frame** — the bordered box with filigree crests, for the map
-- [ ] **Type scale** — script / Cinzel caps / Ovo body, sized for mobile and desktop
-- [ ] **Chevron + label** — the `^` + "Tap to open" / "Scroll down" / "Click to open" unit
-- [ ] Marked `<!-- TODO: swap in floral PNG -->` slots throughout
+- [x] **Torn-paper card** — irregular deckled top and bottom edges (SVG mask), paper texture
+- [x] **Gold filigree flourish** — the flanking ornaments beside script headings
+- [x] **Ornate frame** — the bordered box with filigree crests, for the map
+- [x] **Type scale** — script / Cinzel caps / Ovo body, sized for mobile and desktop
+- [x] **Chevron + label** — the `^` + "Tap to open" / "Scroll down" / "Click to open" unit
+- [x] Marked `<!-- TODO: swap in floral PNG -->` slots throughout
 
 **Done when:** `_components.html` shows every ornament side by side and they look right at
 phone size. Deleted before launch.

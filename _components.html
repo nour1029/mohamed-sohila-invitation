@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design primitives</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Ovo&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+  /* Throwaway preview page — deleted at Phase 15. Nothing here ships. */
+
+  body { padding-block: var(--space-4) var(--space-6); }
+
+  .spec {
+    max-width: var(--col-wide);
+    margin-inline: auto;
+    padding: var(--space-4) var(--gutter);
+    border-top: 1px dashed var(--gold-soft);
+  }
+  .spec:first-of-type { border-top: 0; }
+
+  .spec__title {
+    font-family: var(--font-body);
+    font-size: var(--t-small);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .stack { display: grid; gap: var(--space-3); justify-items: center; }
+
+  /* Proves the torn edge is really transparent, not cream-coloured fakery. */
+  .on-photo {
+    padding: var(--space-3) 0;
+    background:
+      linear-gradient(135deg, var(--sage), var(--blush) 60%, var(--gold-light));
+  }
+</style>
+</head>
+
+<body>
+
+<header class="spec">
+  <h1 class="caps" style="text-align:center">Design primitives</h1>
+</header>
+
+<!-- 1 · Type scale ---------------------------------------------------- -->
+<section class="spec">
+  <p class="spec__title">1 · Type scale</p>
+  <div class="stack">
+    <h2 class="heading heading--names">Zohan<span class="amp">&amp;</span>Rose</h2>
+    <h3 class="heading">Schedule of Events</h3>
+    <p class="script" style="font-size:var(--t-script-md)">Scroll down</p>
+    <p class="display" style="font-size:var(--t-display-lg);color:var(--ink)">118 : 15 : 16 : 39</p>
+    <p class="caps">Guest Arrival</p>
+    <p style="text-align:center">Join us for an evening of love, laughter, duas, and
+       unforgettable memories as we begin our forever.</p>
+  </div>
+</section>
+
+<!-- 2 · Filigree ------------------------------------------------------ -->
+<section class="spec">
+  <p class="spec__title">2 · Gold filigree flourish</p>
+  <h3 class="heading heading--flourished"><span>Location</span></h3>
+  <h3 class="heading heading--flourished"><span>Schedule of Events</span></h3>
+</section>
+
+<!-- 3 · Wax seal ------------------------------------------------------ -->
+<section class="spec">
+  <p class="spec__title">3 · Wax seal — one component, two dresses</p>
+  <div class="row">
+    <div class="seal seal--monogram">
+      <span class="seal__mark">R&amp;Z</span>
+    </div>
+    <button class="seal seal--label" type="button">
+      <span class="seal__mark">RSVP</span>
+    </button>
+    <div class="seal seal--monogram" style="--seal-size:64px">
+      <span class="seal__mark">R&amp;Z</span>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · Chevron + label ----------------------------------------------- -->
+<section class="spec">
+  <p class="spec__title">4 · Chevron + label cue</p>
+  <div class="row">
+    <div class="cue">
+      <span class="cue__chevron"></span>
+      <span class="cue__label caps">Tap to open</span>
+    </div>
+    <div class="cue">
+      <span class="cue__chevron"></span>
+      <span class="cue__label script" style="font-size:var(--t-script-md)">Click to open</span>
+    </div>
+    <div class="cue cue--down">
+      <span class="cue__chevron"></span>
+      <span class="cue__label script" style="font-size:var(--t-script-md)">Scroll down</span>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · Torn-paper card ----------------------------------------------- -->
+<section class="spec">
+  <p class="spec__title">5 · Torn-paper card</p>
+  <div class="card">
+    <h3 class="heading heading--flourished" style="margin-bottom:var(--space-2)"><span>Dress Code</span></h3>
+    <p style="text-align:center">We kindly ask guests to avoid deep red and maroon
+       attire for the celebration.</p>
+  </div>
+</section>
+
+<section class="spec on-photo">
+  <p class="spec__title" style="color:var(--ink)">5b · …over a colour, proving the tear is transparent</p>
+  <div class="card">
+    <p style="text-align:center">The deckle is cut with a mask, not painted cream.</p>
+  </div>
+</section>
+
+<!-- 6 · Ornate frame -------------------------------------------------- -->
+<section class="spec">
+  <p class="spec__title">6 · Ornate frame (map surround)</p>
+  <div class="frame">
+    <div class="frame__inner">
+      <!-- TODO Phase 8: swap for the Google Map iframe -->
+      <div class="slot" style="min-height:180px">Map embed</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · Art slots ----------------------------------------------------- -->
+<section class="spec">
+  <p class="spec__title">7 · Art slots awaiting real assets</p>
+  <div class="row">
+    <!-- TODO Phase 14: swap in floral PNG -->
+    <div class="slot" style="width:130px;height:110px">Corner floral<br>cluster</div>
+    <!-- TODO Phase 14: swap in floral PNG -->
+    <div class="slot" style="width:130px;height:110px">Stone column<br>+ garland</div>
+    <!-- TODO Phase 14: swap in venue line-art -->
+    <div class="slot" style="width:130px;height:110px">Venue<br>illustration</div>
+  </div>
+</section>
+
+</body>
+</html>
