@@ -226,8 +226,28 @@
   </section>
 
   <!-- 8 · RSVP — Phase 10 -->
-  <section id="rsvp" class="band" data-phase="Phase 10">
-    <h2 class="band__label" data-reveal>RSVP</h2>
+  <section id="rsvp" class="section rsvp">
+    <div class="section__inner">
+      <h2 class="heading heading--flourished" data-reveal>
+        <span>Confirm Your Attendance</span>
+      </h2>
+
+      <p class="rsvp__intro" data-reveal>
+        To help us prepare for a joyful celebration, kindly confirm your attendance.
+      </p>
+
+      <div class="rsvp__invite" data-reveal>
+        <button class="seal seal--label" type="button" id="rsvp-open" aria-haspopup="dialog">
+          <span class="seal__mark" aria-hidden="true">RSVP</span>
+          <span class="visually-hidden">Open the RSVP form</span>
+        </button>
+
+        <p class="cue rsvp__cue" aria-hidden="true">
+          <span class="cue__chevron"></span>
+          <span class="cue__label script">Click to open</span>
+        </p>
+      </div>
+    </div>
   </section>
 
   <!-- 9 · Closing — Phase 12 -->
@@ -236,6 +256,72 @@
   </section>
 
 </main>
+
+<!-- RSVP modal — Phase 10.
+     A native <dialog>: the focus trap, Esc-to-close and focus restore are
+     all built in and correct, which a hand-rolled overlay rarely is. -->
+<dialog class="modal" id="rsvp-modal" aria-labelledby="rsvp-title">
+  <div class="modal__card" tabindex="-1">
+
+    <button class="modal__close" type="button" id="rsvp-close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <h2 class="heading" id="rsvp-title"><span>Confirm Your Attendance</span></h2>
+    <p class="modal__deadline">
+      Please RSVP before <span data-wedding="rsvp.deadline"></span>
+    </p>
+
+    <form class="form" id="rsvp-form" novalidate>
+
+      <div class="field">
+        <label class="field__label" for="rsvp-name">Your name</label>
+        <input class="field__input" type="text" id="rsvp-name" name="name"
+               autocomplete="name" required>
+        <p class="field__error" id="rsvp-name-error" hidden></p>
+      </div>
+
+      <fieldset class="field field--choice">
+        <legend class="field__label">Will you be attending?</legend>
+        <label class="choice">
+          <input type="radio" name="attending" value="Accepts with pleasure" required>
+          <span>Accepts with pleasure</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="attending" value="Declines with regret">
+          <span>Declines with regret</span>
+        </label>
+        <p class="field__error" id="rsvp-attending-error" hidden></p>
+      </fieldset>
+
+      <div class="field">
+        <label class="field__label" for="rsvp-guests">Number of guests attending</label>
+        <input class="field__input" type="text" inputmode="numeric" id="rsvp-guests"
+               name="guests">
+        <p class="field__error" id="rsvp-guests-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="rsvp-song">A song that gets you dancing</label>
+        <input class="field__input" type="text" id="rsvp-song" name="song">
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="rsvp-children">Children attending</label>
+        <input class="field__input" type="text" id="rsvp-children" name="children"
+               aria-describedby="rsvp-children-help">
+        <p class="field__help" id="rsvp-children-help">Please include names and ages.</p>
+      </div>
+
+      <button class="btn" type="submit" id="rsvp-submit">
+        <span class="btn__label">Send</span>
+      </button>
+
+      <p class="form__status" id="rsvp-status" role="status" aria-live="polite"></p>
+
+    </form>
+  </div>
+</dialog>
 
 <!-- Persistent music button — Phase 11 -->
 

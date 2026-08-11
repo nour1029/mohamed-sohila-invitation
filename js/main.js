@@ -69,6 +69,13 @@ const WEDDING = {
   // Phase 11. Relative path into assets/audio/.
   audioSrc: '',
 
+  // TODO Phase 13: a real number. Shown when a submission fails — an RSVP
+  // that cannot reach the sheet must still reach a human.
+  contact: {
+    name: 'Rose',
+    phone: '+1 555 000 0000',
+  },
+
   gate: {
     // How long the envelope remembers it has been opened:
     //   'session' — a guest who already opened it this browsing session goes
@@ -397,7 +404,161 @@ function initVenue() {
   link.rel = 'noopener';
 }
 
-/* ---------- 10 · Boot -------------------------------------- */
+/* ---------- 10 · RSVP (Phase 10) ---------------------------
+   The only part with a backend, and the only part that must not
+   fail quietly. Every failure path ends with the guest being told
+   how to reach a person.
+   ----------------------------------------------------------- */
+
+function initRsvp() {
+  const modal  = document.getElementById('rsvp-modal');
+  const form   = document.getElementById('rsvp-form');
+  const status = document.getElementById('rsvp-status');
+  const submit = document.getElementById('rsvp-submit');
+  const openBtn  = document.getElementById('rsvp-open');
+  const closeBtn = document.getElementById('rsvp-close');
+  if (!modal || !form) return;
+
+  /* -- open / close ---------------------------------------- */
+
+  // showModal() gives the focus trap, Esc handling and focus restore.
+  // Focus the card rather than the first input: autofocusing a text field
+  // throws up the phone keyboard before the guest has read the form.
+  openBtn?.addEventListener('click', () => {
+    modal.showModal();
+    modal.querySelector('.modal__card')?.focus();
+  });
+  closeBtn?.addEventListener('click', () => modal.close());
+
+  // Click outside the card. The dialog element fills the viewport, so a
+  // click landing on it rather than on .modal__card is a backdrop click.
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close();
+  });
+
+  /* -- validation ------------------------------------------ */
+
+  const setError = (fieldEl, errorEl, message) => {
+    fieldEl.classList.toggle('is-invalid', Boolean(message));
+    if (errorEl) {
+      errorEl.textContent = message ?? '';
+      errorEl.hidden = !message;
+    }
+  };
+
+  const validate = () => {
+    const errors = [];
+    const data = new FormData(form);
+
+    const nameField = document.getElementById('rsvp-name').closest('.field');
+    const name = String(data.get('name') ?? '').trim();
+    if (!name) {
+      setError(nameField, document.getElementById('rsvp-name-error'),
+        'Please let us know who you are.');
+      errors.push('name');
+    } else {
+      setError(nameField, document.getElementById('rsvp-name-error'), null);
+    }
+
+    const attendingField = form.querySelector('.field--choice');
+    if (!data.get('attending')) {
+      setError(attendingField, document.getElementById('rsvp-attending-error'),
+        'Please choose one so we can plan the seating.');
+      errors.push('attending');
+    } else {
+      setError(attendingField, document.getElementById('rsvp-attending-error'), null);
+    }
+
+    const guestsField = document.getElementById('rsvp-guests').closest('.field');
+    const guests = String(data.get('guests') ?? '').trim();
+    if (guests && !/^\d{1,3}$/.test(guests)) {
+      setError(guestsField, document.getElementById('rsvp-guests-error'),
+        'A number, please — for example 2.');
+      errors.push('guests');
+    } else {
+      setError(guestsField, document.getElementById('rsvp-guests-error'), null);
+    }
+
+    return errors;
+  };
+
+  /* -- submit ---------------------------------------------- */
+
+  const setStatus = (message, kind) => {
+    status.className = kind ? `form__status form__status--${kind}` : 'form__status';
+    status.textContent = '';
+    if (message) status.append(message);
+  };
+
+  /** Never let an RSVP evaporate: always hand back a way to reach a person. */
+  const failureMessage = () => {
+    const fragment = document.createDocumentFragment();
+    const { name, phone } = WEDDING.contact;
+    fragment.append(
+      'That did not send, and we would hate to miss you. Please text ',
+      Object.assign(document.createElement('a'), {
+        href: `sms:${phone.replace(/[^\d+]/g, '')}`,
+        textContent: `${name} on ${phone}`,
+      }),
+      ' instead.',
+    );
+    return fragment;
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const errors = validate();
+    if (errors.length) {
+      setStatus('', null);
+      form.querySelector('.is-invalid input')?.focus();
+      return;
+    }
+
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    submit.disabled = true;
+    submit.querySelector('.btn__label').textContent = 'Sending…';
+    setStatus('', null);
+
+    try {
+      if (!WEDDING.rsvpEndpoint) {
+        // Not deployed yet. Say so plainly rather than showing a fake success.
+        throw new Error('RSVP endpoint is not configured');
+      }
+
+      // No Content-Type header on purpose: that keeps this a "simple"
+      // request, so the browser skips the CORS preflight, which Apps
+      // Script cannot answer.
+      const response = await fetch(WEDDING.rsvpEndpoint, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const result = await response.json().catch(() => ({ ok: true }));
+      if (result.ok === false) throw new Error(result.error || 'rejected');
+
+      form.hidden = true;
+      setStatus(
+        data.attending?.startsWith('Accepts')
+          ? 'Thank you — we cannot wait to celebrate with you.'
+          : 'Thank you for letting us know. You will be missed.',
+        'success',
+      );
+      status.hidden = false;
+
+    } catch (error) {
+      console.error('[wedding] RSVP submission failed:', error);
+      setStatus(failureMessage(), 'error');
+      submit.disabled = false;
+      submit.querySelector('.btn__label').textContent = 'Try again';
+    }
+  });
+}
+
+/* ---------- 11 · Boot -------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
@@ -407,9 +568,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initSchedule();
   initCountdown();
   initVenue();
+  initRsvp();
 
   initReveals();
 
-  // Phase 10 · RSVP modal + submit
   // Phase 11 · music player
 });

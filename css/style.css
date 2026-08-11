@@ -1077,7 +1077,223 @@ body.is-gated {
   height: clamp(120px, 34vw, 190px);
 }
 
-/* ---------- 9.6 · Scaffold bands (Phase 0 only) -----------
+/* ============================================================
+   10 · RSVP (Phase 10)
+   ============================================================ */
+
+.rsvp { text-align: center; }
+
+.rsvp__intro {
+  margin-top: var(--space-2);
+  text-wrap: pretty;
+}
+
+.rsvp__invite {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.rsvp__invite .seal { --seal-size: clamp(96px, 26vw, 128px); }
+
+.rsvp__cue .cue__label { font-size: var(--t-script-md); }
+
+/* ---------- 10.1 · Modal ---------------------------------- */
+
+.modal {
+  width: min(94vw, 440px);
+  max-height: min(90dvh, 760px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.modal::backdrop {
+  background: color-mix(in srgb, var(--maroon-deep) 62%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+/* Focus lands here on open so the dialog is announced, but it is a
+   programmatic target, not something the guest aimed at — no ring. */
+.modal:focus,
+.modal__card:focus { outline: none; }
+
+.modal__card {
+  position: relative;
+  max-height: inherit;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-4) clamp(1.25rem, 6vw, 2rem) var(--space-4);
+  background: var(--cream);
+  border-radius: 4px;
+  box-shadow: 0 18px 50px color-mix(in srgb, var(--maroon-deep) 40%, transparent);
+  text-align: center;
+}
+
+.modal__close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  /* 44px: a real thumb target, not a 16px glyph you have to aim at. */
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--gold);
+  border-radius: 50%;
+  transition: background-color 0.2s var(--ease-out);
+}
+
+.modal__close:hover {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+.modal__deadline {
+  font-size: var(--t-small);
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  margin-top: var(--space-1);
+}
+
+/* ---------- 10.2 · Form ----------------------------------- */
+
+.form {
+  margin-top: var(--space-4);
+  text-align: left;
+}
+
+.field { margin-bottom: var(--space-3); border: 0; padding: 0; }
+
+.field__label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--t-small);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: var(--space-1);
+  padding: 0;
+}
+
+.field__input {
+  width: 100%;
+  /* 16px minimum, or iOS Safari zooms the page on focus. */
+  font-size: max(16px, var(--t-body));
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 55%, var(--cream));
+  border: 1px solid var(--gold-soft);
+  border-radius: 3px;
+  padding: 0.65rem 0.75rem;
+  transition: border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--cream);
+}
+
+.field__help {
+  font-size: var(--t-small);
+  color: var(--ink-soft);
+  margin-top: var(--space-1);
+}
+
+/* Warm, not shouty: no red sirens on a wedding invitation. */
+.field__error {
+  font-size: var(--t-small);
+  color: var(--maroon);
+  margin-top: var(--space-1);
+}
+
+.field__error[hidden] { display: none; }
+
+.field.is-invalid .field__input { border-color: var(--maroon); }
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  font-size: var(--t-body);
+}
+
+.choice input { accent-color: var(--maroon); width: 1.05rem; height: 1.05rem; }
+
+/* ---------- 10.3 · Submit button -------------------------- */
+
+.btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: var(--space-4);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-display);
+  font-size: var(--t-caps);
+  letter-spacing: var(--track-caps);
+  text-indent: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--maroon);
+  border-radius: 999px;
+  overflow: hidden;
+  transition: background-color 0.25s var(--ease-out), transform 0.15s var(--ease-out);
+}
+
+.btn:hover { background: color-mix(in srgb, var(--maroon) 88%, #000); }
+.btn:active { transform: translateY(1px); }
+
+.btn:disabled { opacity: 0.65; cursor: default; transform: none; }
+
+/* The diagonal sheen sweep. */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -60%;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    color-mix(in srgb, #fff 26%, transparent),
+    transparent);
+  transform: skewX(-18deg);
+  transition: translate 0.7s var(--ease-out);
+}
+
+.btn:hover::after { translate: 360% 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn::after { display: none; }
+}
+
+.form__status {
+  font-size: var(--t-body);
+  line-height: 1.55;
+  text-align: center;
+  margin-top: var(--space-3);
+  text-wrap: pretty;
+}
+
+.form__status:empty { display: none; }
+
+.form__status--success { color: var(--sage); }
+.form__status--error   { color: var(--maroon); }
+
+.form__status a {
+  color: inherit;
+  font-weight: inherit;
+  text-underline-offset: 3px;
+}
+
+/* ---------- 10.4 · Scaffold bands (Phase 0 only) ----------
    Placeholder styling so the skeleton is legible and scrollable.
    Every rule in this block gets deleted as its phase lands.
    ---------------------------------------------------------- */

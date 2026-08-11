@@ -146,17 +146,19 @@ With Parts A and B done, these go quickly — they're compositions of existing p
 
 The only part with a backend, and the only part that must not fail silently.
 
-- [ ] Maroon `RSVP` wax seal + `Click to open`
-- [ ] Modal: overlay, cream card, `×` close, Esc to close, click-outside to close
-- [ ] **Focus trap** and focus restore — accessibility, and it's genuinely annoying without it
-- [ ] Fields: name · attending (radio) · guest count · song request · children
-- [ ] Client-side validation with warm, non-shouty error styling
-- [ ] Maroon submit button with the diagonal sheen sweep
-- [ ] **Google Apps Script endpoint** appending to a Sheet:
+- [x] Maroon `RSVP` wax seal + `Click to open`
+- [x] Modal: overlay, cream card, `×` close, Esc to close, click-outside to close
+- [x] **Focus trap** and focus restore — native `<dialog>`, all four close paths verified
+- [x] Fields: name · attending (radio) · guest count · song request · children
+- [x] Client-side validation with warm, non-shouty error styling
+- [x] Maroon submit button with the diagonal sheen sweep
+- [x] **Google Apps Script endpoint** written — `apps-script/Code.gs`
       `Timestamp | Name | Attending | Guests | Song | Children`
-- [ ] Loading / success / failure states — failure must tell the guest to text you instead,
+- [x] Loading / success / failure states — failure must tell the guest to text you instead,
       never swallow an RSVP
-- [ ] Deadline text driven from `WEDDING.rsvpDeadline`
+- [x] Deadline text driven from `WEDDING.rsvpDeadline`
+- [ ] **Blocked on you:** deploy the script and paste back the URL —
+      steps in `apps-script/README.md`. Also set a real number in `WEDDING.contact`.
 
 > **Needs you:** a Google account. I'll write the Apps Script and give you exact
 > click-by-click deploy steps — you paste it in and hand me back the URL. Two minutes.
