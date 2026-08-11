@@ -1,0 +1,208 @@
+/* ============================================================
+   The Sacred Garden — wedding invitation
+   Phase 0: reset, design tokens, responsive shell, scaffold bands.
+   Section styles arrive in their own phases.
+   ============================================================ */
+
+/* ---------- 1 · Tokens ------------------------------------ */
+
+:root {
+  /* Palette — REFERENCE.md §2. Nothing here is pure black or white. */
+  --cream:        #F7EFDF;
+  --paper:        #EFE7D6;
+  --gold:         #B08D3E;
+  --gold-light:   #D4B36A;
+  --maroon:       #6B1220;
+  --maroon-deep:  #4A0C16;
+  --ink:          #4A3F35;
+  --sage:         #8A9A7B;
+  --blush:        #D9A9A0;
+
+  /* Derived tints — for rules, shadows, washes. */
+  --ink-soft:     color-mix(in srgb, var(--ink) 68%, transparent);
+  --gold-soft:    color-mix(in srgb, var(--gold) 32%, transparent);
+  --shadow-warm:  color-mix(in srgb, var(--maroon-deep) 14%, transparent);
+
+  /* Type families */
+  --font-script:  "Pinyon Script", cursive;   /* candidate — see _fonts.html */
+  --font-display: "Cinzel", Georgia, serif;   /* caps, numerals */
+  --font-body:    "Ovo", Georgia, serif;
+
+  /* Type scale — fluid, mobile floor to desktop ceiling.
+     Script runs deliberately large; it is the personality of the design. */
+  --t-script-xl:  clamp(4.25rem, 17vw, 7.5rem);   /* couple's names */
+  --t-script-lg:  clamp(2.5rem, 9.5vw, 4rem);     /* section headings */
+  --t-script-md:  clamp(1.75rem, 6.5vw, 2.5rem);  /* "Scroll down" */
+  --t-display-lg: clamp(2.25rem, 9vw, 3.5rem);    /* countdown numerals */
+  --t-display-md: clamp(1rem, 3.6vw, 1.25rem);    /* venue name */
+  --t-caps:       clamp(0.7rem, 2.9vw, 0.8rem);   /* tracked gold caps */
+  --t-body:       clamp(0.95rem, 3.7vw, 1.0625rem);
+  --t-small:      clamp(0.75rem, 3vw, 0.8125rem);
+
+  --track-caps:   0.28em;   /* wide tracking on all-caps gold labels */
+  --leading-body: 1.75;
+
+  /* Rhythm */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+
+  /* Layout */
+  --col:        480px;   /* the intimate column, phone-width by intent */
+  --col-wide:   620px;   /* desktop breathes a little, never sprawls */
+  --gutter:     clamp(1.25rem, 5vw, 2rem);
+
+  /* Motion — Phase 4 uses these for every reveal. */
+  --ease-out:   cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-reveal: 0.7s;
+  --stagger:    120ms;
+}
+
+/* ---------- 2 · Reset ------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body,
+h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+ul[role="list"], ol[role="list"] { list-style: none; }
+
+img, picture, svg, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ---------- 3 · Ground ------------------------------------ */
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: var(--leading-body);
+  overflow-x: hidden;
+  /* Phase 2 adds .is-locked here while the envelope is closed. */
+}
+
+/* The single content column. Mobile-first: full width minus gutters,
+   capped so it stays intimate. Desktop widens modestly instead of
+   leaving a phone-shaped strip stranded in empty cream. */
+.col {
+  width: 100%;
+  max-width: var(--col);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@media (min-width: 768px) {
+  .col { max-width: var(--col-wide); }
+}
+
+/* ---------- 4 · Utilities --------------------------------- */
+
+.script  { font-family: var(--font-script); color: var(--gold); line-height: 1.15; }
+.display { font-family: var(--font-display); }
+
+.caps {
+  font-family: var(--font-display);
+  font-size: var(--t-caps);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+  /* tracking adds a trailing gap; pull it back so text stays optically centered */
+  text-indent: var(--track-caps);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- 5 · Scaffold bands (Phase 0 only) -------------
+   Placeholder styling so the skeleton is legible and scrollable.
+   Every rule in this block gets deleted as its phase lands.
+   ---------------------------------------------------------- */
+
+.band {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 55vh;
+  padding: var(--space-5) var(--gutter);
+  border-top: 1px dashed var(--gold-soft);
+  text-align: center;
+}
+
+.band--full {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.band:first-child { border-top: 0; }
+
+.band__label {
+  font-family: var(--font-display);
+  font-size: var(--t-display-md);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.band[data-phase]::after {
+  content: attr(data-phase);
+  position: absolute;
+  top: var(--space-2);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: var(--t-small);
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+
+/* ---------- 6 · Motion preferences ------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Script font candidates</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Ovo&family=Tangerine:wght@400;700&family=Pinyon+Script&family=Italianno&family=Parisienne&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+  /* Throwaway preview page — deleted once the font is picked. */
+
+  body { padding-block: var(--space-4) var(--space-6); }
+
+  .page-head {
+    max-width: var(--col-wide);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    text-align: center;
+    margin-bottom: var(--space-4);
+  }
+  .page-head p {
+    font-size: var(--t-small);
+    color: var(--ink-soft);
+    margin-top: var(--space-1);
+  }
+
+  .candidate {
+    max-width: var(--col-wide);
+    margin-inline: auto;
+    padding: var(--space-4) var(--gutter);
+    border-top: 1px dashed var(--gold-soft);
+    text-align: center;
+  }
+
+  .candidate__name {
+    font-family: var(--font-body);
+    font-size: var(--t-small);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: var(--space-3);
+  }
+
+  /* The real test: names at hero scale. */
+  .specimen-names {
+    color: var(--gold);
+    line-height: 1.05;
+    font-size: var(--t-script-xl);
+  }
+  .specimen-names .amp {
+    display: block;
+    font-size: 0.5em;
+    margin-block: -0.1em;
+  }
+
+  .specimen-heading {
+    color: var(--gold);
+    font-size: var(--t-script-lg);
+    line-height: 1.15;
+    margin-top: var(--space-3);
+  }
+
+  .specimen-small {
+    color: var(--gold);
+    font-size: var(--t-script-md);
+    line-height: 1.2;
+    margin-top: var(--space-2);
+  }
+
+  /* Legibility check — script beside the Cinzel/Ovo it has to live with. */
+  .specimen-pairing {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--gold-soft);
+  }
+  .specimen-pairing .caps { display: block; margin-bottom: var(--space-1); }
+  .specimen-pairing p { font-size: var(--t-body); }
+
+  .f-tangerine { font-family: "Tangerine", cursive; font-weight: 700; }
+  .f-pinyon    { font-family: "Pinyon Script", cursive; }
+  .f-italianno { font-family: "Italianno", cursive; }
+  .f-parisienne{ font-family: "Parisienne", cursive; }
+</style>
+</head>
+
+<body>
+
+<header class="page-head">
+  <h1 class="caps">Script font candidates</h1>
+  <p>Judge these on a phone, not a laptop — that is where every guest will see them.
+     Pick one, then set <code>--font-script</code> in <code>css/style.css</code>.</p>
+</header>
+
+<!-- Each block repeats the three real uses: names, a section heading, "Scroll down". -->
+
+<section class="candidate">
+  <p class="candidate__name">1 · Tangerine (bold)</p>
+  <div class="specimen-names f-tangerine">
+    Zohan<span class="amp">&amp;</span>Rose
+  </div>
+  <p class="specimen-heading f-tangerine">Schedule of Events</p>
+  <p class="specimen-small f-tangerine">Scroll down</p>
+  <div class="specimen-pairing">
+    <span class="caps">5 PM · Guest Arrival</span>
+    <p>Join us for an evening of love, laughter, duas, and unforgettable memories
+       as we begin our forever.</p>
+  </div>
+</section>
+
+<section class="candidate">
+  <p class="candidate__name">2 · Pinyon Script <em>(current default)</em></p>
+  <div class="specimen-names f-pinyon">
+    Zohan<span class="amp">&amp;</span>Rose
+  </div>
+  <p class="specimen-heading f-pinyon">Schedule of Events</p>
+  <p class="specimen-small f-pinyon">Scroll down</p>
+  <div class="specimen-pairing">
+    <span class="caps">5 PM · Guest Arrival</span>
+    <p>Join us for an evening of love, laughter, duas, and unforgettable memories
+       as we begin our forever.</p>
+  </div>
+</section>
+
+<section class="candidate">
+  <p class="candidate__name">3 · Italianno</p>
+  <div class="specimen-names f-italianno">
+    Zohan<span class="amp">&amp;</span>Rose
+  </div>
+  <p class="specimen-heading f-italianno">Schedule of Events</p>
+  <p class="specimen-small f-italianno">Scroll down</p>
+  <div class="specimen-pairing">
+    <span class="caps">5 PM · Guest Arrival</span>
+    <p>Join us for an evening of love, laughter, duas, and unforgettable memories
+       as we begin our forever.</p>
+  </div>
+</section>
+
+<section class="candidate">
+  <p class="candidate__name">4 · Parisienne</p>
+  <div class="specimen-names f-parisienne">
+    Zohan<span class="amp">&amp;</span>Rose
+  </div>
+  <p class="specimen-heading f-parisienne">Schedule of Events</p>
+  <p class="specimen-small f-parisienne">Scroll down</p>
+  <div class="specimen-pairing">
+    <span class="caps">5 PM · Guest Arrival</span>
+    <p>Join us for an evening of love, laughter, duas, and unforgettable memories
+       as we begin our forever.</p>
+  </div>
+</section>
+
+</body>
+</html>
