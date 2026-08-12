@@ -700,9 +700,10 @@ body.is-gated {
 /* ============================================================
    7 · Hero (Phase 3)
 
-   A portrait panel: a drawn stone arch framing the couple's
-   names, with the lake showing through the opening and florals
-   overlapping the columns.
+   One painted scene — arch, columns, vines, lake, swans — with
+   the couple's words as live text on top. Type is sized in cqw
+   so the words keep their proportions against the painting at
+   every panel width.
    ============================================================ */
 
 .hero {
@@ -710,128 +711,78 @@ body.is-gated {
   place-items: center;
   min-height: 100vh;
   min-height: 100svh;
+  padding: var(--space-2) 0;
 }
 
 .hero:focus { outline: none; }   /* focus lands here from the gate, silently */
 
-/* Full-bleed on a phone. On wider screens it becomes a centred portrait
-   panel rather than a stretched-out arch — a squat, very wide arch stops
-   reading as an arch at all. */
 .hero__panel {
   position: relative;
-  width: 100%;
-  min-height: 100svh;
+  width: min(100%, 560px);
+  /* Matches the scene exactly, so at normal sizes nothing is cropped. */
+  aspect-ratio: 981 / 1558;
+  max-height: calc(100svh - var(--space-3));
   overflow: hidden;
-  isolation: isolate;
-  /* Lighter than the stone, so the opening reads as light coming through
-     rather than as a shape drawn on the same tone. */
-  background: #FBF6EC;
+  container-type: inline-size;
 }
 
-@media (min-width: 700px) {
-  .hero { padding: var(--space-4) var(--gutter); }
-
-  /* Sized from HEIGHT, not width: with a fixed width the aspect ratio
-     forces a panel taller than the window and the foot of the arch is
-     cut off. Height fits the viewport and the width follows from it. */
-  .hero__panel {
-    height: min(calc(100svh - 2 * var(--space-4)), 940px);
-    width: auto;
-    max-width: 100%;
-    min-height: 0;
-    aspect-ratio: 0.56;
-    border-radius: 3px;
-    box-shadow: 0 18px 48px color-mix(in srgb, var(--ink) 20%, transparent);
-  }
-}
-
-/* ---------- 7.1 · Arch and scene -------------------------- */
-
-.hero__arch {
+.hero__bg {
   position: absolute;
   inset: 0;
-  z-index: 2;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  object-fit: cover;
+  object-position: center;
 }
 
-/* Behind the arch, so the opening frames it like a window. */
-.hero__scene {
+/* Positions mirror where the original artwork had its text, measured off
+   the source: eyebrow 17.7%, names 36.5-61.5%, cue 69.8% of the height. */
+.hero__words,
+.hero__names,
+.hero__cue {
   position: absolute;
-  inset: auto 0 0 0;
-  z-index: 1;
-  height: 42%;
-  min-height: 0;
-  border: 0;
-  align-content: end;
-  padding-bottom: var(--space-4);
-  color: var(--ink-soft);
-}
-
-/* ---------- 7.2 · Words inside the arch ------------------- */
-
-.hero__inner {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  text-align: center;
-  pointer-events: none;
-}
-
-/* The words sit in the arch head. Positioned from the top in percent of
-   HEIGHT — a percentage margin would resolve against the container's
-   WIDTH instead, which is what threw the scroll cue to the floor. */
-.hero__words {
-  position: absolute;
-  top: 15%;
   left: 50%;
-  width: 74%;
   translate: -50% 0;
+  z-index: 2;
+  width: 84%;
+  text-align: center;
 }
+
+.hero__words { top: 16.4%; }
 
 .hero__eyebrow {
-  font-size: var(--t-script-md);
+  font-size: 6.2cqw;
   line-height: 1;
 }
 
 .hero__date {
-  font-size: var(--t-display-md);
-  letter-spacing: 0.18em;
-  text-indent: 0.18em;
-  color: var(--ink);
-  margin-top: var(--space-1);
+  font-size: 4.6cqw;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  margin-top: 0.35em;
 }
 
 .hero__names {
-  font-size: clamp(2.75rem, 12vw, 4rem);
-  margin-top: var(--space-2);
+  top: 33%;
+  font-size: 15.5cqw;
+  line-height: 1.06;
+  margin: 0;
 }
 
-.hero__cue {
-  position: absolute;
-  bottom: 38%;
-  left: 50%;
-  translate: -50% 0;
-  gap: 0.1rem;
+.hero__names .amp {
+  font-size: 0.42em;
+  margin-block: 0.02em;
 }
 
-.hero__cue .cue__label { font-size: var(--t-script-md); }
+.hero__cue { top: 67.5%; }
 
-/* ---------- 7.3 · Corner florals -------------------------- */
+.hero__cue .cue__label { font-size: 4.4cqw; }
 
-.hero__corner {
-  position: absolute;
-  bottom: 0;
-  z-index: 4;
-  width: clamp(140px, 42%, 240px);
-  height: auto;
-  pointer-events: none;
-  user-select: none;
+.hero__cue .cue__chevron {
+  width: 3.4cqw;
+  height: 3.4cqw;
+  border-width: 1.5px;
 }
-
-.hero__corner--start { left: 0; }
-.hero__corner--end   { right: 0; }
 
 /* ============================================================
    8 · Scroll reveals (Phase 4)
