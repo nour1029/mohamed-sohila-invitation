@@ -65,41 +65,90 @@
 
   <!-- 2 · Hero — Phase 3. tabindex allows the gate to land focus here. -->
   <section id="hero" class="hero" tabindex="-1">
+    <div class="hero__panel">
 
-    <!-- TODO Phase 14: swap in the lake / swans background -->
-    <div class="hero__scene slot" aria-hidden="true">Lake &amp; swans<br>background</div>
+      <!-- TODO Phase 14: swap in the lake / swans illustration. Sits behind
+           the arch, so the arch opening frames it like a window. -->
+      <div class="hero__scene slot" aria-hidden="true">Lake &amp; swans</div>
 
-    <!-- TODO Phase 14: swap in stone column + rose garland art -->
-    <div class="hero__column hero__column--start slot" aria-hidden="true">Column</div>
-    <div class="hero__column hero__column--end slot" aria-hidden="true">Column</div>
+      <!-- Stone arch, drawn rather than photographed. preserveAspectRatio
+           is "none": the panel's aspect ratio is pinned in CSS, so the
+           stretch is small and predictable at every size. -->
+      <svg class="hero__arch" viewBox="0 0 100 200" preserveAspectRatio="none"
+           aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="stone" x1="0" y1="0" x2="1" y2="0.25">
+            <stop offset="0"    stop-color="#EDE1CB"/>
+            <stop offset="0.45" stop-color="#DFD1B6"/>
+            <stop offset="1"    stop-color="#CDBB9B"/>
+          </linearGradient>
+        </defs>
 
-    <div class="hero__inner">
-      <p class="hero__eyebrow caps" data-reveal>Wedding Day</p>
-      <p class="hero__date display" data-reveal>
-        <time data-wedding="date"></time>
-      </p>
+        <!-- Outer rectangle minus the arch opening, cut with evenodd. The
+             viewBox ratio is 0.5, close to the panel's, so the non-uniform
+             stretch stays small and the crown does not turn into a spike. -->
+        <path fill="url(#stone)" fill-rule="evenodd" d="
+          M0,0 H100 V200 H0 Z
+          M13,200 L13,118 C13,86 26,64 39,48 C46,39 48,30 50,16
+          C52,30 54,39 61,48 C74,64 87,86 87,118 L87,200 Z"/>
 
-      <h1 class="heading heading--names hero__names" data-reveal>
-        <span data-wedding="couple.one"></span>
-        <span class="amp" aria-hidden="true">&amp;</span>
-        <span data-wedding="couple.two"></span>
-      </h1>
+        <!-- Carved band echoing the opening, set into the stone. -->
+        <path fill="none" stroke="#B9A481" stroke-opacity="0.7" stroke-width="0.6"
+              vector-effect="non-scaling-stroke" d="
+          M6,200 L6,117 C6,83 20,59 34,42 C42,32 45,22 50,5
+          C55,22 58,32 66,42 C80,59 94,83 94,117 L94,200"/>
+
+        <!-- Hairline on the opening itself. -->
+        <path fill="none" stroke="#B08D3E" stroke-opacity="0.5" stroke-width="0.9"
+              vector-effect="non-scaling-stroke" d="
+          M13,200 L13,118 C13,86 26,64 39,48 C46,39 48,30 50,16
+          C52,30 54,39 61,48 C74,64 87,86 87,118 L87,200"/>
+
+        <!-- Capitals where the arch springs from the columns. -->
+        <g fill="#BFAA88" fill-opacity="0.9">
+          <rect x="5" y="115" width="9" height="2.6"/>
+          <rect x="86" y="115" width="9" height="2.6"/>
+        </g>
+
+        <!-- Fluting down the column faces. -->
+        <g fill="none" stroke="#B9A481" stroke-opacity="0.45" stroke-width="0.5"
+           vector-effect="non-scaling-stroke">
+          <path d="M6,124 V196 M10,124 V196"/>
+          <path d="M90,124 V196 M94,124 V196"/>
+        </g>
+      </svg>
+
+      <div class="hero__inner">
+       <div class="hero__words">
+        <p class="hero__eyebrow script" data-reveal>Wedding Day</p>
+        <p class="hero__date display" data-reveal>
+          <time data-wedding="date"></time>
+        </p>
+
+        <h1 class="heading heading--names hero__names" data-reveal>
+          <span data-wedding="couple.one"></span>
+          <span class="amp" aria-hidden="true">&amp;</span>
+          <span data-wedding="couple.two"></span>
+        </h1>
+       </div>
+
+        <p class="hero__cue cue cue--down" aria-hidden="true">
+          <span class="cue__chevron"></span>
+          <span class="cue__label script">Scroll down</span>
+        </p>
+      </div>
+
+      <!-- Corner florals, overlapping the columns as in the reference.
+           width/height are the real pixel dimensions so the browser
+           reserves the space and nothing jumps as they decode. -->
+      <img class="hero__corner hero__corner--start" alt=""
+           src="assets/img/hero-floral-left.png" width="480" height="736"
+           decoding="async">
+      <img class="hero__corner hero__corner--end" alt=""
+           src="assets/img/hero-floral-right.png" width="484" height="736"
+           decoding="async">
+
     </div>
-
-    <!-- Corner florals. width/height are the real pixel dimensions so the
-         browser reserves the space and nothing jumps as they decode. -->
-    <img class="hero__corner hero__corner--start" alt=""
-         src="assets/img/hero-floral-left.png" width="480" height="736"
-         decoding="async">
-    <img class="hero__corner hero__corner--end" alt=""
-         src="assets/img/hero-floral-right.png" width="484" height="736"
-         decoding="async">
-
-    <p class="hero__cue cue cue--down" aria-hidden="true">
-      <span class="cue__chevron"></span>
-      <span class="cue__label script">Scroll down</span>
-    </p>
-
   </section>
 
   <!-- 3 · Bismillah / invitation — Phase 5 -->

@@ -699,81 +699,132 @@ body.is-gated {
 
 /* ============================================================
    7 · Hero (Phase 3)
+
+   A portrait panel: a drawn stone arch framing the couple's
+   names, with the lake showing through the opening and florals
+   overlapping the columns.
    ============================================================ */
 
 .hero {
-  position: relative;
   display: grid;
   place-items: center;
   min-height: 100vh;
   min-height: 100svh;
-  padding: var(--space-6) var(--gutter) var(--space-5);
-  overflow: hidden;
 }
 
 .hero:focus { outline: none; }   /* focus lands here from the gate, silently */
 
-.hero__inner {
+/* Full-bleed on a phone. On wider screens it becomes a centred portrait
+   panel rather than a stretched-out arch — a squat, very wide arch stops
+   reading as an arch at all. */
+.hero__panel {
   position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  /* Lighter than the stone, so the opening reads as light coming through
+     rather than as a shape drawn on the same tone. */
+  background: #FBF6EC;
+}
+
+@media (min-width: 700px) {
+  .hero { padding: var(--space-4) var(--gutter); }
+
+  /* Sized from HEIGHT, not width: with a fixed width the aspect ratio
+     forces a panel taller than the window and the foot of the arch is
+     cut off. Height fits the viewport and the width follows from it. */
+  .hero__panel {
+    height: min(calc(100svh - 2 * var(--space-4)), 940px);
+    width: auto;
+    max-width: 100%;
+    min-height: 0;
+    aspect-ratio: 0.56;
+    border-radius: 3px;
+    box-shadow: 0 18px 48px color-mix(in srgb, var(--ink) 20%, transparent);
+  }
+}
+
+/* ---------- 7.1 · Arch and scene -------------------------- */
+
+.hero__arch {
+  position: absolute;
+  inset: 0;
   z-index: 2;
   width: 100%;
-  max-width: var(--col);
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Behind the arch, so the opening frames it like a window. */
+.hero__scene {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  height: 42%;
+  min-height: 0;
+  border: 0;
+  align-content: end;
+  padding-bottom: var(--space-4);
+  color: var(--ink-soft);
+}
+
+/* ---------- 7.2 · Words inside the arch ------------------- */
+
+.hero__inner {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   text-align: center;
+  pointer-events: none;
 }
 
-@media (min-width: 768px) {
-  .hero__inner { max-width: var(--col-wide); }
+/* The words sit in the arch head. Positioned from the top in percent of
+   HEIGHT — a percentage margin would resolve against the container's
+   WIDTH instead, which is what threw the scroll cue to the floor. */
+.hero__words {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  width: 74%;
+  translate: -50% 0;
 }
 
-.hero__eyebrow { display: block; margin-bottom: var(--space-1); }
+.hero__eyebrow {
+  font-size: var(--t-script-md);
+  line-height: 1;
+}
 
 .hero__date {
   font-size: var(--t-display-md);
-  letter-spacing: 0.22em;
-  text-indent: 0.22em;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
   color: var(--ink);
-  margin-bottom: var(--space-4);
+  margin-top: var(--space-1);
 }
 
-.hero__names { margin-bottom: var(--space-2); }
+.hero__names {
+  font-size: clamp(2.75rem, 12vw, 4rem);
+  margin-top: var(--space-2);
+}
 
-/* ---------- 7.1 · Placeholder art ------------------------- */
-
-/* The lake and swans sit behind everything, faded so the names stay legible
-   once a real photograph lands here. */
-.hero__scene {
+.hero__cue {
   position: absolute;
-  inset: 12% 0 22%;
-  z-index: 0;
-  opacity: 0.5;
-  /* Placeholder caption to the top, out from behind the names. */
-  place-items: start center;
-  padding-top: var(--space-2);
+  bottom: 38%;
+  left: 50%;
+  translate: -50% 0;
+  gap: 0.1rem;
 }
 
-.hero__column {
-  position: absolute;
-  top: 50%;
-  z-index: 1;
-  width: clamp(38px, 12vw, 84px);
-  height: min(52vh, 400px);
-  translate: 0 -50%;
-}
+.hero__cue .cue__label { font-size: var(--t-script-md); }
 
-.hero__column--start { left: 0; }
-.hero__column--end   { right: 0; }
-
-/* Columns crowd the names on the narrowest phones — the names win. */
-@media (max-width: 400px) {
-  .hero__column { display: none; }
-}
+/* ---------- 7.3 · Corner florals -------------------------- */
 
 .hero__corner {
   position: absolute;
   bottom: 0;
-  z-index: 1;
-  width: clamp(150px, 44vw, 280px);
-  /* Height follows the art; these are tall corner pieces, not boxes. */
+  z-index: 4;
+  width: clamp(140px, 42%, 240px);
   height: auto;
   pointer-events: none;
   user-select: none;
@@ -781,16 +832,6 @@ body.is-gated {
 
 .hero__corner--start { left: 0; }
 .hero__corner--end   { right: 0; }
-
-.hero__cue {
-  position: absolute;
-  left: 50%;
-  bottom: var(--space-3);
-  z-index: 2;
-  translate: -50% 0;
-}
-
-.hero__cue .cue__label { font-size: var(--t-script-md); }
 
 /* ============================================================
    8 · Scroll reveals (Phase 4)
