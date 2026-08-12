@@ -601,19 +601,28 @@ body.is-gated {
   place-items: center;
   min-height: 100vh;
   min-height: 100svh;
-  padding: var(--space-2) 0;
+  /* No padding: the panel below is sized to fill this box exactly, so any
+     padding here would leave a cream sliver top and bottom that the panel
+     could never close. */
+  padding: 0;
 }
 
 .hero:focus { outline: none; }   /* focus lands here from the gate, silently */
 
 .hero__panel {
   position: relative;
-  width: min(100%, 560px);
-  /* Matches the scene video exactly, so nothing is cropped at normal
-     sizes. The still poster is a slightly wider crop of the same art and
-     object-fit: cover absorbs the difference. */
-  aspect-ratio: 720 / 1280;
-  max-height: calc(100svh - var(--space-3));
+  width: 100%;
+  /* On a phone this is already ~100vw, so max-width has no effect there;
+     it only caps the panel on wide screens, where .hero centers it and
+     the cream either side is deliberate framing, not a gap to close. */
+  max-width: 560px;
+  /* Height is pinned to the full viewport, not the video's own aspect
+     ratio — an aspect-ratio box only matches the screen by coincidence,
+     and everywhere else it leaves cream showing above and below. Filling
+     the height outright and letting object-fit: cover crop the sides
+     instead is what keeps the top and bottom flush on every screen. */
+  height: 100vh;
+  height: 100svh;
   overflow: hidden;
   container-type: inline-size;
 }

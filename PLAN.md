@@ -92,6 +92,9 @@ The first thing every guest sees. Worth over-investing in.
 - [x] Corner floral cluster slots
 - [x] `Wedding Day` + date at top, `Scroll down` + chevron at bottom
 - [x] Holds up from 320px to desktop
+- [x] Panel fills the viewport height exactly, top and bottom — no cream
+      showing above or below on any screen (object-fit: cover on the video/
+      poster absorbs the crop instead)
 
 ---
 
