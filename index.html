@@ -35,29 +35,34 @@
      ============================================================ -->
 
 <!-- 1 · Envelope gate — Phase 2. Outside <main>: it covers the page
-     rather than being part of the document flow. -->
+     rather than being part of the document flow.
+
+     Two stages, as on the reference: a still of the sealed envelope, then
+     on tap a short video of it opening. The video fades out as it ends and
+     the invitation is underneath. -->
 <div class="gate" id="gate">
-  <div class="gate__envelope">
 
-    <div class="gate__glow" aria-hidden="true"></div>
+  <div class="gate__still" id="gate-still">
+    <img class="gate__img" src="assets/img/envelope-closed.jpg" alt=""
+         width="941" height="1672" fetchpriority="high">
 
-    <div class="gate__pocket gate__paper" aria-hidden="true"></div>
-
-    <div class="gate__flap" aria-hidden="true">
-      <span class="gate__flap-face gate__paper"></span>
-    </div>
-
-    <button class="gate__seal seal seal--monogram" type="button" id="gate-open">
-      <span class="seal__mark" data-wedding="couple.monogram" aria-hidden="true"></span>
+    <button class="gate__open" type="button" id="gate-open">
+      <span class="cue">
+        <span class="cue__chevron"></span>
+        <span class="cue__label caps">Tap to open</span>
+      </span>
       <span class="visually-hidden">Open the invitation</span>
     </button>
-
   </div>
 
-  <p class="gate__cue cue" aria-hidden="true">
-    <span class="cue__chevron"></span>
-    <span class="cue__label caps">Tap to open</span>
-  </p>
+  <!-- muted + playsinline are what make autoplay-after-gesture legal on
+       iOS; without playsinline it takes over the whole screen. -->
+  <div class="gate__film" id="gate-film" aria-hidden="true">
+    <video id="gate-video" class="gate__video"
+           src="assets/video/envelope-open.mp4"
+           muted playsinline preload="auto"></video>
+  </div>
+
 </div>
 
 <main id="invitation">

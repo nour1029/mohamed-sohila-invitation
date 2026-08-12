@@ -69,8 +69,11 @@ The first thing every guest sees. Worth over-investing in.
 - [x] Full-viewport envelope, embossed floral vine (tone-on-tone shadow/highlight, no color)
 - [x] Diagonal flap seams meeting at center, `R&Z` seal at the junction
 - [x] `^` + `TAP TO OPEN` in wide-tracked gold caps
-- [x] **Open animation:** flaps rotate on 3D X-axis, golden light blooms from the seam,
-      envelope lifts away
+- [x] **Open animation:** the reference's own two-stage sequence — a still of the sealed
+      envelope, then a 4.8s film of it opening that dissolves as it ends. Replaces the
+      hand-built CSS 3D flap.
+      ⚠ The seal reads `R&Z` in both the still and the film and is **not** live text;
+      different initials need new artwork for both files.
 - [x] Page scroll locked until opened, unlocked after
 - [x] Triggers the music (see Phase 11) — dispatches a `wedding:open` event to listen for
 - [x] Respects `prefers-reduced-motion` — instant, dignified fade instead

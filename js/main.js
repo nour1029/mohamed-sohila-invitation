@@ -185,16 +185,22 @@ const store = {
 };
 
 /* ---------- 5 · Envelope gate (Phase 2) --------------------
-   Timings here mirror the transitions in css/style.css §6.5.
+   Still of the sealed envelope, then a short film of it opening
+   that dissolves as it ends.
+
+   Every branch here has to end with the guest inside. A video
+   that will not load, will not decode, or silently stalls must
+   never leave someone staring at a sealed envelope.
    ----------------------------------------------------------- */
 
-const GATE_KEY = 'wedding.gate.opened';
-const FLAP_MS = 1050;   /* .gate__flap transition */
-const LIFT_MS = 1100;   /* .gate transition       */
+const GATE_KEY  = 'wedding.gate.opened';
+const FADE_MS   = 900;    /* .gate__still / .gate__film fade  */
+const DISSOLVE_MS = 800;  /* .gate fade once the film is done */
 
 function initGate() {
-  const gate = document.getElementById('gate');
-  const main = document.getElementById('invitation');
+  const gate  = document.getElementById('gate');
+  const video = document.getElementById('gate-video');
+  const main  = document.getElementById('invitation');
   if (!gate) return;
 
   const wasOpened =
@@ -202,13 +208,31 @@ function initGate() {
 
   if (wasOpened) {
     gate.hidden = true;
-    return;                       // straight in, no lock, no animation
+    return;                       // straight in, no lock, no film
   }
 
   lockScroll(true);
   if (main) main.inert = true;    // keep tab focus out of the page behind
 
   let opening = false;
+  let finished = false;
+
+  /** Let the guest in. Safe to call twice; only the first call counts. */
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+
+    gate.classList.add('is-closing');
+    gate.classList.add('is-open');
+    lockScroll(false);
+    if (main) main.inert = false;
+
+    window.setTimeout(() => {
+      gate.hidden = true;
+      video?.pause();
+      document.getElementById('hero')?.focus({ preventScroll: true });
+    }, DISSOLVE_MS);
+  };
 
   const open = () => {
     if (opening) return;
@@ -221,22 +245,37 @@ function initGate() {
     // Phase 11 listens for this: audio may only start from a real gesture.
     document.dispatchEvent(new CustomEvent('wedding:open'));
 
-    const flapTime = prefersReducedMotion() ? 0 : FLAP_MS;
+    // Stillness means no film either — fade straight through.
+    if (prefersReducedMotion() || !video) {
+      finish();
+      return;
+    }
 
-    gate.classList.add('is-opening');
+    gate.classList.add('is-playing');
 
-    // The flap swings, then the envelope lifts away, then it is gone.
-    window.setTimeout(() => {
-      gate.classList.add('is-open');
-      lockScroll(false);
-      if (main) main.inert = false;
+    // Begin the dissolve just before the last frame, so the film never
+    // shows its final frozen frame or a flash of black.
+    const watchForEnd = () => {
+      if (!video.duration || Number.isNaN(video.duration)) return;
+      const remaining = (video.duration - video.currentTime) * 1000;
+      if (remaining <= FADE_MS) finish();
+    };
+    video.addEventListener('timeupdate', watchForEnd);
+    video.addEventListener('ended', finish);
 
-      window.setTimeout(() => {
-        gate.hidden = true;
-        // Land the guest at the top of the invitation, not mid-page.
-        document.getElementById('hero')?.focus({ preventScroll: true });
-      }, LIFT_MS);
-    }, flapTime * 0.62);          // overlap: the lift starts mid-swing
+    // If it cannot play at all, do not strand the guest behind it.
+    video.addEventListener('error', finish);
+    video.addEventListener('stalled', finish);
+
+    const played = video.play();
+    if (played && played.catch) played.catch(finish);
+
+    // Backstop: if the video never fires a single event — a decode failure
+    // on an old phone, say — let them in on the clock instead.
+    const cap = (video.duration && !Number.isNaN(video.duration))
+      ? video.duration * 1000 + 1200
+      : 7000;
+    window.setTimeout(finish, cap);
   };
 
   gate.addEventListener('click', open);

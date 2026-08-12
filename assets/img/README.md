@@ -10,6 +10,8 @@ Everything here came from the reference site
 | `hero-scene.jpg` | Derived from the site's OG preview image, `Screenshot_2026-06-2.png` |
 | `hero-floral-left.png` | Tilda CDN `tild6639-3363-4136-a234-356639363561` |
 | `hero-floral-right.png` | Tilda CDN `tild3764-3461-4436-a562-636534643333` |
+| `envelope-closed.jpg` | Cloudflare R2 `pub-96ce671efbac…`, the gate's still |
+| `../video/envelope-open.mp4` | Cloudflare R2 `pub-96ce671efbac…`, the opening film |
 | `_source/keep/venue-line-art.png` | Tilda CDN `tild3637-3939-4864-a263-333836383139`, for Phase 8 |
 
 > **None of this is ours.** It is most likely licensed stock or commissioned
@@ -63,3 +65,32 @@ cwebp -q 82 hero-scene.jpg -o hero-scene.webp
 ```
 
 Then wrap the `<img>` in a `<picture>` with the JPEG as fallback.
+
+
+## The envelope
+
+The gate is the reference's own two-stage sequence: a still of the sealed
+envelope, then a 4.8s film of it opening which dissolves as it ends. Both come
+from the reference's Cloudflare R2 bucket, not Tilda.
+
+**The wax seal reads `R&Z` in both the still and the film.** Unlike the hero,
+this is not live text and cannot be swapped — it is embossed wax, lit and
+photographed, and it moves in the video. Different initials mean new artwork
+for both files. `WEDDING.couple.monogram` no longer drives the gate.
+
+The still was 2.4MB as PNG with no transparency; re-saved as JPEG at 253KB.
+The film is 3.5MB and could not be re-encoded — no ffmpeg on this machine.
+That is the single heaviest thing a guest downloads, and it is on the critical
+path since it is the first screen. Worth an `ffmpeg -crf 30` pass before
+launch:
+
+```sh
+brew install ffmpeg
+ffmpeg -i envelope-open.mp4 -vcodec libx264 -crf 30 -preset slow \
+       -movflags +faststart -an envelope-open-small.mp4
+```
+
+## Also on the reference, not yet used
+
+`Swans2.mov` — the reference animates the hero's swans with an autoplaying
+looped video sitting over the static scene. Our hero uses the still plate.
