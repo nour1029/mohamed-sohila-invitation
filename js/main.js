@@ -24,16 +24,19 @@ const WEDDING = {
 
   couple: {
     // Order matters: `one` reads first in the hero stack.
-    one: 'Zohan',
-    two: 'Rose',
-    // Wax seal monogram (Phase 1 / Phase 2).
-    monogram: 'R&Z',
+    one: 'Mazen',
+    two: 'Shams',
+    // Wax seal monogram (Phase 1 / Phase 2). NOTE: the envelope's still and
+    // its opening film are photographed wax, not live text — they still
+    // read "R&Z" and do not update from this value. See assets/img/README.md.
+    monogram: 'M&S',
   },
 
   // ISO 8601 WITH offset. The offset is not optional — without it the
   // countdown silently shifts by the guest's own timezone.
-  // 27 Sept 2026, 5:00 PM, America/New_York (EDT, -04:00).
-  datetime: '2026-09-27T17:00:00-04:00',
+  // 29 Aug 2026, 5:00 PM, America/New_York (EDT, -04:00). Time carried over
+  // from the placeholder — confirm the actual ceremony start time.
+  datetime: '2026-08-29T17:00:00-04:00',
 
   // The wedding's own timezone. Everything printed on the page is rendered
   // in *this* zone, so a guest reading from Sydney still sees the date and
@@ -52,7 +55,10 @@ const WEDDING = {
   },
 
   // Last date a guest can respond. Date-only; the deadline is end of day.
-  rsvpDeadline: '2026-09-06',
+  // The wedding is only 16 days out, so the placeholder's 3-week lead time
+  // would land in the past — the exact bug REFERENCE.md flags in the
+  // reference site. Set to one week before instead; confirm with the couple.
+  rsvpDeadline: '2026-08-22',
 
   // Rendered as the timeline in Phase 7. Add or remove stops freely.
   schedule: [
