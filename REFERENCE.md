@@ -257,7 +257,8 @@ must be replaced:
 - Keep the reference's narrow-column-on-desktop look, or build a proper responsive
   desktop composition? (Recommendation: **proper responsive** — the reference's version
   is a builder artifact, not a design intent.)
-- Should the envelope gate remember it's been opened (`localStorage`), so a returning
-  guest isn't gated again? Reference does not.
+- ~~Should the envelope gate remember it's been opened?~~ **Decided 2026-08-12: no.**
+  `WEDDING.gate.remember: 'never'` — the envelope opens every visit. `'session'` and
+  `'forever'` are still implemented if that ever changes.
 - Add a per-guest personalized link (`?to=Sara`) so the envelope greets them by name?
   Reference does not — but it's cheap and lands well.

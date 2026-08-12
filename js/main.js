@@ -78,11 +78,11 @@ const WEDDING = {
 
   gate: {
     // How long the envelope remembers it has been opened:
-    //   'session' — a guest who already opened it this browsing session goes
-    //               straight in, but a fresh visit gets the moment again
-    //   'never'   — always gate (what the reference does)
+    //   'never'   — always gate. Every guest opens the envelope every time;
+    //               it is the first impression and nobody should miss it.
+    //   'session' — skipped for the rest of the browsing session
     //   'forever' — opened once, never gated again on this device
-    remember: 'session',
+    remember: 'never',
   },
 };
 

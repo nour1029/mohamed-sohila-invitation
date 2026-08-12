@@ -74,8 +74,8 @@ The first thing every guest sees. Worth over-investing in.
 - [x] Page scroll locked until opened, unlocked after
 - [x] Triggers the music (see Phase 11) — dispatches a `wedding:open` event to listen for
 - [x] Respects `prefers-reduced-motion` — instant, dignified fade instead
-- [x] Decided: remembered for the **browser session** (`WEDDING.gate.remember`), so a
-      returning guest mid-session isn't re-gated but a fresh visit still gets the moment
+- [x] Decided: **never remembered** (`WEDDING.gate.remember: 'never'`) — the envelope is
+      the first impression and every guest gets it every time, same as the reference
 
 **Done when:** it feels like opening a real envelope on an actual phone, not a div rotating.
 
