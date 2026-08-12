@@ -31,9 +31,12 @@
   /* Type scale — fluid, mobile floor to desktop ceiling.
      Script runs deliberately large; it is the personality of the design. */
   --t-script-xl:  clamp(4.25rem, 17vw, 7.5rem);   /* couple's names */
-  /* Section headings must clear their flanking flourishes on one line at
-     360px — "Schedule of Events" is the longest we have. */
-  --t-script-lg:  clamp(2rem, 8vw, 3.5rem);       /* section headings */
+  /* Section headings must clear their flanking flourishes on one line.
+     The ceiling is set by the longest heading, "Confirm Your Attendance":
+     at 2.6rem it measures ~392px, which fits a 556px desktop column with
+     two 56px flourishes and their gaps. Raise this and that heading wraps
+     and squeezes its ornaments to nothing. */
+  --t-script-lg:  clamp(1.75rem, 8vw, 2.6rem);    /* section headings */
   --t-script-md:  clamp(1.75rem, 6.5vw, 2.5rem);  /* "Scroll down" */
   --t-display-lg: clamp(2.25rem, 9vw, 3.5rem);    /* countdown numerals */
   --t-display-md: clamp(1rem, 3.6vw, 1.25rem);    /* venue name */
@@ -209,7 +212,13 @@ body {
 .heading--flourished::after {
   content: "";
   flex: 1 1 0;
-  min-width: 0;
+  /* A floor, not zero. Taking only leftover space means a long heading can
+     starve these down to 0px and the ornaments vanish with no sign that
+     anything is wrong — which is exactly what happened at desktop width.
+     The floor scales with the viewport: a fixed 40px is generous on a
+     laptop but wide enough on a phone to push the heading onto two lines,
+     which is the opposite problem. */
+  min-width: clamp(26px, 8vw, 40px);
   max-width: 92px;
   height: 20px;
   background: var(--filigree) center / contain no-repeat;
