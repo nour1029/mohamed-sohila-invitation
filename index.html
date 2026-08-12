@@ -251,8 +251,20 @@
   </section>
 
   <!-- 9 · Closing — Phase 12 -->
-  <section id="closing" class="band" data-phase="Phase 12">
-    <h2 class="band__label" data-reveal>Closing</h2>
+  <section id="closing" class="closing">
+    <div class="section__inner closing__words">
+      <p class="heading closing__line" data-reveal>Hope to see you there!</p>
+      <p class="closing__names display" data-wedding="couple.both" data-reveal></p>
+    </div>
+
+    <figure class="closing__figure" data-reveal>
+      <!-- TODO Phase 14: swap in the couple photo -->
+      <div class="closing__photo slot" aria-hidden="true">Couple photo</div>
+
+      <!-- TODO Phase 14: swap in the watercolour floral arch -->
+      <div class="closing__arch closing__arch--start slot" aria-hidden="true">Floral</div>
+      <div class="closing__arch closing__arch--end slot" aria-hidden="true">Floral</div>
+    </figure>
   </section>
 
 </main>
@@ -323,7 +335,14 @@
   </div>
 </dialog>
 
-<!-- Persistent music button — Phase 11 -->
+<!-- Persistent music button — Phase 11.
+     Stays hidden unless WEDDING.audioSrc is set, so an unconfigured
+     player never shows a control that cannot do anything. -->
+<button class="music" id="music-toggle" type="button" hidden aria-pressed="false">
+  <span class="music__icon" aria-hidden="true"></span>
+  <span class="visually-hidden" id="music-label">Play music</span>
+</button>
+<audio id="music-audio" loop preload="none"></audio>
 
 <script src="js/main.js"></script>
 </body>

@@ -558,7 +558,55 @@ function initRsvp() {
   });
 }
 
-/* ---------- 11 · Boot -------------------------------------- */
+/* ---------- 11 · Music player (Phase 11) -------------------
+   Starts when the envelope opens, because that is the one moment
+   we are guaranteed a real user gesture — mobile browsers refuse
+   audio without one.
+   ----------------------------------------------------------- */
+
+function initMusic() {
+  const button = document.getElementById('music-toggle');
+  const audio  = document.getElementById('music-audio');
+  const label  = document.getElementById('music-label');
+  if (!button || !audio) return;
+
+  // Nothing to play yet: leave the button hidden rather than offering a
+  // control that does nothing.
+  if (!WEDDING.audioSrc) return;
+
+  audio.src = WEDDING.audioSrc;
+  audio.volume = 0.55;
+  button.hidden = false;
+
+  // The icon is driven by the audio element's own events, not by what we
+  // asked it to do — so it always shows what is actually happening, even
+  // if the browser or the phone's media controls overrule us.
+  const sync = () => {
+    const playing = !audio.paused;
+    button.classList.toggle('is-playing', playing);
+    button.setAttribute('aria-pressed', String(playing));
+    label.textContent = playing ? 'Pause music' : 'Play music';
+  };
+
+  audio.addEventListener('play', sync);
+  audio.addEventListener('pause', sync);
+  audio.addEventListener('ended', sync);
+  sync();
+
+  button.addEventListener('click', () => {
+    if (audio.paused) audio.play().catch(sync);
+    else audio.pause();
+  });
+
+  // Fired by the envelope gate. If the browser still refuses, the button
+  // simply stays in its paused state for the guest to press.
+  document.addEventListener('wedding:open', () => {
+    if (prefersReducedMotion()) return;   // stillness means sound too
+    audio.play().catch(() => sync());
+  }, { once: true });
+}
+
+/* ---------- 12 · Boot -------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
@@ -570,7 +618,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initVenue();
   initRsvp();
 
-  initReveals();
+  // Registers its wedding:open listener before the gate can fire it.
+  initMusic();
 
-  // Phase 11 · music player
+  initReveals();
 });

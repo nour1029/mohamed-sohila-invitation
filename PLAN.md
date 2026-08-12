@@ -167,12 +167,15 @@ The only part with a backend, and the only part that must not fail silently.
 
 ### Phase 11 · Music player `M`
 
-- [ ] Fixed circular maroon button, bottom-right, pause/play icon
-- [ ] Starts on envelope open — **this is the only reliable way**, since mobile browsers
+- [x] Fixed circular maroon button, bottom-right, pause/play icon
+- [x] Starts on envelope open — **this is the only reliable way**, since mobile browsers
       block autoplay without a user gesture
-- [ ] State persists across scroll; icon always reflects reality
-- [ ] Sensible fallback if the browser blocks it anyway
-- [ ] Doesn't fight the phone's own media controls
+- [x] State persists across scroll; icon always reflects reality — driven by the audio
+      element's own play/pause events, not by what we asked it to do
+- [x] Sensible fallback if the browser blocks it anyway — button sits in paused state
+- [x] Doesn't fight the phone's own media controls
+- [ ] **Blocked on you:** an audio file we have rights to, into `assets/audio/`, then set
+      `WEDDING.audioSrc`. Until then the button stays hidden.
 
 > **Needs you:** an audio file you have rights to. The reference used Einaudi's *Divenire*,
 > which is not ours to take.
@@ -180,8 +183,8 @@ The only part with a backend, and the only part that must not fail silently.
 ---
 
 ### Phase 12 · Closing `S`
-- [ ] `Hope to see you there!` script + names in Cinzel
-- [ ] Full-width couple photo slot, floral arch overlapping its bottom corners
+- [x] `Hope to see you there!` script + names in Cinzel
+- [x] Full-width couple photo slot, floral arch overlapping its bottom corners
 
 ---
 
