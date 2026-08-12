@@ -597,6 +597,38 @@ function initRsvp() {
   });
 }
 
+/* ---------- 10.5 · Hero scene video ------------------------
+   The hero's painting is a video. It only starts once the guest
+   is through the envelope, and it never becomes load-bearing:
+   the poster is the still plate, so a browser that cannot decode
+   the file simply shows the painting.
+   ----------------------------------------------------------- */
+
+function initHeroVideo() {
+  const video = document.getElementById('hero-video');
+  if (!video) return;
+
+  // Stillness means stillness — leave the poster showing.
+  if (prefersReducedMotion()) return;
+
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
+    video.preload = 'auto';
+    video.load();
+    const played = video.play();
+    // A refusal or a codec the browser cannot handle is fine: the poster
+    // is the same artwork, so there is nothing to fall back to or fix.
+    if (played && played.catch) played.catch(() => {});
+  };
+
+  document.addEventListener('wedding:open', start, { once: true });
+
+  // If the gate was skipped entirely, wedding:open never fires.
+  if (document.getElementById('gate')?.hidden) start();
+}
+
 /* ---------- 11 · Music player (Phase 11) -------------------
    Starts when the envelope opens, because that is the one moment
    we are guaranteed a real user gesture — mobile browsers refuse
@@ -657,8 +689,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initVenue();
   initRsvp();
 
-  // Registers its wedding:open listener before the gate can fire it.
+  // Both register their wedding:open listeners before the gate can fire it.
   initMusic();
+  initHeroVideo();
 
   initReveals();
 });

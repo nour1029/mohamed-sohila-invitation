@@ -72,12 +72,21 @@
   <section id="hero" class="hero" tabindex="-1">
     <div class="hero__panel">
 
-      <!-- The arch, columns, vines, lake and swans are one painted scene.
-           The couple's names are NOT in it: the source had them baked in,
-           and they were painted out so the words below stay live text
-           driven from WEDDING. See assets/img/README.md. -->
-      <img class="hero__bg" src="assets/img/hero-scene.jpg" alt=""
-           width="981" height="1558" fetchpriority="high" decoding="async">
+      <!-- The scene is a video: the swans drift, petals fall, light moves.
+           poster is the still plate, so a browser that cannot decode HEVC
+           shows the painting instead of a blank box. preload is none and
+           playback starts on wedding:open — no reason to pull 7MB before
+           the guest has opened the envelope. -->
+      <!-- src is set directly rather than via <source type="video/quicktime">:
+           browsers filter <source> by declared type, and Chrome reports no
+           support for quicktime even where it decodes the file happily. A
+           bare src lets it sniff, and a browser that genuinely cannot decode
+           just keeps showing the poster. -->
+      <video class="hero__bg" id="hero-video"
+             src="assets/video/swans.mov"
+             poster="assets/img/hero-scene.jpg"
+             muted loop playsinline preload="none"
+             width="720" height="1280" aria-hidden="true"></video>
 
       <div class="hero__words">
         <p class="hero__eyebrow script" data-reveal>Wedding Day</p>

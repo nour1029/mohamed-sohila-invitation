@@ -90,7 +90,48 @@ ffmpeg -i envelope-open.mp4 -vcodec libx264 -crf 30 -preset slow \
        -movflags +faststart -an envelope-open-small.mp4
 ```
 
-## Also on the reference, not yet used
+## The hero scene video
 
-`Swans2.mov` — the reference animates the hero's swans with an autoplaying
-looped video sitting over the static scene. Our hero uses the still plate.
+`../video/swans.mov` is the hero. It is not just the swans — it is the whole
+painting, animated: the swans drift, blossom petals fall, light shifts across
+the arch. 720x1280, 8.06s, looping.
+
+`hero-scene.jpg` is now its **poster**, not the hero itself. The video only
+starts once the guest is through the envelope, so nothing pulls 7MB before
+they have opened it.
+
+Three things about this file are worth knowing:
+
+**It is HEVC (h.265) in a QuickTime container.** Safari plays it everywhere.
+Chrome on macOS plays it via the system decoder. Firefox does not, and Android
+and Windows Chrome depend on the device. Where it cannot decode, the poster
+stays on screen — the same artwork, just still — so nothing ever breaks. This
+is why the poster matters and why the still plate was worth making.
+
+**Do not use `<source type="video/quicktime">`.** Browsers filter `<source>`
+by declared type, and Chrome reports no support for quicktime even where it
+decodes the file happily, so the video silently gets no source at all
+(`networkState: 3`). Setting `src` directly on the `<video>` lets it sniff.
+The reference sidesteps this by labelling its `.mov` as `video/mp4`.
+
+**It was not faststart.** As downloaded, the `moov` atom sat at byte 7,313,055
+of 7,319,318 — the very end — so a browser had to fetch all 7MB before it
+could show one frame. `_source/keep/faststart.py` rewrites it with `moov`
+first, patching every `stco` chunk offset by the size of the moved atom
+(those offsets are absolute file positions, so they must shift or playback
+breaks silently). `moov` now sits at byte 28. The envelope film was already
+faststart.
+
+## Page weight
+
+The two videos are 10.5MB together and both are on the critical path. Neither
+could be re-encoded here — no ffmpeg. Before launch:
+
+```sh
+brew install ffmpeg
+# H.264 alongside the HEVC, so Firefox and Android get motion too:
+ffmpeg -i swans.mov -vcodec libx264 -crf 30 -preset slow -an \
+       -movflags +faststart swans.mp4
+```
+
+Then offer both, H.264 first, and everyone gets the animation.

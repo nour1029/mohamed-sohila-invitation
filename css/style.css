@@ -609,8 +609,10 @@ body.is-gated {
 .hero__panel {
   position: relative;
   width: min(100%, 560px);
-  /* Matches the scene exactly, so at normal sizes nothing is cropped. */
-  aspect-ratio: 981 / 1558;
+  /* Matches the scene video exactly, so nothing is cropped at normal
+     sizes. The still poster is a slightly wider crop of the same art and
+     object-fit: cover absorbs the difference. */
+  aspect-ratio: 720 / 1280;
   max-height: calc(100svh - var(--space-3));
   overflow: hidden;
   container-type: inline-size;
