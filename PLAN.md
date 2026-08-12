@@ -195,7 +195,10 @@ Swap every placeholder for your actual details. Straight run through the checkli
 `REFERENCE.md` §5 — nothing invented, nothing left saying "Zohan and Rose".
 
 ### Phase 14 · Real assets `M`
-- [ ] Florals, envelope texture, couple photo, venue illustration dropped in
+- [~] Florals, envelope texture, couple photo, venue illustration dropped in
+      — hero corner florals in (taken from the reference site; see
+      `assets/img/README.md` for the licensing caveat). Still needed: envelope
+      texture, couple photo, venue illustration, ivy/rose vines, columns, swans
 - [ ] All images exported at 2× and converted to WebP with JPG fallback
 - [ ] Explicit `width`/`height` on everything so nothing jumps while loading
 

@@ -772,8 +772,11 @@ body.is-gated {
   position: absolute;
   bottom: 0;
   z-index: 1;
-  width: clamp(110px, 34vw, 220px);
-  height: clamp(90px, 26vw, 190px);
+  width: clamp(150px, 44vw, 280px);
+  /* Height follows the art; these are tall corner pieces, not boxes. */
+  height: auto;
+  pointer-events: none;
+  user-select: none;
 }
 
 .hero__corner--start { left: 0; }

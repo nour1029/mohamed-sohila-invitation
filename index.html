@@ -86,9 +86,14 @@
       </h1>
     </div>
 
-    <!-- TODO Phase 14: swap in watercolour floral clusters -->
-    <div class="hero__corner hero__corner--start slot" aria-hidden="true">Floral</div>
-    <div class="hero__corner hero__corner--end slot" aria-hidden="true">Floral</div>
+    <!-- Corner florals. width/height are the real pixel dimensions so the
+         browser reserves the space and nothing jumps as they decode. -->
+    <img class="hero__corner hero__corner--start" alt=""
+         src="assets/img/hero-floral-left.png" width="480" height="736"
+         decoding="async">
+    <img class="hero__corner hero__corner--end" alt=""
+         src="assets/img/hero-floral-right.png" width="484" height="736"
+         decoding="async">
 
     <p class="hero__cue cue cue--down" aria-hidden="true">
       <span class="cue__chevron"></span>
