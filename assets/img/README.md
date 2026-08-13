@@ -135,3 +135,37 @@ ffmpeg -i swans.mov -vcodec libx264 -crf 30 -preset slow -an \
 ```
 
 Then offer both, H.264 first, and everyone gets the animation.
+
+
+## Countdown and Schedule (matched to the live reference)
+
+The reference's Countdown is not a card at all — it's a self-contained coded
+widget (Ovo digits in a shimmering gold-gradient text-clip, wiped open on
+scroll, each unit rolling out and back in on change rather than the text
+just overwriting). That behaviour is reproduced in `js/main.js`
+(`initCountdown`, `flipDigit`) and `css/style.css` §9.2 directly from the
+reference's own inline `<style>`/`<script>` — colours retokenised to
+`--gold`/`--gold-light`, everything else near-identical, including the exact
+per-unit stagger delays.
+
+Schedule keeps its own hand-built torn-paper card and timeline, but the
+flourishes flanking the heading and the flower on the timeline are now the
+reference's own assets rather than approximations:
+
+| File | Origin | Used for |
+|---|---|---|
+| `schedule-flourish-left.png` | Tilda `tild3638-3336-4136-a131-…` | Left of "Schedule of Events" |
+| `schedule-flourish-right.png` | Tilda `tild6131-6362-4663-b461-…` | Right of "Schedule of Events" |
+| `schedule-rose.png` | Tilda `tild3363-3665-4330-a361-…`, resized from 1309x1201 | Crowning the timeline rule |
+
+These are scoped to the Schedule heading only, via a `.heading--schedule`
+modifier — the shared `.heading--flourished` filigree (Location, RSVP, Dress
+Code) is untouched, since those headings' own reference assets haven't been
+checked yet.
+
+**Found along the way, not (yet) acted on:** fixing the real flourish images
+in exposed a pre-existing bug — the flourish min-width floor (added when the
+desktop zero-width bug was fixed) was tuned against bare section headings
+and was too generous for a heading sitting inside a card's extra padding,
+wrapping "Schedule of Events" back onto two lines at phone width. The
+coefficient was lowered (8vw → 5.5vw); re-verified clean at 320/390/1280.

@@ -123,14 +123,21 @@ With Parts A and B done, these go quickly — they're compositions of existing p
 
 ### Phase 6 · Countdown `S`
 - [x] Live D:H:M:S from `WEDDING.date`, ticking every second
-- [x] Cinzel numerals, `:` separators, small labels beneath
+- [x] Matches the reference's own custom widget exactly: Ovo (not Cinzel) digits in a
+      shimmering gold gradient, `:` separators, small labels beneath
+- [x] Ink-wipe reveal the first time the clock scrolls into view, then each unit flips
+      (rolls out/in) on change rather than the text just overwriting — both taken from
+      the reference's own CSS/JS, not approximated
 - [x] Graceful state for when the date has passed ("Today's the day" / post-wedding message)
       — both branches verified against a shifted clock
 - [x] No layout jitter as digits change (tabular figures + fixed column width)
 
 ### Phase 7 · Schedule timeline `M`
-- [x] Torn-paper card, script heading with filigree flourishes
-- [x] Vertical gold rule, rose bud at top, diamond nodes per stop
+- [x] Torn-paper card, script heading with filigree flourishes — flourishes are the
+      reference's own photographed gold scrollwork (`schedule-flourish-*.png`), scoped
+      to this heading only via `.heading--schedule`, not the shared hand-drawn filigree
+- [x] Vertical gold rule, rose at top — the reference's own photographed peony
+      (`schedule-rose.png`), not the CSS-drawn rosebud — and diamond nodes per stop
 - [x] Time left / event right, generated from the `WEDDING.schedule` array
 - [x] Reveals stop-by-stop as you scroll
 

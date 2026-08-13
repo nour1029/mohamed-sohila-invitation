@@ -217,8 +217,14 @@ body {
      anything is wrong — which is exactly what happened at desktop width.
      The floor scales with the viewport: a fixed 40px is generous on a
      laptop but wide enough on a phone to push the heading onto two lines,
-     which is the opposite problem. */
-  min-width: clamp(26px, 8vw, 40px);
+     which is the opposite problem. 5.5vw rather than 8vw: a heading inside
+     a card (padding on both the card and its section) has noticeably less
+     room than one sitting straight in .section__inner, and 8vw was enough
+     to wrap "Schedule of Events" back onto two lines the moment it had a
+     card's padding to contend with — the exact failure this floor exists
+     to prevent, just from the other side. This still saturates at the
+     40px cap well before desktop width, so the original fix is unaffected. */
+  min-width: clamp(26px, 5.5vw, 40px);
   max-width: 92px;
   height: 20px;
   background: var(--filigree) center / contain no-repeat;
@@ -230,6 +236,19 @@ body {
 @media (max-width: 360px) {
   .heading--flourished::before,
   .heading--flourished::after { display: none; }
+}
+
+/* The Schedule heading uses the reference's own photographed gold
+   scrollwork instead of the shared hand-drawn --filigree. Left and right
+   are two distinct images, each already drawn facing the right way — not
+   a mirror of one another — so the generic scaleX(-1) mirror is cancelled. */
+.heading--schedule::before {
+  background-image: url("../assets/img/schedule-flourish-left.png");
+  transform: none;
+}
+
+.heading--schedule::after {
+  background-image: url("../assets/img/schedule-flourish-right.png");
 }
 
 /* ---------- 5.2 · Wax seal --------------------------------
@@ -782,14 +801,19 @@ body.is-gated {
 .invite__ivy--start { left: 0; }
 .invite__ivy--end   { right: 0; }
 
-/* ---------- 9.2 · Countdown (Phase 6) --------------------- */
+/* ---------- 9.2 · Countdown (Phase 6) ---------------------
+   Matches the reference's own custom widget: Ovo (not Cinzel)
+   digits in a shimmering gold gradient, revealed with an "ink"
+   wipe the first time they scroll into view, then flipped in
+   and out — not just overwritten — whenever a unit changes.
+   ---------------------------------------------------------- */
 
 .countdown__clock {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   gap: clamp(0.15rem, 1.2vw, 0.5rem);
-  margin-top: var(--space-3);
+  margin-top: var(--space-4);
 }
 
 .count {
@@ -801,30 +825,112 @@ body.is-gated {
   min-width: clamp(3.1rem, 15vw, 4.4rem);
 }
 
+/* Clips the flip transform so a digit leaving upward does not briefly
+   overlap the label sitting underneath it. */
+.count__wrap {
+  overflow: hidden;
+  height: 1.22em;
+  display: grid;
+  place-items: center;
+}
+
 .count__value {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--t-display-lg);
   font-variant-numeric: tabular-nums lining-nums;
   font-feature-settings: "tnum" 1;
   line-height: 1.1;
-  color: var(--ink);
+
+  background: linear-gradient(105deg,
+    var(--gold) 0%, var(--gold) 25%,
+    var(--gold-light) 46%, color-mix(in srgb, var(--gold-light) 70%, #fff) 52%,
+    var(--gold-light) 58%, var(--gold) 75%, var(--gold) 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* Hidden until .js-countdown-in scrolls it into view (see main.js), then
+     wiped open left-to-right. Motion-safe fallback keeps this at 0% so a
+     reduced-motion guest is never shown a permanently blank digit. */
+  clip-path: inset(0 100% 0 0);
+  transition: transform 0.55s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.55s ease;
+}
+
+.count__value.is-revealed {
+  animation:
+    countInkReveal 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    countShimmer 4.5s ease-in-out 1.1s infinite;
+}
+
+/* Staggered so the four units wipe in left to right rather than at once. */
+[data-count="days"].is-revealed    { animation-delay: 0s,    1.1s; }
+[data-count="hours"].is-revealed   { animation-delay: 0.18s, 1.28s; }
+[data-count="minutes"].is-revealed { animation-delay: 0.36s, 1.46s; }
+[data-count="seconds"].is-revealed { animation-delay: 0.54s, 1.64s; }
+
+@keyframes countInkReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes countShimmer {
+  0%, 100% { background-position: 100% 0; }
+  50%      { background-position: 0% 0; }
+}
+
+/* One unit ticking over: out on the way up, back in from below. Applied
+   only when the value actually changes — see main.js — not every second. */
+.count__value.is-leaving  { transform: translateY(-60%); opacity: 0; }
+.count__value.is-entering {
+  transform: translateY(60%);
+  opacity: 0;
+  transition: none;   /* snap to the entry position before animating in */
 }
 
 .count__label {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-style: italic;
   font-size: var(--t-caps);
-  letter-spacing: 0.16em;
-  text-indent: 0.16em;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-indent: 0.1em;
   color: var(--gold);
+  opacity: 0;
   margin-top: var(--space-1);
+  transition: opacity 0.8s ease;
 }
 
+.count__label.is-revealed { opacity: 0.85; }
+
+.count__label[data-count-label="days"].is-revealed    { transition-delay: 0.9s; }
+.count__label[data-count-label="hours"].is-revealed   { transition-delay: 1.08s; }
+.count__label[data-count-label="minutes"].is-revealed { transition-delay: 1.26s; }
+.count__label[data-count-label="seconds"].is-revealed { transition-delay: 1.44s; }
+
 .count__sep {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--t-display-lg);
   line-height: 1.1;
-  color: var(--gold-soft);
+  margin-top: -0.7em;   /* the ":" sits high in its em box; pull it to the digits' optical centre */
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.count__sep.is-revealed { opacity: 0.9; }
+.count__sep:nth-of-type(1).is-revealed { transition-delay: 0.25s; }
+.count__sep:nth-of-type(2).is-revealed { transition-delay: 0.43s; }
+.count__sep:nth-of-type(3).is-revealed { transition-delay: 0.61s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .count__value {
+    clip-path: none;
+    animation: none;
+    background-position: 0 0;
+  }
+  .count__label,
+  .count__sep { opacity: 0.85; transition: none; }
 }
 
 .countdown__after {
@@ -860,16 +966,17 @@ body.is-gated {
     var(--gold-soft), var(--gold) 12%, var(--gold) 88%, var(--gold-soft));
 }
 
-/* Rose bud crowning the rule. */
+/* Rose crowning the rule — the reference's own photographed peony,
+   not the SVG rosebud other sections might still use. */
 .timeline::after {
   content: "";
   position: absolute;
   left: 50%;
-  top: -0.6em;
-  width: 22px;
-  height: 22px;
+  top: -0.85em;
+  width: 30px;
+  height: 30px;
   translate: -50% 0;
-  background: var(--rosebud) center / contain no-repeat;
+  background: url("../assets/img/schedule-rose.png") center / contain no-repeat;
 }
 
 .timeline__stop {

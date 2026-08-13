@@ -346,6 +346,24 @@ function initReveals() {
 
 const MS = { second: 1000, minute: 60000, hour: 3600000, day: 86400000 };
 
+/**
+ * A unit rolls out and back in on change, rather than the text just
+ * jumping — mirrors the reference's own "flip" transition. 520ms matches
+ * its .55s transform/opacity transition, so the swap lands mid-motion
+ * instead of stalling on a held frame.
+ */
+function flipDigit(el, newValue) {
+  if (el.textContent === newValue) return;
+  el.classList.add('is-leaving');
+  window.setTimeout(() => {
+    el.classList.remove('is-leaving');
+    el.classList.add('is-entering');
+    el.textContent = newValue;
+    void el.offsetHeight;               // force reflow so the next class removal animates
+    el.classList.remove('is-entering');
+  }, 520);
+}
+
 function initCountdown() {
   const clock = document.getElementById('countdown-clock');
   const after = document.getElementById('countdown-after');
@@ -356,7 +374,25 @@ function initCountdown() {
     fields[el.dataset.count] = el;
   });
 
+  // The gold ink-wipe and shimmer only ever play once, the first time the
+  // clock scrolls into view — same trigger the reference uses.
+  const revealables = clock.querySelectorAll('.count__value, .count__label, .count__sep');
+  const reveal = () => revealables.forEach((el) => el.classList.add('is-revealed'));
+
+  if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+    reveal();
+  } else {
+    const observer = new IntersectionObserver((entries, obs) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        reveal();
+        obs.disconnect();
+      }
+    }, { threshold: 0.5 });
+    observer.observe(clock);
+  }
+
   let timer = null;
+  let first = true;
 
   const tick = () => {
     const remaining = WEDDING_DATE.getTime() - Date.now();
@@ -375,10 +411,22 @@ function initCountdown() {
     }
 
     const pad = (n) => String(n).padStart(2, '0');
-    fields.days.textContent    = Math.floor(remaining / MS.day);
-    fields.hours.textContent   = pad(Math.floor(remaining / MS.hour)   % 24);
-    fields.minutes.textContent = pad(Math.floor(remaining / MS.minute) % 60);
-    fields.seconds.textContent = pad(Math.floor(remaining / MS.second) % 60);
+    const next = {
+      days:    String(Math.floor(remaining / MS.day)),
+      hours:   pad(Math.floor(remaining / MS.hour)   % 24),
+      minutes: pad(Math.floor(remaining / MS.minute) % 60),
+      seconds: pad(Math.floor(remaining / MS.second) % 60),
+    };
+
+    if (first) {
+      // The opening render sets every digit directly — nothing is on
+      // screen yet for a flip to be worth animating, and it would only
+      // add motion behind the ink-wipe reveal.
+      Object.entries(next).forEach(([unit, value]) => { fields[unit].textContent = value; });
+      first = false;
+    } else {
+      Object.entries(next).forEach(([unit, value]) => flipDigit(fields[unit], value));
+    }
   };
 
   tick();
