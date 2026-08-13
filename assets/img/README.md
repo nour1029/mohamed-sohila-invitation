@@ -195,6 +195,20 @@ hand-drawn approximation on this card.
   side), which is why `.invite__ivy` positions them with a negative
   `translateY` rather than sitting flush inside the card like the old
   placeholder slots did.
+- **`invite-ivy-left.webp` / `invite-ivy-right.webp`** are the primary
+  source now (PNGs are the `<picture>` fallback for non-WebP browsers),
+  pulled directly from Tilda's own optimizer (`optim.tildacdn.net`) rather
+  than re-encoded here — this machine has no `cwebp`. Sized at 436×/420×,
+  the same widths the reference's own JS requests them at, ~5-6× lighter
+  than the PNGs (58KB/51KB vs. 299KB/280KB).
+- **The `.invite__ivy` size was a real bug, not a style choice**: it first
+  shipped at a guessed `clamp(50px, 15vw, 84px)`, sized for the old square
+  placeholder slot. Checking the widths Tilda requests these images at
+  (436px/420px, ≈2× for retina) against their canvas box (224px/236px on a
+  744px-wide card) puts the reference's florals at ~30% of the card's
+  width — roughly double what was shipping. Fixed to
+  `clamp(80px, 30%, 190px)`; they now arch over the Bismillah graphic
+  properly instead of sitting as small corner accents.
 
 **One font swapped deliberately, not matched exactly.** The reference's
 "Two Souls / One destiny / A Lifetime written by Allah" and its Tilda

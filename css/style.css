@@ -815,12 +815,14 @@ body.is-gated {
 
 /* Drapes down over the card's torn top edge rather than sitting inside
    it — matches the reference's own floral placement (its florals sit
-   ~55% above the card top, inset ~17.6% from each side). */
+   ~55% above the card top, inset ~17.6% from each side, at ~30% of the
+   card's own width — confirmed against the 436px/420px raster widths
+   Tilda's CDN serves them at on the live site). */
 .invite__ivy {
   position: absolute;
   top: 0;
   left: 17%;
-  width: clamp(50px, 15vw, 84px);
+  width: clamp(80px, 30%, 190px);
   height: auto;
   transform: translateY(-55%);
 }

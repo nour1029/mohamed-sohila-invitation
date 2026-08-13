@@ -117,9 +117,16 @@
       <article class="card invite" data-reveal-stagger>
 
         <!-- Same floral cutouts the reference uses to flank its own invite
-             card (assets/img/README.md — the Tilda IDs match exactly). -->
-        <img class="invite__ivy invite__ivy--start" src="assets/img/hero-floral-left.png" alt="" aria-hidden="true" width="480" height="736">
-        <img class="invite__ivy invite__ivy--end" src="assets/img/hero-floral-right.png" alt="" aria-hidden="true" width="484" height="736">
+             card (assets/img/README.md — the Tilda IDs match exactly). WebP
+             first, at the same width the reference itself requests. -->
+        <picture>
+          <source srcset="assets/img/invite-ivy-left.webp" type="image/webp">
+          <img class="invite__ivy invite__ivy--start" src="assets/img/hero-floral-left.png" alt="" aria-hidden="true" width="480" height="736">
+        </picture>
+        <picture>
+          <source srcset="assets/img/invite-ivy-right.webp" type="image/webp">
+          <img class="invite__ivy invite__ivy--end" src="assets/img/hero-floral-right.png" alt="" aria-hidden="true" width="484" height="736">
+        </picture>
 
         <img class="bismillah" src="assets/img/bismillah.png"
              alt="بِسْمِ ٱللّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ — In the name of Allah, the Most Gracious, the Most Merciful"
