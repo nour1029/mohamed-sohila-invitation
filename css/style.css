@@ -862,14 +862,20 @@ body.is-gated {
 .invite__body { color: #6A5140; text-wrap: pretty; }
 
 /* Two halves of one floral swag across the card's top, not a pair of
-   corner accents: together they span ~5%–89% of the card's width with a
-   small gap at centre, and hang ~55% of their own height above the torn
+   corner accents: together they span ~8%–92% of the card's width with a
+   small gap at centre, and hang ~56% of their own height above the torn
    edge so the trailing vines drape down either side of the Bismillah.
    Every number is measured off the live reference's rendered geometry,
    normalised against its *visible* paper (the source PNG floats the card
    inside a wider transparent canvas, so its own element box is 30% wider
-   than the paper and can't be compared to ours directly). The left/right
-   asymmetry is in the reference too — the art isn't mirrored. */
+   than the paper and can't be compared to ours directly).
+
+   The reference's own two halves are slightly mismatched (39%/41% wide,
+   4.8%/11.2% in, 54.5%/57.5% up) because the art isn't mirrored; these
+   are the midpoint of each pair, so the two sit at matching size and
+   matching inset. Averaging happens to leave the swag's overall geometry
+   untouched — still an 84% span with a 4% gap at centre, exactly the
+   reference's — because the reference's own errors cancel. */
 /* The <picture> wrappers must establish no containing block, or the
    absolutely positioned image inside resolves its percentages against the
    wrapper instead of the card. Two separate rules would each cause that:
@@ -891,20 +897,13 @@ body.is-gated {
 .invite__ivy {
   position: absolute;
   top: 0;
+  width: 40%;
   height: auto;
+  transform: translateY(-56%);
 }
 
-.invite__ivy--start {
-  left: 4.8%;
-  width: 39%;
-  transform: translateY(-54.5%);
-}
-
-.invite__ivy--end {
-  right: 11.2%;
-  width: 41%;
-  transform: translateY(-57.5%);
-}
+.invite__ivy--start { left: 8%; }
+.invite__ivy--end   { right: 8%; }
 
 /* ---------- 9.2 · Countdown (Phase 6) ---------------------
    Matches the reference's own custom widget: Ovo (not Cinzel)
