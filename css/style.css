@@ -758,7 +758,13 @@ body.is-gated {
    9 · Content sections (Phases 5–7)
    ============================================================ */
 
-.section { padding-block: var(--space-6); }
+/* Two adjacent sections each contribute their padding to the gap between
+   them, so this is half the space the eye actually sees. The reference
+   runs ~44–72px between one section's last line and the next one's first;
+   at var(--space-6) each side we were putting 192px there, which is what
+   made every band look adrift from the one above it. 36px a side lands on
+   the reference's 72px at desktop and tightens to 56px on a phone. */
+.section { padding-block: clamp(1.75rem, 4vw, 2.25rem); }
 
 .section__inner {
   width: 100%;
@@ -954,9 +960,15 @@ body.is-gated {
 }
 
 /* Clips the flip transform so a digit leaving upward does not briefly
-   overlap the label sitting underneath it. */
+   overlap the label sitting underneath it.
+   The font-size is what makes the height correct, not decoration: `em`
+   resolves against this element's own font-size, and without it the wrap
+   inherited the body's ~15px and clipped a 36px digit down to 18px —
+   cutting off more than half of every number. It must track whatever
+   .count__value is set to. */
 .count__wrap {
   overflow: hidden;
+  font-size: var(--t-display-lg);
   height: 1.22em;
   display: grid;
   place-items: center;
@@ -1036,11 +1048,17 @@ body.is-gated {
 .count__label[data-count-label="minutes"].is-revealed { transition-delay: 1.26s; }
 .count__label[data-count-label="seconds"].is-revealed { transition-delay: 1.44s; }
 
+/* Given the same box as .count__wrap and centred in it, so it lines up
+   with the digits on its own. This previously used a -0.7em nudge, which
+   was tuned to cancel the clipped wrap height above — with that fixed the
+   nudge threw the colons ~43px clear of the digits. */
 .count__sep {
   font-family: var(--font-body);
   font-size: var(--t-display-lg);
-  line-height: 1.1;
-  margin-top: -0.7em;   /* the ":" sits high in its em box; pull it to the digits' optical centre */
+  height: 1.22em;
+  display: grid;
+  place-items: center;
+  line-height: 1;
   color: var(--gold);
   opacity: 0;
   transition: opacity 0.6s ease;
