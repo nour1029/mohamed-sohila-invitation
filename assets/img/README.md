@@ -201,14 +201,53 @@ hand-drawn approximation on this card.
   than re-encoded here — this machine has no `cwebp`. Sized at 436×/420×,
   the same widths the reference's own JS requests them at, ~5-6× lighter
   than the PNGs (58KB/51KB vs. 299KB/280KB).
-- **The `.invite__ivy` size was a real bug, not a style choice**: it first
-  shipped at a guessed `clamp(50px, 15vw, 84px)`, sized for the old square
-  placeholder slot. Checking the widths Tilda requests these images at
-  (436px/420px, ≈2× for retina) against their canvas box (224px/236px on a
-  744px-wide card) puts the reference's florals at ~30% of the card's
-  width — roughly double what was shipping. Fixed to
-  `clamp(80px, 30%, 190px)`; they now arch over the Bismillah graphic
-  properly instead of sitting as small corner accents.
+### Getting the placement right (measured, not estimated)
+
+Two earlier attempts at these numbers were wrong because they were derived
+from the raw HTML's `data-field-*` attributes. Those are authored against
+Tilda's 1200px design canvas and, crucially, the card image's element box
+is **30% wider than the card actually looks** — the source PNG floats the
+torn paper inside a wide transparent canvas (opaque bounds are x 233→1530
+of 1680). Any ratio taken against the element box is therefore ~30% too
+small.
+
+The values in `css/style.css` §9.1 come from measuring the **rendered**
+reference in Chrome and normalising against its *visible* paper:
+
+| | left floral | right floral | Bismillah |
+|---|---|---|---|
+| width (% of card) | 39.0 | 41.1 | 49.3 |
+| inset from that edge | 4.8% | 11.2% | centred |
+| above card top (% of own height) | 54.5 | 57.5 | — |
+
+The two florals are one swag, not a pair of corner accents: together they
+span ~5%→89% of the card's width with a ~4% gap at centre, and their
+trailing vines hang *past* the Bismillah on both sides. The left/right
+asymmetry is in the reference too — the art is not mirrored.
+
+**Two CSS traps cost the most time here, both silent:**
+
+1. The `<picture>` wrappers were becoming the containing block for the
+   absolutely positioned images inside, so every percentage resolved
+   against the card's *content* box instead of its full width — florals
+   landed ~10% too small and too far in, with no error anywhere. Two
+   independent causes, each sufficient on its own: `.card > *` sets
+   `position: relative` (for the `::before` grain, which this card
+   doesn't have), and the stagger reveal sets `transform:
+   translateY(20px)` on every direct child — a transformed element is a
+   containing block for absolutely positioned descendants. The transform
+   one also *animates*, so the florals would have slid into place a beat
+   behind the card. Both are overridden in §9.1; note the override needs
+   specificity (0,2,0) to beat `.js [data-reveal-stagger] > *`.
+2. `.bismillah` is in normal flow, so its `%` width resolves against the
+   content box while the florals' resolve against the padding box. Its
+   width adds the inline padding back before taking the 49.3% share; the
+   florals must not.
+
+Watch for the same thing when measuring: `.is-revealed` goes on the
+stagger *container*, and the children take 0.7s to settle — sampling
+`getBoundingClientRect()` immediately after adding the class reads a
+position 20px out, mid-transition.
 
 **One font swapped deliberately, not matched exactly.** The reference's
 "Two Souls / One destiny / A Lifetime written by Allah" and its Tilda

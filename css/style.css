@@ -780,7 +780,11 @@ body.is-gated {
    photo. Left/right stay straight, same as the mask version, so the art
    still reads as a strip rather than a bounded rectangle. */
 .card.invite {
-  padding: var(--space-4) var(--space-3);
+  /* Top inset is padding, not a margin on the Bismillah: with no
+     padding-top a child's margin-top collapses through the card and
+     shifts the whole thing down instead of insetting the content.
+     10% ≈ the reference's 60px-below-the-torn-edge on its own card. */
+  padding: 10% var(--space-3) var(--space-4);
   background: url("../assets/img/invite-card-bg.png") center / 100% 100% no-repeat;
   -webkit-mask-image: none;
           mask-image: none;
@@ -788,9 +792,17 @@ body.is-gated {
 
 .card.invite::before { display: none; }
 
+/* 49% of the card's width, measured off the reference; its distance from
+   the torn edge comes from .card.invite's padding-top. The florals' vines
+   hang past it either side, which is why it reads small against the card. */
 .bismillah {
   display: block;
-  width: clamp(220px, 62vw, 360px);
+  /* 49% of the card's full width. As an in-flow child a bare % would
+     resolve against the content box, which the card's inline padding has
+     already narrowed — so add that padding back before taking the share.
+     (The florals above are absolutely positioned and resolve against the
+     padding box, so their percentages need no such correction.) */
+  width: calc(0.493 * (100% + 2 * var(--space-3)));
   height: auto;
   margin: 0 auto var(--space-3);
 }
@@ -813,22 +825,50 @@ body.is-gated {
 
 .invite__body { color: #6A5140; text-wrap: pretty; }
 
-/* Drapes down over the card's torn top edge rather than sitting inside
-   it — matches the reference's own floral placement (its florals sit
-   ~55% above the card top, inset ~17.6% from each side, at ~30% of the
-   card's own width — confirmed against the 436px/420px raster widths
-   Tilda's CDN serves them at on the live site). */
+/* Two halves of one floral swag across the card's top, not a pair of
+   corner accents: together they span ~5%–89% of the card's width with a
+   small gap at centre, and hang ~55% of their own height above the torn
+   edge so the trailing vines drape down either side of the Bismillah.
+   Every number is measured off the live reference's rendered geometry,
+   normalised against its *visible* paper (the source PNG floats the card
+   inside a wider transparent canvas, so its own element box is 30% wider
+   than the paper and can't be compared to ours directly). The left/right
+   asymmetry is in the reference too — the art isn't mirrored. */
+/* The <picture> wrappers must establish no containing block, or the
+   absolutely positioned image inside resolves its percentages against the
+   wrapper instead of the card. Two separate rules would each cause that:
+     · .card > * sets position: relative (for the ::before grain, which
+       .card.invite doesn't have) — so force it back to static;
+     · the stagger reveal sets transform: translateY(20px) on every direct
+       child, and a transformed element is a containing block for
+       absolutely positioned descendants. That one also *moves* as the
+       transition runs, so the florals would slide into place a beat after
+       the card rather than sitting still. Opacity alone carries the
+       fade-in; it creates a stacking context but no containing block. */
+/* .js …> * scores (0,2,0), so this must too — hence .js, not .invite alone. */
+.js .invite > picture,
+.invite > picture {
+  position: static;
+  transform: none;
+}
+
 .invite__ivy {
   position: absolute;
   top: 0;
-  left: 17%;
-  width: clamp(80px, 30%, 190px);
   height: auto;
-  transform: translateY(-55%);
 }
 
-.invite__ivy--start { left: 17%; }
-.invite__ivy--end   { left: auto; right: 17%; }
+.invite__ivy--start {
+  left: 4.8%;
+  width: 39%;
+  transform: translateY(-54.5%);
+}
+
+.invite__ivy--end {
+  right: 11.2%;
+  width: 41%;
+  transform: translateY(-57.5%);
+}
 
 /* ---------- 9.2 · Countdown (Phase 6) ---------------------
    Matches the reference's own custom widget: Ovo (not Cinzel)
