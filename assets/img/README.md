@@ -8,8 +8,10 @@ Everything here came from the reference site
 | File | Origin |
 |---|---|
 | `hero-scene.jpg` | Derived from the site's OG preview image, `Screenshot_2026-06-2.png` |
-| `hero-floral-left.png` | Tilda CDN `tild6639-3363-4136-a234-356639363561` |
-| `hero-floral-right.png` | Tilda CDN `tild3764-3461-4436-a562-636534643333` |
+| `hero-floral-left.png` | Tilda CDN `tild6639-3363-4136-a234-356639363561` — despite the filename, the reference actually places this on the invite card, not the hero; see below |
+| `hero-floral-right.png` | Tilda CDN `tild3764-3461-4436-a562-636534643333` — same |
+| `bismillah.png` | Tilda CDN `tild3438-6238-4236-b537-366632636138`, 1022×312 |
+| `invite-card-bg.png` | Tilda CDN `tild3134-6461-4832-a236-633431616631`, cropped to its opaque bounds and resized from 1680×833 |
 | `envelope-closed.jpg` | Cloudflare R2 `pub-96ce671efbac…`, the gate's still |
 | `../video/envelope-open.mp4` | Cloudflare R2 `pub-96ce671efbac…`, the opening film |
 | `_source/keep/venue-line-art.png` | Tilda CDN `tild3637-3939-4864-a263-333836383139`, for Phase 8 |
@@ -169,3 +171,46 @@ desktop zero-width bug was fixed) was tuned against bare section headings
 and was too generous for a heading sitting inside a card's extra padding,
 wrapping "Schedule of Events" back onto two lines at phone width. The
 coefficient was lowered (8vw → 5.5vw); re-verified clean at 320/390/1280.
+
+## Bismillah / invitation card (matched to the live reference)
+
+Same treatment as Schedule: the reference's own art replaces every
+hand-drawn approximation on this card.
+
+- **`bismillah.png`** stands in for what used to be live Arabic text. The
+  reference doesn't set the phrase in a font at all — it's a calligraphy
+  graphic. Accessibility isn't lost: the `<img alt>` carries both the Arabic
+  and an English translation.
+- **`invite-card-bg.png`** replaces the CSS torn-paper mask
+  (`css/style.css` §5.3, `.card`) for this card only, via a `.card.invite`
+  override. The source PNG (1680×833) has the torn card art centered in a
+  much wider transparent canvas; it's cropped to the art's own opaque
+  bounds before shipping. Straight left/right edges, torn top/bottom — same
+  shape the CSS mask already produced, now a photograph instead of a
+  gradient trick. Worth a pass with `pngquant`/`cwebp` before launch (445KB,
+  no compressor available on this machine — see "Page weight" above).
+- **`hero-floral-left/right.png`** turn out to belong to this card, not the
+  hero — the reference's own layout has them draped over the card's torn
+  top edge (roughly 55% of their height above it, inset ~17.6% from each
+  side), which is why `.invite__ivy` positions them with a negative
+  `translateY` rather than sitting flush inside the card like the old
+  placeholder slots did.
+
+**One font swapped deliberately, not matched exactly.** The reference's
+"Two Souls / One destiny / A Lifetime written by Allah" and its Tilda
+`font-family` both resolve to real fonts we could identify by their
+`@font-face` `src` URLs:
+
+| Reference text | Resolves to | License |
+|---|---|---|
+| "Two Souls…" (gold, `#A67D2B`) | Imperial Script | Free — SIL Open Font License, on Google Fonts |
+| "Dear Friends…" / body (`#6A5140`) | GT Super Display Light | Paid — Grilli Type commercial license |
+
+Imperial Script is now loaded (`index.html`) and used for `.invite__line`
+— an exact match. GT Super Display Light is not: it's a paid commercial
+typeface and its `.woff` isn't ours to copy off Tilda's CDN and re-host,
+unlike the images (most likely licensed stock, but at least not a font
+foundry's own paid product). `.invite__greeting` and `.invite__body` keep
+Ovo, the sitewide body font, with the reference's exact text colour. If a
+licensed copy of GT Super Display is ever obtained, drop its `.woff` into
+`assets/fonts/` and point `--font-body` at it for this card only.

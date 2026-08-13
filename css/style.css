@@ -762,44 +762,71 @@ body.is-gated {
   .section__inner { max-width: var(--col-wide); }
 }
 
-/* ---------- 9.1 · Bismillah / invitation (Phase 5) -------- */
+/* ---------- 9.1 · Bismillah / invitation (Phase 5) --------
+   Matched to the live reference: its own torn-paper photograph as the
+   card ground (assets/img/invite-card-bg.png, replacing the hand-drawn
+   mask below), its own Bismillah calligraphy graphic rather than live
+   Naskh text, and its own floral cutouts flanking the card. Colours and
+   the script font for "Two Souls..." are taken from the reference's own
+   CSS. Its serif for the greeting/body ("GT Super Display Light") is a
+   paid commercial font we won't redistribute; Ovo (the sitewide body
+   font already) stands in — see assets/img/README.md.
+   ---------------------------------------------------------- */
 
 .invite { text-align: center; }
 
+/* The real photographed card replaces the CSS torn-paper mask: no more
+   --tear reveal, no repeating grain overlay — both are baked into the
+   photo. Left/right stay straight, same as the mask version, so the art
+   still reads as a strip rather than a bounded rectangle. */
+.card.invite {
+  padding: var(--space-4) var(--space-3);
+  background: url("../assets/img/invite-card-bg.png") center / 100% 100% no-repeat;
+  -webkit-mask-image: none;
+          mask-image: none;
+}
+
+.card.invite::before { display: none; }
+
 .bismillah {
-  font-family: "Amiri", serif;
-  font-size: clamp(1.4rem, 5.6vw, 1.9rem);
-  /* Naskh stacks vowel marks well above and below the baseline; without the
-     extra leading the harakat collide with the lines around them. */
-  line-height: 2.1;
-  color: var(--gold);
-  margin-bottom: var(--space-3);
+  display: block;
+  width: clamp(220px, 62vw, 360px);
+  height: auto;
+  margin: 0 auto var(--space-3);
 }
 
 .invite__line {
+  font-family: "Imperial Script", var(--font-script);
+  color: #A67D2B;
   font-size: var(--t-script-md);
-  line-height: 1.35;
+  line-height: 1.05;
 }
 
 .invite__line:last-of-type { margin-bottom: var(--space-3); }
 
 .invite__greeting {
+  color: #6A5140;
   font-size: var(--t-body);
   letter-spacing: 0.02em;
   margin-bottom: var(--space-1);
 }
 
-.invite__body { text-wrap: pretty; }
+.invite__body { color: #6A5140; text-wrap: pretty; }
 
+/* Drapes down over the card's torn top edge rather than sitting inside
+   it — matches the reference's own floral placement (its florals sit
+   ~55% above the card top, inset ~17.6% from each side). */
 .invite__ivy {
   position: absolute;
-  top: var(--tear);
-  width: clamp(56px, 17vw, 92px);
-  height: clamp(56px, 17vw, 92px);
+  top: 0;
+  left: 17%;
+  width: clamp(50px, 15vw, 84px);
+  height: auto;
+  transform: translateY(-55%);
 }
 
-.invite__ivy--start { left: 0; }
-.invite__ivy--end   { right: 0; }
+.invite__ivy--start { left: 17%; }
+.invite__ivy--end   { left: auto; right: 17%; }
 
 /* ---------- 9.2 · Countdown (Phase 6) ---------------------
    Matches the reference's own custom widget: Ovo (not Cinzel)

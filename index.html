@@ -17,7 +17,9 @@
 -->
 <!-- Amiri is a proper Naskh face — the Bismillah must not fall back to a
      system font that mangles its diacritics. -->
-<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cinzel:wght@400;500;600&family=Ovo&family=Pinyon+Script&display=swap" rel="stylesheet">
+<!-- Imperial Script matches the reference's own font for the "Two Souls..."
+     lines exactly (its 'NewFonts' weight 300 resolves to Imperial Script). -->
+<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cinzel:wght@400;500;600&family=Imperial+Script&family=Ovo&family=Pinyon+Script&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -114,11 +116,14 @@
     <div class="section__inner">
       <article class="card invite" data-reveal-stagger>
 
-        <!-- TODO Phase 14: swap in trailing ivy + roses -->
-        <span class="invite__ivy invite__ivy--start slot" aria-hidden="true">Ivy</span>
-        <span class="invite__ivy invite__ivy--end slot" aria-hidden="true">Ivy</span>
+        <!-- Same floral cutouts the reference uses to flank its own invite
+             card (assets/img/README.md — the Tilda IDs match exactly). -->
+        <img class="invite__ivy invite__ivy--start" src="assets/img/hero-floral-left.png" alt="" aria-hidden="true" width="480" height="736">
+        <img class="invite__ivy invite__ivy--end" src="assets/img/hero-floral-right.png" alt="" aria-hidden="true" width="484" height="736">
 
-        <p class="bismillah" lang="ar" dir="rtl">بِسْمِ ٱللّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</p>
+        <img class="bismillah" src="assets/img/bismillah.png"
+             alt="بِسْمِ ٱللّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ — In the name of Allah, the Most Gracious, the Most Merciful"
+             width="1022" height="312">
 
         <p class="invite__line script">Two Souls</p>
         <p class="invite__line script">One destiny</p>

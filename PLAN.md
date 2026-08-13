@@ -120,6 +120,12 @@ With Parts A and B done, these go quickly — they're compositions of existing p
 - [x] Torn-paper card, ivy + roses in top corners
 - [x] Arabic بِسْمِ ٱللّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ in gold, correct RTL rendering and font (Amiri)
 - [x] Three script lines + the invitation paragraph
+- [x] Matched to the live reference exactly: the reference's own torn-paper photograph
+      as the card ground (not a CSS mask), its own Bismillah calligraphy graphic (not
+      live Naskh text), its own floral corners, and Imperial Script (the reference's
+      actual font) for the three script lines — see `assets/img/README.md`. One
+      deliberate non-match: the greeting/body keep Ovo rather than the reference's
+      GT Super Display Light, a paid commercial font we won't redistribute.
 
 ### Phase 6 · Countdown `S`
 - [x] Live D:H:M:S from `WEDDING.date`, ticking every second
