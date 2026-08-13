@@ -150,15 +150,18 @@ reference's own inline `<style>`/`<script>` — colours retokenised to
 `--gold`/`--gold-light`, everything else near-identical, including the exact
 per-unit stagger delays.
 
-Schedule keeps its own hand-built torn-paper card and timeline, but the
-flourishes flanking the heading and the flower on the timeline are now the
-reference's own assets rather than approximations:
+Schedule was first done as a partial pass — our own hand-built torn-paper
+card and timeline, with only the flourishes and the flower swapped for the
+reference's assets. It has since been cloned properly; see "Schedule of
+Events" below for how the card and type actually work now. The assets:
 
 | File | Origin | Used for |
 |---|---|---|
 | `schedule-flourish-left.png` | Tilda `tild3638-3336-4136-a131-…` | Left of "Schedule of Events" |
 | `schedule-flourish-right.png` | Tilda `tild6131-6362-4663-b461-…` | Right of "Schedule of Events" |
 | `schedule-rose.png` | Tilda `tild3363-3665-4330-a361-…`, resized from 1309x1201 | Crowning the timeline rule |
+| `schedule-card-top.png` | Tilda `tild6638-3365-4663-b834-…`, 1680x652 | Card's torn top edge |
+| `schedule-card-bottom.png` | Tilda `tild3633-3739-4961-b135-…`, 1680x563 | Card's torn bottom edge |
 
 These are scoped to the Schedule heading only, via a `.heading--schedule`
 modifier — the shared `.heading--flourished` filigree (Location, RSVP, Dress
@@ -267,3 +270,59 @@ foundry's own paid product). `.invite__greeting` and `.invite__body` keep
 Ovo, the sitewide body font, with the reference's exact text colour. If a
 licensed copy of GT Super Display is ever obtained, drop its `.woff` into
 `assets/fonts/` and point `--font-body` at it for this card only.
+## Schedule of Events (cloned from the live reference)
+
+Measured off the rendered reference rather than its markup, for the same
+reason as the invitation card: its `data-field-*` values are authored
+against a 1200px canvas and its card images float the artwork inside a
+wider transparent frame (opaque bounds x 233→1530 of 1680, so the element
+box is ~30% wider than the paper looks).
+
+**The card is two photographs, not one.** `schedule-card-top.png` is torn
+along its top edge and flat below; `schedule-card-bottom.png` is flat on
+top and torn along the bottom. The reference stacks them with a gap in
+between, which is how its card can be any height without stretching the
+tear. Ours does the same through `.card--paper`: the two strips anchored
+top and bottom at `100% auto`, over a fill.
+
+Both were cropped to the torn band plus enough flat paper to blend
+(130 of 652 and 563 rows) and shipped at 1112px wide — 2× the desktop
+card — which keeps them ~115KB each instead of ~600KB for the full
+plates. The fill is `#F1E5D4`, the exact tone of the rows the strips join
+on: the paper samples within 1–2/255 across its whole height, so the
+seams are invisible. This is a better card than the `--torn-*` CSS mask
+in §5.3 and `.card--paper` is written to be reusable if other sections
+want it.
+
+Type and colour, all as rendered by the reference:
+
+| | font | size / line-height | colour |
+|---|---|---|---|
+| "Schedule of Events" | Imperial Script | 41 / 64 | `#A67D2B` |
+| "5 PM" | Ovo | 30 / 47 | `#846F61` |
+| "Guest Arrival" | GT Super Display Light → Ovo | 20 / 22 | `#6C513F` |
+| rule | — | 1px | `#9C8575` |
+| node | — | 8px, rotated 45° | `#8C7666` |
+
+The reference's `NewFonts` weight 600 resolves to **Ovo-Regular**, which
+is already `--font-body` — so the times are an exact match, not a stand-in.
+Only the labels substitute (weight 100 is GT Super Display Light, the paid
+font noted above).
+
+Rows are 78px centre to centre. The peony is centred on the *first node*,
+not floated above the rule — measured, its centre and the first diamond's
+centre are the same point.
+
+**Two things that needed solving rather than copying:**
+
+- The peony is 55px wide over an 11px node, so it reaches ~22px past the
+  column either side and lands on "5 PM" and the first label unless the
+  grid's column gap clears it. The reference has ~17px of daylight beyond
+  the flower; ours now matches at every width.
+- On a phone the reference's scrollwork sits hard against the screen
+  edges (1px and 390px on a 390 screen) — possible only because its card
+  is wider than the screen. Ours fits the screen, so below 484px the card
+  drops its gutters and the heading reclaims the card's inline padding
+  with a negative margin. Without that the flourishes get starved to
+  ~28px against the 41px title; with it they reach 52px on a phone and
+  the reference's full 79px on desktop.
