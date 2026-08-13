@@ -843,10 +843,23 @@ body.is-gated {
   margin: 0 auto var(--space-3);
 }
 
+/* The reference sets these at a flat 41px / 21px (line-height 43 / 26) at
+   every viewport — its layout is a fixed 1200px canvas, so nothing about
+   it is fluid. Matched as a ceiling that only small phones scale back
+   from, rather than a hard px value that would overflow a 320px screen:
+   both hit the reference's exact size from ~390px up. The site's own
+   --t-script-md / --t-body are deliberately not used here; they are a
+   whole step smaller (25px / 14px on a phone) and left this section
+   looking half the weight of the reference. */
+.invite {
+  --invite-script: clamp(1.9rem, 10.5vw, 2.5625rem);  /* → 41px */
+  --invite-body:   clamp(1rem, 5.4vw, 1.3125rem);     /* → 21px */
+}
+
 .invite__line {
   font-family: "Imperial Script", var(--font-script);
   color: #A67D2B;
-  font-size: var(--t-script-md);
+  font-size: var(--invite-script);
   line-height: 1.05;
 }
 
@@ -854,28 +867,39 @@ body.is-gated {
 
 .invite__greeting {
   color: #6A5140;
-  font-size: var(--t-body);
+  font-size: var(--invite-body);
+  line-height: 1.24;
   letter-spacing: 0.02em;
   margin-bottom: var(--space-1);
 }
 
-.invite__body { color: #6A5140; text-wrap: pretty; }
+.invite__body {
+  color: #6A5140;
+  font-size: var(--invite-body);
+  line-height: 1.24;
+  text-wrap: pretty;
+}
 
-/* Two halves of one floral swag across the card's top, not a pair of
-   corner accents: together they span ~8%–92% of the card's width with a
-   small gap at centre, and hang ~56% of their own height above the torn
-   edge so the trailing vines drape down either side of the Bismillah.
-   Every number is measured off the live reference's rendered geometry,
-   normalised against its *visible* paper (the source PNG floats the card
-   inside a wider transparent canvas, so its own element box is 30% wider
-   than the paper and can't be compared to ours directly).
+/* Two halves of one floral swag across the card's top: flush to each
+   outer edge, hanging ~56% of their own height above the torn edge so the
+   trailing vines drape down either side of the Bismillah.
 
-   The reference's own two halves are slightly mismatched (39%/41% wide,
-   4.8%/11.2% in, 54.5%/57.5% up) because the art isn't mirrored; these
-   are the midpoint of each pair, so the two sit at matching size and
-   matching inset. Averaging happens to leave the swag's overall geometry
-   untouched — still an 84% span with a 4% gap at centre, exactly the
-   reference's — because the reference's own errors cancel. */
+   The sizing came from the live reference's rendered geometry, normalised
+   against its *visible* paper (the source PNG floats the card inside a
+   wider transparent canvas, so its own element box is 30% wider than the
+   paper and can't be compared to ours directly). Its two halves are
+   slightly mismatched — 39%/41% wide, 54.5%/57.5% up, because the art
+   isn't mirrored — so both use the midpoint of each pair instead, giving
+   a matching size and rise on either side.
+
+   Sized and inset to the scale the reference reads at on a phone rather
+   than on desktop: there its card is a fixed 574px overflowing a 390px
+   screen, so its florals come out ~56% of the visible width and hang
+   ~11–14% off each edge. That's the bigger, bolder look — on desktop the
+   same art sits at only ~39% and well inside the card. Hanging off the
+   edge is why the card clips them (overflow is hidden on the body), which
+   is intended: they read as cut off by the frame, not as free-floating
+   bouquets. */
 /* The <picture> wrappers must establish no containing block, or the
    absolutely positioned image inside resolves its percentages against the
    wrapper instead of the card. Two separate rules would each cause that:
@@ -897,13 +921,13 @@ body.is-gated {
 .invite__ivy {
   position: absolute;
   top: 0;
-  width: 40%;
+  width: 56%;
   height: auto;
   transform: translateY(-56%);
 }
 
-.invite__ivy--start { left: 8%; }
-.invite__ivy--end   { right: 8%; }
+.invite__ivy--start { left: -15%; }
+.invite__ivy--end   { right: -15%; }
 
 /* ---------- 9.2 · Countdown (Phase 6) ---------------------
    Matches the reference's own custom widget: Ovo (not Cinzel)
