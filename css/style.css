@@ -633,8 +633,17 @@ body.is-gated {
   width: 100%;
   /* On a phone this is already ~100vw, so max-width has no effect there;
      it only caps the panel on wide screens, where .hero centers it and
-     the cream either side is deliberate framing, not a gap to close. */
-  max-width: 560px;
+     the cream either side is deliberate framing, not a gap to close.
+     The cap is 78.3% of the invitation card's desktop width (556px), the
+     ratio the reference holds between its hero video and its card at
+     every breakpoint: the torn card is meant to be visibly wider than the
+     photo and jut out past it either side. Below ~436px wide the cap
+     stops applying and the photo goes full-bleed, which is how the
+     reference reads on a phone too (there both its photo and its card are
+     fixed widths that simply overflow the screen). All the hero type is
+     sized in cqw against this panel, so narrowing it scales the whole
+     composition rather than breaking it. */
+  max-width: 436px;
   /* Height is pinned to the full viewport, not the video's own aspect
      ratio — an aspect-ratio box only matches the screen by coincidence,
      and everywhere else it leaves cream showing above and below. Filling
@@ -772,6 +781,33 @@ body.is-gated {
    paid commercial font we won't redistribute; Ovo (the sitewide body
    font already) stands in — see assets/img/README.md.
    ---------------------------------------------------------- */
+
+/* The card rides up over the bottom of the hero rather than sitting below
+   it in its own band. In the reference the two overlap by ~7% of the
+   card's width — the photo runs on behind the torn edge and shows through
+   its notches — and that seam is the whole reason the florals exist: they
+   straddle it, tying the narrower photo to the wider card. Left in its own
+   band (the section's default 96px of top padding) they have nothing to
+   sit on and read as floating in empty cream.
+   Both .hero__panel and .card are already positioned, and this comes later
+   in the document, so it paints over the hero without needing a z-index. */
+#invitation-card {
+  padding-top: 0;
+  margin-top: calc(-1 * clamp(24px, 7vw, 45px));
+}
+
+/* The card must never be narrower than the photo it overlaps, or the
+   photo's bottom corners poke out past the torn edge at the seam. Below
+   ~484px the section's gutters make it narrower, so drop them and let the
+   card run edge to edge — which is also how the reference reads on a
+   phone, its card being a fixed 574px that simply overflows the screen
+   with its straight side edges off-view. */
+@media (max-width: 484px) {
+  #invitation-card .section__inner {
+    max-width: none;
+    padding-inline: 0;
+  }
+}
 
 .invite { text-align: center; }
 
