@@ -61,23 +61,17 @@ const WEDDING = {
     coords: null,
   },
 
-  // Last date a guest can respond. Date-only; the deadline is end of day.
-  // The wedding is only 16 days out, so the placeholder's 3-week lead time
-  // would land in the past — the exact bug REFERENCE.md flags in the
-  // reference site. Set to one week before instead; confirm with the couple.
-  rsvpDeadline: '2026-08-22',
-
-  // Rendered as the timeline in Phase 7. Add or remove stops freely.
+  // Rendered as "Our Love Timeline" in Phase 7. Originally the wedding-day
+  // run of show (times + events); repurposed as relationship milestones
+  // (dates + events) — the component only ever cared that each stop has a
+  // `time` label and an `event` line, so nothing else had to change.
+  // Add or remove stops freely.
   schedule: [
-    { time: '5 PM', event: 'Guest Arrival'   },
-    { time: '6 PM', event: 'Nikkah Ceremony' },
-    { time: '7 PM', event: 'Mocktail Hour'   },
-    { time: '8 PM', event: 'Dinner'          },
-    { time: '9 PM', event: 'Dance'           },
+    { time: '01.05.2025', event: 'Our First Meeting' },
+    { time: '23.08.2025', event: 'She Said Yes'       },
+    { time: '23.08.2025', event: 'Engagement'         },
+    { time: '29.08.2026', event: 'Forever Begins'     },
   ],
-
-  // Phase 10 fills this in after the Apps Script is deployed.
-  rsvpEndpoint: '',
 
   // Phase 11. Relative path into assets/audio/, e.g. 'assets/audio/music.mp3'.
   // The player, the button and the start-on-open handoff are all built and
@@ -85,13 +79,6 @@ const WEDDING = {
   // While it is empty the button never appears, so guests are never offered
   // a control that does nothing. See PLAN.md Phase 11 for what to drop in.
   audioSrc: 'assets/audio/music.mp3',
-
-  // TODO Phase 13: a real number. Shown when a submission fails — an RSVP
-  // that cannot reach the sheet must still reach a human.
-  contact: {
-    name: 'Rose',
-    phone: '+1 555 000 0000',
-  },
 
   gate: {
     // How long the envelope remembers it has been opened:
@@ -128,11 +115,6 @@ const fmt = {
     return inVenueZone(d, 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   },
 
-  /** `September 6` — for the RSVP deadline line. */
-  monthDay(d) {
-    return inVenueZone(d, 'en-US', { month: 'long', day: 'numeric' });
-  },
-
   /** `5:00 PM`, no leading zero. */
   time(d) {
     return inVenueZone(d, 'en-US', { hour: 'numeric', minute: '2-digit' });
@@ -155,10 +137,6 @@ const WEDDING_TEXT = {
 
   'venue.name':    WEDDING.venue.name,
   'venue.address': WEDDING.venue.addressLines.join(', '),
-
-  // Anchored at noon UTC so the date-only deadline lands on the intended
-  // calendar day once re-expressed in the venue's timezone.
-  'rsvp.deadline': fmt.monthDay(new Date(`${WEDDING.rsvpDeadline}T12:00:00Z`)),
 };
 
 /* ---------- 3 · Binding ------------------------------------
@@ -584,160 +562,6 @@ function initVenue() {
   link.rel = 'noopener';
 }
 
-/* ---------- 10 · RSVP (Phase 10) ---------------------------
-   The only part with a backend, and the only part that must not
-   fail quietly. Every failure path ends with the guest being told
-   how to reach a person.
-   ----------------------------------------------------------- */
-
-function initRsvp() {
-  const modal  = document.getElementById('rsvp-modal');
-  const form   = document.getElementById('rsvp-form');
-  const status = document.getElementById('rsvp-status');
-  const submit = document.getElementById('rsvp-submit');
-  const openBtn  = document.getElementById('rsvp-open');
-  const closeBtn = document.getElementById('rsvp-close');
-  if (!modal || !form) return;
-
-  /* -- open / close ---------------------------------------- */
-
-  // showModal() gives the focus trap, Esc handling and focus restore.
-  // Focus the card rather than the first input: autofocusing a text field
-  // throws up the phone keyboard before the guest has read the form.
-  openBtn?.addEventListener('click', () => {
-    modal.showModal();
-    modal.querySelector('.modal__card')?.focus();
-  });
-  closeBtn?.addEventListener('click', () => modal.close());
-
-  // Click outside the card. The dialog element fills the viewport, so a
-  // click landing on it rather than on .modal__card is a backdrop click.
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.close();
-  });
-
-  /* -- validation ------------------------------------------ */
-
-  const setError = (fieldEl, errorEl, message) => {
-    fieldEl.classList.toggle('is-invalid', Boolean(message));
-    if (errorEl) {
-      errorEl.textContent = message ?? '';
-      errorEl.hidden = !message;
-    }
-  };
-
-  const validate = () => {
-    const errors = [];
-    const data = new FormData(form);
-
-    const nameField = document.getElementById('rsvp-name').closest('.field');
-    const name = String(data.get('name') ?? '').trim();
-    if (!name) {
-      setError(nameField, document.getElementById('rsvp-name-error'),
-        'Please let us know who you are.');
-      errors.push('name');
-    } else {
-      setError(nameField, document.getElementById('rsvp-name-error'), null);
-    }
-
-    const attendingField = form.querySelector('.field--choice');
-    if (!data.get('attending')) {
-      setError(attendingField, document.getElementById('rsvp-attending-error'),
-        'Please choose one so we can plan the seating.');
-      errors.push('attending');
-    } else {
-      setError(attendingField, document.getElementById('rsvp-attending-error'), null);
-    }
-
-    const guestsField = document.getElementById('rsvp-guests').closest('.field');
-    const guests = String(data.get('guests') ?? '').trim();
-    if (guests && !/^\d{1,3}$/.test(guests)) {
-      setError(guestsField, document.getElementById('rsvp-guests-error'),
-        'A number, please — for example 2.');
-      errors.push('guests');
-    } else {
-      setError(guestsField, document.getElementById('rsvp-guests-error'), null);
-    }
-
-    return errors;
-  };
-
-  /* -- submit ---------------------------------------------- */
-
-  const setStatus = (message, kind) => {
-    status.className = kind ? `form__status form__status--${kind}` : 'form__status';
-    status.textContent = '';
-    if (message) status.append(message);
-  };
-
-  /** Never let an RSVP evaporate: always hand back a way to reach a person. */
-  const failureMessage = () => {
-    const fragment = document.createDocumentFragment();
-    const { name, phone } = WEDDING.contact;
-    fragment.append(
-      'That did not send, and we would hate to miss you. Please text ',
-      Object.assign(document.createElement('a'), {
-        href: `sms:${phone.replace(/[^\d+]/g, '')}`,
-        textContent: `${name} on ${phone}`,
-      }),
-      ' instead.',
-    );
-    return fragment;
-  };
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const errors = validate();
-    if (errors.length) {
-      setStatus('', null);
-      form.querySelector('.is-invalid input')?.focus();
-      return;
-    }
-
-    const data = Object.fromEntries(new FormData(form).entries());
-
-    submit.disabled = true;
-    submit.querySelector('.btn__label').textContent = 'Sending…';
-    setStatus('', null);
-
-    try {
-      if (!WEDDING.rsvpEndpoint) {
-        // Not deployed yet. Say so plainly rather than showing a fake success.
-        throw new Error('RSVP endpoint is not configured');
-      }
-
-      // No Content-Type header on purpose: that keeps this a "simple"
-      // request, so the browser skips the CORS preflight, which Apps
-      // Script cannot answer.
-      const response = await fetch(WEDDING.rsvpEndpoint, {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-      const result = await response.json().catch(() => ({ ok: true }));
-      if (result.ok === false) throw new Error(result.error || 'rejected');
-
-      form.hidden = true;
-      setStatus(
-        data.attending?.startsWith('Accepts')
-          ? 'Thank you — we cannot wait to celebrate with you.'
-          : 'Thank you for letting us know. You will be missed.',
-        'success',
-      );
-      status.hidden = false;
-
-    } catch (error) {
-      console.error('[wedding] RSVP submission failed:', error);
-      setStatus(failureMessage(), 'error');
-      submit.disabled = false;
-      submit.querySelector('.btn__label').textContent = 'Try again';
-    }
-  });
-}
-
 /* ---------- 10.5 · Hero scene video ------------------------
    The hero's painting is a video. It only starts once the guest
    is through the envelope, and it never becomes load-bearing:
@@ -837,7 +661,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScheduleRose();
   initCountdown();
   initVenue();
-  initRsvp();
 
   // Both register their wedding:open listeners before the gate can fire it.
   initMusic();
