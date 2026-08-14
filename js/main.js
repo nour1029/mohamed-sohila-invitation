@@ -79,7 +79,11 @@ const WEDDING = {
   // Phase 10 fills this in after the Apps Script is deployed.
   rsvpEndpoint: '',
 
-  // Phase 11. Relative path into assets/audio/.
+  // Phase 11. Relative path into assets/audio/, e.g. 'assets/audio/music.mp3'.
+  // The player, the button and the start-on-open handoff are all built and
+  // verified; this is the only thing standing between them and working.
+  // While it is empty the button never appears, so guests are never offered
+  // a control that does nothing. See PLAN.md Phase 11 for what to drop in.
   audioSrc: '',
 
   // TODO Phase 13: a real number. Shown when a submission fails — an RSVP
@@ -239,6 +243,11 @@ function initGate() {
     gate.classList.add('is-open');
     lockScroll(false);
     if (main) main.inert = false;
+
+    // The film is over and the page is the guest's. Phase 11 waits for this
+    // to fade the music button in — the reference keeps it out of sight
+    // until exactly here, rather than floating it over a sealed envelope.
+    document.dispatchEvent(new CustomEvent('wedding:opened'));
 
     window.setTimeout(() => {
       gate.hidden = true;
@@ -778,8 +787,15 @@ function initMusic() {
   if (!WEDDING.audioSrc) return;
 
   audio.src = WEDDING.audioSrc;
-  audio.volume = 0.55;
+  // The reference plays at full volume. One line to soften if it startles.
+  audio.volume = 1;
   button.hidden = false;
+
+  // Present in the DOM but invisible until the film ends, so the transition
+  // has a box to animate. If the gate was skipped, show it straight away.
+  const reveal = () => button.classList.add('is-ready');
+  document.addEventListener('wedding:opened', reveal, { once: true });
+  if (document.getElementById('gate')?.hidden) reveal();
 
   // The icon is driven by the audio element's own events, not by what we
   // asked it to do — so it always shows what is actually happening, even

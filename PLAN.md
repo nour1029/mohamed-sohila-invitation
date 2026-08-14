@@ -201,7 +201,11 @@ The only part with a backend, and the only part that must not fail silently.
 
 ### Phase 11 · Music player `M`
 
-- [x] Fixed circular maroon button, bottom-right, pause/play icon
+- [x] Fixed circular maroon button, bottom-right, pause/play icon — **now
+      matched to the reference's own control exactly**: 60px disc, `#5A0F1B`,
+      20px off the corner, `0 4px 6px rgba(0,0,0,.1)` shadow, 30px white
+      glyphs on its own geometry, and hidden until the opening film finishes
+      rather than floating over a sealed envelope
 - [x] Starts on envelope open — **this is the only reliable way**, since mobile browsers
       block autoplay without a user gesture
 - [x] State persists across scroll; icon always reflects reality — driven by the audio
@@ -211,8 +215,25 @@ The only part with a backend, and the only part that must not fail silently.
 - [ ] **Blocked on you:** an audio file we have rights to, into `assets/audio/`, then set
       `WEDDING.audioSrc`. Until then the button stays hidden.
 
-> **Needs you:** an audio file you have rights to. The reference used Einaudi's *Divenire*,
-> which is not ours to take.
+> **On taking the reference's track:** it plays Ludovico Einaudi's *Divenire*
+> from its own storage bucket. That is a commercially released recording, and
+> re-hosting it on your domain isn't something I'll do for you — it is the one
+> asset on this site that would be someone else's to license. Everything
+> around it is finished and verified, so it is genuinely a one-line change
+> once you have a file:
+>
+> 1. Put it in `assets/audio/` (mp3 or m4a).
+> 2. Set `WEDDING.audioSrc` to its path.
+>
+> Routes to that exact piece, in rough order of effort: it is on the usual
+> streaming stores as a paid download; several licensing marketplaces sell a
+> personal/web-use licence for well-known piano works; or a solo-piano track
+> from a royalty-free library will sit in the same emotional register for
+> nothing. Any of the three drops in the same way.
+
+> **Needs you:** an audio file you have rights to. Confirmed against the live
+> reference — it serves `Einaudi_ Divenire.mp3` from its own bucket, which is
+> not ours to take.
 
 ---
 
