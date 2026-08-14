@@ -2,28 +2,17 @@
 
 | File | Notes |
 |---|---|
-| `music.mp3` | The track that plays when the envelope opens. **Not in git — see below.** |
+| `music.mp3` | The track that plays when the envelope opens. |
 
 Wired up via `WEDDING.audioSrc` in `js/main.js`. Renamed from its download
 name on the way in: the original had spaces and parentheses, which have to be
 percent-encoded in a URL and are a reliable source of 404s on static hosts.
 
-## Not tracked in git
+## Tracked in git
 
-`.gitignore` excludes `assets/audio/*.mp3`. Two practical reasons: git history
-is permanent, so a 3.9MB binary is in the repo forever once committed; and if
-this repo is ever pushed anywhere public, a commercially released recording
-goes with it. Neither is a problem while the file simply sits in the folder.
-
-**This does not affect deploying.** Netlify Drop (and every other static host)
-uploads the folder, not the repo, so the file ships normally.
-
-**It does affect cloning.** A fresh clone has no `music.mp3`, `WEDDING.audioSrc`
-points at a file that isn't there, and — because `initMusic` checks the config
-rather than the file — the button appears and the audio silently fails to play.
-Copy the file across after cloning.
-
-To track it instead, delete the `assets/audio/*.mp3` line from `.gitignore`.
+Committed directly (a 3.9MB commercially released recording), since the site
+is deployed via GitHub Pages from this repo, which serves whatever's
+committed. The repo is public, so treat this file as public.
 
 ## Format
 
