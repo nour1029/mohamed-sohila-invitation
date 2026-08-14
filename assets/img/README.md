@@ -470,3 +470,52 @@ Zoom is held at 13 rather than 16 until there is a real pin to zoom to.
 To pin the door exactly: right-click the hall in Google Maps, the first menu
 item is the lat,lng, paste it in as `coords: { lat: …, lng: … }`. Nothing
 else needs to change.
+
+---
+
+# The couple photo (yours)
+
+| File | Origin |
+|---|---|
+| `couple.jpg` / `couple.webp` | Your own photo, supplied 2026-08-14 |
+| `_source/couple-original.png` | As received, before rotation and encoding |
+
+Not from the reference site, and not stock — the second genuinely personal
+asset here after the Location artwork. It does not carry the licensing
+caveat at the top of this file.
+
+## The faces are covered
+
+The photo arrived with fire emoji stickers over both faces. They have been
+left exactly as supplied — no attempt was made to remove them, and none
+should be: reconstructing a face under an overlay invents a person who was
+never in the frame.
+
+If the stickers were a privacy measure for sending the file and the real
+invitation should show the couple, send the unstickered original and it
+drops in under the same filenames with no code change. If they are meant to
+stay, nothing more is needed.
+
+## Rotation
+
+It arrived sideways. The phone had recorded the quarter turn in EXIF rather
+than in the pixels, and the PNG export dropped the tag — the file even
+carries `Orientation: 1` ("upright"), which is why nothing auto-corrected
+it. Rotated 90° clockwise on the way in, so the pixels are now upright and
+no viewer has to be trusted to read a tag: 818×1280 → **1280×818**.
+
+## Encoding and the width cap
+
+JPEG quality 84 (136KB) with a WebP alternate at quality 82 (82KB), served
+through `<picture>`. Unlike the venue drawing — fine line art, where WebP
+lost to a quantised PNG — this is a photograph, which is what WebP is good
+at, so the 40% saving is real and worth the extra file.
+
+`.closing__figure` is capped at **1280px**, the photo's native width. It is
+a phone snapshot; past its own width a "full-bleed" band is just upscaling,
+and 1.5× by a 1920px monitor shows. The cap is wider than any phone or
+laptop, so the photo still runs edge to edge everywhere it matters, and on a
+wide desktop it reads as a centred composition rather than a soft one.
+
+Cover-cropping trims the sides, never the top: the photo is 1.565:1 against
+a 1.5:1 box, and both faces sit well inboard of the trim.

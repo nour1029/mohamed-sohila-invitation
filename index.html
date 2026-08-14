@@ -312,8 +312,16 @@
     </div>
 
     <figure class="closing__figure" data-reveal>
-      <!-- TODO Phase 14: swap in the couple photo -->
-      <div class="closing__photo slot" aria-hidden="true">Couple photo</div>
+      <!-- Shot portrait and rotated a quarter turn upright; the phone wrote
+           the rotation into EXIF, which the PNG export then dropped. Native
+           size is 1280x818, so it upscales past a ~1280px-wide viewport —
+           see .closing__figure for the cap that keeps that from showing. -->
+      <picture>
+        <source srcset="assets/img/couple.webp" type="image/webp">
+        <img class="closing__photo" src="assets/img/couple.jpg"
+             alt="The couple, leaning their heads together"
+             width="1280" height="818" loading="lazy" decoding="async">
+      </picture>
 
       <!-- TODO Phase 14: swap in the watercolour floral arch -->
       <div class="closing__arch closing__arch--start slot" aria-hidden="true">Floral</div>

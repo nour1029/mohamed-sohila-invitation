@@ -218,7 +218,12 @@ The only part with a backend, and the only part that must not fail silently.
 
 ### Phase 12 · Closing `S`
 - [x] `Hope to see you there!` script + names in Cinzel
-- [x] Full-width couple photo slot, floral arch overlapping its bottom corners
+- [x] Full-width couple photo — **your real photo is in**, rotated upright and
+      capped at its native 1280px so it never upscales into softness
+- [ ] Floral arch overlapping its bottom corners — still a placeholder
+- [ ] **Your call:** the photo came with fire emoji over both faces, left
+      exactly as supplied. If that was only for sending the file, send the
+      unstickered original and it drops in under the same filename.
 
 ---
 
@@ -238,8 +243,9 @@ Swap every placeholder for your actual details. Straight run through the checkli
 ### Phase 14 · Real assets `M`
 - [~] Florals, envelope texture, couple photo, venue illustration dropped in
       — hero corner florals in (taken from the reference site; see
-      `assets/img/README.md` for the licensing caveat). Still needed: envelope
-      texture, couple photo, venue illustration, ivy/rose vines, columns, swans
+      `assets/img/README.md` for the licensing caveat), **venue illustration
+      in** (your own artwork), **couple photo in** (your own). Still needed:
+      envelope texture, closing floral arch, ivy/rose vines, columns, swans
 - [ ] All images exported at 2× and converted to WebP with JPG fallback
 - [ ] Explicit `width`/`height` on everything so nothing jumps while loading
 
@@ -282,7 +288,7 @@ P13/P14 need your content ──> P15 ──> P16
 | 10 | A Google account, to deploy the Apps Script endpoint |
 | 11 | An audio file we have rights to |
 | 13 | The content checklist in `REFERENCE.md` §5 |
-| 14 | Couple photo; florals if you don't want sourced stock |
+| 14 | ~~Couple photo~~ (in); florals if you don't want sourced stock |
 
 Everything else I can build with placeholders. **Phases 0–12 need nothing from you** beyond
 the font pick — so we can go a long way before you have to gather anything.
