@@ -1717,10 +1717,6 @@ body.is-gated {
   margin: var(--space-5) 0 0;
 }
 
-/* A <picture> is inline by default, which leaves a strip of line-box
-   descender space under the photo that the floral arches then sit in. */
-.closing__figure > picture { display: block; }
-
 /* No aspect-ratio and no object-fit: the box takes the photo's own shape,
    so nothing is ever cropped off any edge. The width/height attributes in
    the markup supply the intrinsic ratio, so the space is reserved before

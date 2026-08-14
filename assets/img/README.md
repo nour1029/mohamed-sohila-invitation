@@ -504,12 +504,27 @@ carries `Orientation: 1` ("upright"), which is why nothing auto-corrected
 it. Rotated 90° clockwise on the way in, so the pixels are now upright and
 no viewer has to be trusted to read a tag: 818×1280 → **1280×818**.
 
-## Encoding
+## Encoding: JPEG only, and why the WebP was removed
 
-JPEG quality 84 (136KB) with a WebP alternate at quality 82 (82KB), served
-through `<picture>`. Unlike the venue drawing — fine line art, where WebP
-lost to a quantised PNG — this is a photograph, which is what WebP is good
-at, so the 40% saving is real and worth the extra file.
+WebP normally wins on photographs, so this one shipped with a `<picture>`
+and a WebP alternate at first. Measured against the original, it does not
+win here — and because browsers prefer WebP, the alternate meant the *worst*
+version was the one actually being served:
+
+| | size | PSNR vs original |
+|---|---|---|
+| WebP q82 (was being served) | 80KB | 39.7 dB |
+| WebP q92 | 151KB | 43.4 dB |
+| **JPEG q92 (shipped)** | **146KB** | **48.2 dB** |
+
+JPEG beats WebP at the same file size by nearly 5 dB. The likely reason is
+that this file has already been through JPEG compression once on its way
+here, so it carries JPEG-shaped artefacts that re-encode cheaply as JPEG and
+expensively as WebP. Whatever the cause, the numbers are the numbers: the
+`<picture>` was dropped for a plain `<img>`.
+
+48.2 dB is comfortably into visually-lossless territory — the average pixel
+is off by about 1 part in 255 from the original.
 
 ## Shown whole, and edge to edge at any width
 
