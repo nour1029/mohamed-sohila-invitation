@@ -148,11 +148,26 @@ With Parts A and B done, these go quickly — they're compositions of existing p
 - [x] Reveals stop-by-stop as you scroll
 
 ### Phase 8 · Venue + map `M`
-- [x] Venue name (Cinzel) + address
-- [x] Gold line-art building illustration slot
+- [x] Venue name + address — **title-case body serif, not Cinzel caps**, per
+      your own Location artwork
+- [x] Line-art building illustration — the real one, cut from your artwork and
+      recovered as ink-over-paper so it takes on the card's own cream
+      (`assets/img/README.md`). The reference's building is now unused.
+- [x] Torn-paper card, centred rule-and-palmette under the heading in place of
+      the shared flanking filigree — again per your artwork
+- [x] Real venue in `WEDDING` — Laveora Wedding Hall, El Wahat Road, 6th of
+      October City
 - [x] Google Map embed inside the ornate frame from Phase 1 (keyless embed URL)
 - [x] `Open in Maps` link that opens Apple Maps on iOS, Google Maps on Android
 - [x] Map loads lazily — it's the heaviest thing on the page
+- [ ] **Blocked on you (optional):** `WEDDING.venue.coords` is `null`, so the
+      map searches the address rather than pinning the door. Google does find
+      the right listing. Right-click the hall in Google Maps and paste back the
+      lat,lng to pin it exactly.
+- [ ] **Needs a decision:** `WEDDING.timezone` is still `America/New_York`,
+      left over from the placeholder venue. The hall is in Egypt. Changing it
+      moves the printed date/time and the countdown, so it is yours to call —
+      see the note at the top of Phase 13.
 
 ### Phase 9 · Dress code & gift `S`
 - [x] One torn-paper card, both blocks, rose vines down the right edge
@@ -212,6 +227,13 @@ The only part with a backend, and the only part that must not fail silently.
 ### Phase 13 · Real content `S`
 Swap every placeholder for your actual details. Straight run through the checklist in
 `REFERENCE.md` §5 — nothing invented, nothing left saying "Zohan and Rose".
+
+> **Open since the venue became real:** `WEDDING.timezone` is still
+> `America/New_York`. Everything printed on the page — the hero date, the
+> schedule times, the countdown — is rendered in that zone, so a wedding in
+> Giza is currently being announced on New York's clock. Setting it to
+> `Africa/Cairo` will shift the displayed date/time and the countdown, which
+> is why it hasn't been changed unasked. Say the word and it's one line.
 
 ### Phase 14 · Real assets `M`
 - [~] Florals, envelope texture, couple photo, venue illustration dropped in

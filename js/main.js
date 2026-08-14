@@ -47,11 +47,18 @@ const WEDDING = {
   dateFormat: 'dotted',
 
   venue: {
-    name: 'Islamic Center of Melville',
-    addressLines: ['118 Old East Neck Road', 'Melville, NY 11747'],
-    // Used by the map embed and the Open in Maps link (Phase 8).
-    lat: 40.7987,
-    lng: -73.4137,
+    name: 'Laveora Wedding Hall',
+    addressLines: ['El Wahat Road, 6th of October City', 'Giza Governorate, Egypt'],
+
+    // Exact pin for the map embed and the Open in Maps link (Phase 8).
+    // Left null on purpose: nobody has supplied the hall's coordinates, and
+    // a guessed lat/lng drops a pin on the wrong building with complete
+    // confidence — worse than no pin. While this is null both the embed and
+    // the link fall back to searching the address text, which lands guests
+    // on the right road. Fill it in to pin the door exactly:
+    //   right-click the hall in Google Maps -> the first menu item is the
+    //   lat,lng -> paste as { lat: 29.97, lng: 30.93 }.
+    coords: null,
   },
 
   // Last date a guest can respond. Date-only; the deadline is end of day.
@@ -505,19 +512,45 @@ function initScheduleRose() {
 }
 
 /* ---------- 9 · Venue and map (Phase 8) --------------------
-   Coordinates live only in WEDDING.venue; both the embed and the
-   directions link are built from them here.
+   The place lives only in WEDDING.venue; both the embed and the
+   directions link are built from it here.
+
+   `coords` pins the exact door when we have it. Until then we hand
+   Google and Apple the address text and let them geocode — a wider
+   pin, but on the right street rather than a made-up one, and it
+   costs nothing to swap once the real numbers arrive.
    ----------------------------------------------------------- */
 
 function initVenue() {
-  const { lat, lng, name, addressLines } = WEDDING.venue;
-  const coords = `${lat},${lng}`;
+  const { coords, name, addressLines } = WEDDING.venue;
   const fullAddress = [name, ...addressLines].join(', ');
+
+  // What the maps get: a lat,lng pair if we have one, the address if not.
+  const query = coords ? `${coords.lat},${coords.lng}` : fullAddress;
+  // Zooming to the doorstep only makes sense once the pin is the doorstep.
+  const zoom = coords ? 16 : 13;
+
+  // One line per configured address line, so the break lands where the
+  // design puts it instead of wherever the column runs out. textContent
+  // only — config text can no more inject markup here than anywhere else.
+  const lines = document.querySelector('.venue__address-lines');
+  if (lines) {
+    lines.replaceChildren(...addressLines.map((line, i) => {
+      const el = document.createElement('span');
+      el.className = 'venue__address-line';
+      // Commas join the lines back into one readable address; the last
+      // line ends the sentence and takes none. The trailing space is
+      // invisible at the end of a block but keeps a copied address from
+      // coming out as "…October City,Giza Governorate".
+      el.textContent = i < addressLines.length - 1 ? `${line}, ` : line;
+      return el;
+    }));
+  }
 
   // Plain embed URL — no API key, no billing account to keep alive.
   const map = document.getElementById('venue-map');
   if (map) {
-    map.src = `https://maps.google.com/maps?q=${encodeURIComponent(coords)}&z=16&output=embed`;
+    map.src = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=${zoom}&output=embed`;
     map.title = `Map showing ${name}`;
   }
 
@@ -531,9 +564,12 @@ function initVenue() {
   const isApple = /iPad|iPhone|iPod/.test(ua) ||
                   (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 
+  // Apple takes a label plus an optional pin; without `ll` it searches `q`.
+  const appleLL = coords ? `&ll=${coords.lat},${coords.lng}` : '';
+
   link.href = isApple
-    ? `https://maps.apple.com/?q=${encodeURIComponent(fullAddress)}&ll=${coords}`
-    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coords)}`;
+    ? `https://maps.apple.com/?q=${encodeURIComponent(fullAddress)}${appleLL}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
   link.target = '_blank';
   link.rel = 'noopener';

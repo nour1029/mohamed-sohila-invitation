@@ -810,7 +810,8 @@ body.is-gated {
    photo's bottom corners poke out past the torn edge at the seam. */
 @media (max-width: 484px) {
   #invitation-card .section__inner,
-  #schedule .section__inner {
+  #schedule .section__inner,
+  #venue .section__inner {
     max-width: none;
     padding-inline: 0;
   }
@@ -822,6 +823,13 @@ body.is-gated {
      fits the screen, so the heading has to reclaim the padding or the
      flourishes get starved down to ~28px against the 41px title. */
   .heading--schedule { margin-inline: calc(-1 * var(--space-3)); }
+
+  /* #venue drops its gutters so the Location card's torn paper reaches the
+     screen edges like every other card. The map frame and its link sit
+     outside that card, though, and a bordered box hard against the bezel
+     reads as a mistake — so they take the gutter back individually. */
+  #venue .venue__frame,
+  #venue .venue__actions { margin-inline: var(--gutter); }
 }
 
 .invite { text-align: center; }
@@ -1249,27 +1257,119 @@ body.is-gated {
 
 /* ---------- 9.4 · Venue + map (Phase 8) ------------------- */
 
+/* Matched to the supplied Location artwork (assets/img/_source/
+   location-design-original.png). Every size and gap below is that
+   design's own measurement, expressed as a fraction of its card width
+   (1402px) so it scales to whatever width our column happens to be.
+
+   Two things the design does that the rest of the site does not, and
+   which are deliberate here rather than oversights:
+     · no flanking filigree — a single centred rule sits *under* the
+       heading instead, so this heading is a plain .heading;
+     · the venue name is title-case body serif, not tracked Cinzel caps.
+
+   Colours are sampled from the artwork's own stroke interiors (eroded,
+   so antialiasing against the paper can't lighten them):
+     heading #A78031 · name #513B27 · address #412F1D                 */
+
 .venue { text-align: center; }
 
-.venue__art {
-  width: clamp(150px, 46vw, 240px);
-  height: clamp(100px, 30vw, 160px);
-  margin: var(--space-3) auto var(--space-2);
+.venue__card {
+  text-align: center;
+  /* Our torn strip is the reference's photograph, which is proportionally
+     about twice as deep as the one in this design (10% of the card width
+     against 4.7%). Left at the shared card padding the heading tucks up
+     under the tear; 13% puts its cap where the design has it, 12.5% of the
+     card width down. Percentage padding resolves against the containing
+     block's width, so this tracks the card at every size. */
+  padding-top: 13%;
+
+  /* Percentage rather than the shared 24px gutter, so the content box stays
+     a fixed 91.4% of the card. With a fixed gutter it does not: 24px is
+     4.3% of the 556px desktop card but 6.2% of a 390px phone one, and the
+     drawing — sized against the content box — quietly loses 4% of the card
+     on the way down. */
+  padding-inline: 4.3%;
+  /* One shared unit for the whole block: every size and gap below is a
+     multiple of it, the way the design's are. It has to be a custom
+     property rather than `em`, because an `em` on the divider or the
+     drawing resolves against *their* inherited font-size, not the
+     address's — the trap that clipped the countdown digits earlier.
+
+     Held at the site's body size. Scaled strictly by the design's own
+     ratio it would read about 13px in a phone column, which is too small
+     to print an address at. Everything here is therefore ~13% larger
+     against the card than the design is; the positions still match. */
+  --venue-addr: var(--t-body);
+}
+
+/* The design's gold is a touch deeper and browner than the site's --gold
+   (#B08D3E). Scoped, so no other heading shifts. */
+.venue__card .heading {
+  color: #A78031;
+  /* One line, and a script face whose ink already fills its em box. The
+     shared 1.15 leading only adds dead space under the swash, which then
+     has to be subtracted back out of the divider's margin. */
+  line-height: 1;
+}
+
+/* The multipliers below are not the design's raw ink gaps (which run
+   29/30/32/18px against a 41.4px address on a 1402px card). They are what
+   reproduces those gaps here, solved by measuring the rendered result:
+   a CSS margin stacks on top of the line box's half-leading, and how much
+   half-leading there is depends on the font. Every band now lands within
+   0.8% of the card width of the design at both 390px and 1470px. */
+
+.venue__divider {
+  display: block;
+  /* 14.5% of the card in the design. Our content box is the card less its
+     padding, so the same ribbon is 15.9% of it. */
+  width: max(46px, 15.9%);
+  height: auto;
+  /* Pulls up through the slack left under the heading by the swash on the
+     script L, which the line box reserves whether or not the swash is
+     there. Tied to the heading's own size so it scales with it. */
+  margin: calc(-0.15 * var(--t-script-lg)) auto 0;
 }
 
 .venue__name {
-  font-size: var(--t-display-md);
-  letter-spacing: 0.14em;
-  text-indent: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink);
+  font-size: calc(1.345 * var(--venue-addr));   /* design: cap 39px vs 29px */
+  line-height: 1.25;
+  color: #513B27;
+  margin-top: calc(0.39 * var(--venue-addr));
 }
 
 .venue__address {
-  font-size: var(--t-body);
-  color: var(--ink-soft);
-  margin-top: var(--space-1);
-  text-wrap: pretty;
+  font-size: var(--venue-addr);
+  /* The design sets this far tighter than the site's 1.75 body leading —
+     two address lines read as one block there, not as a paragraph. */
+  line-height: 1.32;
+  color: #412F1D;
+  margin-top: calc(0.235 * var(--venue-addr));
+}
+
+/* "Address:" is a label the design prints, not part of the address itself,
+   so it lives in the markup and stays out of WEDDING.venue — the map query
+   and the directions link must not inherit it. */
+.venue__address-label { white-space: nowrap; }
+
+/* display: contents dissolves the wrapper's box, so the first address line
+   sits inline beside that label the way the design has it, and every line
+   after it starts a new one. */
+.venue__address-lines { display: contents; }
+.venue__address-line { display: block; }
+.venue__address-line:first-child { display: inline; }
+
+/* The drawing is the section's centrepiece, and 78.9% of the card wide in
+   the design — 86.4% of our content box once the card's own padding is
+   taken off. (The other reading available, 28.4x the venue name's cap
+   height, lands at 90%; the card fraction wins because our type runs a
+   little larger against the card than the design's does.) */
+.venue__art {
+  display: block;
+  width: 86.4%;
+  height: auto;
+  margin: calc(0.69 * var(--venue-addr)) auto 0;
 }
 
 .venue__frame { margin-top: var(--space-4); }

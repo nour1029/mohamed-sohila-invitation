@@ -349,3 +349,124 @@ if a label ever wraps to two lines and grows a row.
 Degrades safely: `--rose-shift` defaults to 0px, so with JS disabled or
 `prefers-reduced-motion` set, the rose simply stays at the first node —
 never missing, never mid-transform.
+
+---
+
+# Location (built from your own artwork, not the reference)
+
+Everything above came off the reference site. This section did not — it was
+extracted from the Location artwork you supplied, kept at
+`_source/location-design-original.png` (1402×1122). It is also the first
+section carrying your real venue rather than the placeholder one.
+
+| File | Origin | Used for |
+|---|---|---|
+| `venue-building.png` | Cut from the design at x 138–1245, y 538–1069 → 1108×532 | The line drawing of the hall |
+| `venue-divider.png` | Cut from the design at x 602–804, y 272–319 → 203×48 | The rule-and-palmette under the heading |
+
+`_source/keep/venue-line-art.png` (the reference's own building, downloaded
+back in Phase 8) is now unused — superseded by the real venue.
+
+## Extracting the art: ink over paper, not a cutout
+
+Both files are transparent PNGs recovered with
+`_source/keep/extract-location-art.py`. The drawing is ink laid over the
+design's paper, so each pixel is `C = A·F + (1−A)·B` for a known paper
+`B = #FBEEDE`. Solving per pixel — `A = maxᵢ (Bᵢ − Cᵢ)/Bᵢ`, then
+un-premultiplying `F` — gives back the ink's own colour and coverage.
+
+This matters more than a plain background knockout would. The hall's stone
+is drawn as a *wash*, barely darker than the paper; a cutout would have to
+either keep it as an opaque cream rectangle (visibly a different cream from
+our card) or discard it. Recovered as ink, the stone is mostly transparent
+and simply takes on whatever paper it is placed over — which is why the
+drawing sits on our slightly darker `.card--paper` fill (`#F1E5D4`) without
+a seam.
+
+Two checks that the un-compositing is sound:
+
+- Only 0.80% of pixels in the drawing's box are *lighter* than the paper,
+  and by at most 4/255 — noise, not highlights. So "ink over paper" is the
+  right model and nothing is lost by clamping.
+- Composited over magenta, there is no cream halo anywhere — the giveaway
+  that alpha and colour have been separated correctly.
+
+Alpha below 6/255 is dropped, which kills the paper grain that would
+otherwise ride along as a faint rectangle.
+
+`venue-building.png` is then quantised to 96 colours: **831KB → 189KB**, and
+indistinguishable at display size (checked at 2× zoom on the dome and
+signage). WebP was tried and abandoned — for artwork this finely textured it
+came out *larger* than the quantised PNG at every quality setting worth
+using, so a `<picture>` would add markup for nothing.
+
+## Colours, sampled not eyeballed
+
+Taken from the strokes' *interiors* — pixels whose eight neighbours are all
+ink too — so antialiasing against the paper cannot lighten the reading:
+
+| | sampled | note |
+|---|---|---|
+| "Location" | `#A78031` | deeper and browner than the site's `--gold` `#B08D3E`; scoped to this heading |
+| "Laveora Wedding Hall" | `#513B27` | |
+| Address | `#412F1D` | |
+
+## Geometry, and the two places it deliberately departs
+
+Every size and gap is the design's own, expressed as a fraction of its card
+width so it holds at any column width. Measured against the rendered result
+rather than assumed: each band now lands within **0.8% of the card width**
+of the design at both 390px and 1470px, and the drawing is 78.97% of the
+card against the design's 78.89%.
+
+| | design (% of card) | ours |
+|---|---|---|
+| heading ink top | 12.48 | 12.43 |
+| divider top / width | 19.61 / 14.48 | 19.36 / 14.53 |
+| venue name ink top | 24.75 | 24.95 |
+| address line 1 ink top | 30.60 | 30.98 |
+| drawing top / width | 39.51 / 78.89 | 40.29 / 78.97 |
+
+Departures, both deliberate:
+
+- **Type runs ~13% larger against the card.** The design is a 1402px render;
+  our card is 556px at its widest. Scaled by strict proportion the address
+  would print at about 13px in a phone column. It is held at the site's body
+  size instead, and the *positions* still match.
+- **The heading keeps the site's shared `--t-script-lg`**, so "Location" is
+  the same size as "Schedule of Events" and "Confirm Your Attendance" a
+  screen away. Matching the design here would have made this one heading
+  smaller than its neighbours for no reader-visible gain.
+
+Two smaller things worth knowing, since both look like mistakes in the CSS:
+
+- `.venue__divider` has a **negative** top margin, `-0.15 × --t-script-lg`.
+  The script L's swash makes the heading's line box reserve descender space
+  whether or not the swash descends there; the negative margin takes it back.
+  Tied to the heading's size so it scales with it.
+- `.venue__card` uses **percentage** inline padding (4.3%), not the shared
+  24px gutter. A fixed gutter is 4.3% of the 556px desktop card but 6.2% of
+  a 390px phone one, so the drawing — sized against the content box — was
+  quietly losing 4% of the card on the way down to a phone.
+
+## The address breaks where the design breaks it
+
+`initVenue` renders one `<span>` per `WEDDING.venue.addressLines` entry
+rather than joining them into a paragraph, so the break lands after
+"…6th of October City," exactly as the design has it instead of wherever
+the column happens to run out. `display: contents` on the wrapper lets the
+first line sit inline beside the "Address:" label while later lines each
+start a new one.
+
+## The map has no pin yet
+
+`WEDDING.venue.coords` is `null` on purpose. Nobody has supplied the hall's
+coordinates, and a guessed lat/lng drops a pin on the wrong building with
+complete confidence — worse than no pin at all. While it is null both the
+embed and the Open in Maps link search the address text instead, and Google
+does in fact resolve it to the real listing (Laveora, `2X57+VF`, 4.6★).
+Zoom is held at 13 rather than 16 until there is a real pin to zoom to.
+
+To pin the door exactly: right-click the hall in Google Maps, the first menu
+item is the lat,lng, paste it in as `coords: { lat: …, lng: … }`. Nothing
+else needs to change.
