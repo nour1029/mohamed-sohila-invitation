@@ -462,6 +462,48 @@ function initSchedule() {
   list.replaceChildren(...stops);
 }
 
+/* The reference's peony is not pinned to the first stop — it migrates
+   down through every node as the guest scrolls (data-animate-sbs-event
+   "scroll", 5 keyframes at node-spaced offsets, triggered at the
+   viewport's midpoint). CSS alone can position it at the first node; the
+   travel itself needs scroll position, so it lives here as a
+   --rose-shift custom property .timeline::after reads.
+   Measures actual node centres rather than assuming the --row spacing,
+   so it holds if a label ever wraps to two lines and a row grows. */
+function initScheduleRose() {
+  const timeline = document.querySelector('.timeline');
+  const nodes = timeline?.querySelectorAll('.timeline__node');
+  if (!timeline || !nodes || nodes.length < 2) return;
+  if (prefersReducedMotion()) return;   // stays put at the first node
+
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+    const rect = timeline.getBoundingClientRect();
+    const first = nodes[0].getBoundingClientRect();
+    const last = nodes[nodes.length - 1].getBoundingClientRect();
+    const travel = (last.top + last.height / 2) - (first.top + first.height / 2);
+
+    // 0 when the timeline's own top reaches mid-viewport, 1 once its
+    // bottom has — the same "trigger at 50%" the reference scrubs against.
+    let progress = (window.innerHeight * 0.5 - rect.top) / rect.height;
+    progress = Math.min(1, Math.max(0, progress));
+
+    timeline.style.setProperty('--rose-shift', `${(progress * travel).toFixed(1)}px`);
+  };
+
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+
+  update();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+}
+
 /* ---------- 9 · Venue and map (Phase 8) --------------------
    Coordinates live only in WEDDING.venue; both the embed and the
    directions link are built from them here.
@@ -737,8 +779,10 @@ document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
   initGate();
 
-  // Schedule stops must exist before the observer numbers them for stagger.
+  // Schedule stops must exist before the observer numbers them for stagger,
+  // and before the rose can measure their positions.
   initSchedule();
+  initScheduleRose();
   initCountdown();
   initVenue();
   initRsvp();

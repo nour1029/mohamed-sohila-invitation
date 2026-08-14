@@ -326,3 +326,26 @@ centre are the same point.
   with a negative margin. Without that the flourishes get starved to
   ~28px against the 41px title; with it they reach 52px on a phone and
   the reference's full 79px on desktop.
+
+## The rose's scroll-scrubbed travel (now implemented)
+
+Previously noted as skipped: "the reference's scroll-scrubbed rose-travel
+animation... decided as out of reasonable scope." Checking why the rose
+looked mispositioned revealed it wasn't static in the reference at all —
+its `data-animate-sbs-event="scroll"` carries 5 keyframes that walk the
+peony down from the first node to the last as the guest scrolls the
+section, triggered around the viewport's midpoint. A screenshot taken
+mid-scroll will always show it sitting on whichever node the scroll
+position implies, not the first one.
+
+Reproduced in `js/main.js` (`initScheduleRose`): progress runs 0→1 as the
+timeline's own top-to-bottom sweeps through the viewport's vertical
+centre, and the rose is shifted by `progress × (distance from the first
+node's centre to the last node's centre)` via a `--rose-shift` custom
+property `.timeline::after` reads. Measuring the actual node centres
+rather than assuming even `--row` spacing means it still lands correctly
+if a label ever wraps to two lines and grows a row.
+
+Degrades safely: `--rose-shift` defaults to 0px, so with JS disabled or
+`prefers-reduced-motion` set, the rose simply stays at the first node —
+never missing, never mid-transform.

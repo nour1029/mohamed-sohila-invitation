@@ -1184,6 +1184,14 @@ body.is-gated {
    floating it above the rule — measured, its centre and the first
    diamond's centre are the same point, so it crowns the rule by covering
    that node. */
+/* --rose-shift is set by initScheduleRose() in js/main.js as the guest
+   scrolls, migrating the peony down through every node rather than
+   sitting fixed on the first — matching the reference's own scroll-
+   scrubbed animation. Defaults to 0px, which is the first node, so a
+   guest with JS disabled or motion reduced still sees it correctly
+   placed rather than missing or stuck off-position. `translate` centres
+   it on the node; `transform` carries the scroll travel — the two
+   compose instead of colliding because they are separate properties. */
 .timeline::after {
   content: "";
   position: absolute;
@@ -1192,7 +1200,12 @@ body.is-gated {
   width: clamp(38px, 14.1vw, 55px);
   aspect-ratio: 55 / 51;
   translate: -50% -50%;
+  transform: translateY(var(--rose-shift, 0px));
   background: url("../assets/img/schedule-rose.png") center / contain no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline::after { transform: none; }
 }
 
 /* The gap has to clear the peony, not just the node: the flower is 55px
