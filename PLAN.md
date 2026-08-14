@@ -212,30 +212,20 @@ The only part with a backend, and the only part that must not fail silently.
       element's own play/pause events, not by what we asked it to do
 - [x] Sensible fallback if the browser blocks it anyway — button sits in paused state
 - [x] Doesn't fight the phone's own media controls
-- [ ] **Blocked on you:** an audio file we have rights to, into `assets/audio/`, then set
-      `WEDDING.audioSrc`. Until then the button stays hidden.
+- [x] **Audio in place** — you sourced the file yourself and it is wired up.
+      Renamed to `music.mp3` on the way in (the download name's spaces and
+      parentheses need percent-encoding in a URL and 404 on some static
+      hosts). 96 kbps, 5:26, 3.9MB, left as-is: already lean for solo piano.
+      Verified end to end — nothing fetched until the envelope is tapped
+      (`preload="none"`, `networkState` idle on a cold load), music starting
+      with the opening film, button fading in after it, and play/pause
+      toggling the icon, `aria-pressed` and the screen-reader label.
+      ⚠ **Not tracked in git** (`.gitignore`), so a fresh clone has no audio
+      and the button will appear but stay silent. Deploys are unaffected —
+      static hosts upload the folder, not the repo. One line in `.gitignore`
+      to reverse; see `assets/audio/README.md`.
 
-> **On taking the reference's track:** it plays Ludovico Einaudi's *Divenire*
-> from its own storage bucket. That is a commercially released recording, and
-> re-hosting it on your domain isn't something I'll do for you — it is the one
-> asset on this site that would be someone else's to license. Everything
-> around it is finished and verified, so it is genuinely a one-line change
-> once you have a file:
->
-> 1. Put it in `assets/audio/` (mp3 or m4a).
-> 2. Set `WEDDING.audioSrc` to its path.
->
-> Routes to that exact piece, in rough order of effort: it is on the usual
-> streaming stores as a paid download; several licensing marketplaces sell a
-> personal/web-use licence for well-known piano works; or a solo-piano track
-> from a royalty-free library will sit in the same emotional register for
-> nothing. Any of the three drops in the same way.
-
-> **Needs you:** an audio file you have rights to. Confirmed against the live
-> reference — it serves `Einaudi_ Divenire.mp3` from its own bucket, which is
-> not ours to take.
-
----
+> **Needs you:** nothing further here.
 
 ### Phase 12 · Closing `S`
 - [x] `Hope to see you there!` script + names in Cinzel
@@ -312,7 +302,7 @@ P13/P14 need your content ──> P15 ──> P16
 |---|---|
 | 0 | Your pick of script font *(I'll mock the four candidates first)* |
 | 10 | A Google account, to deploy the Apps Script endpoint |
-| 11 | An audio file we have rights to |
+| 11 | ~~An audio file~~ — done, you sourced it |
 | 13 | The content checklist in `REFERENCE.md` §5 |
 | 14 | ~~Couple photo~~ (in); florals if you don't want sourced stock |
 

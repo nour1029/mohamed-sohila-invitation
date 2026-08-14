@@ -1,2 +1,8 @@
 .DS_Store
 *.log
+
+# Music: a 3.9MB commercial recording. Kept out of permanent history and
+# out of anything that gets pushed. Deploys are unaffected — static hosts
+# upload the folder, not the repo. See assets/audio/README.md.
+assets/audio/*.mp3
+assets/audio/*.m4a

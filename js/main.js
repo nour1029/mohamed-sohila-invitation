@@ -84,7 +84,7 @@ const WEDDING = {
   // verified; this is the only thing standing between them and working.
   // While it is empty the button never appears, so guests are never offered
   // a control that does nothing. See PLAN.md Phase 11 for what to drop in.
-  audioSrc: '',
+  audioSrc: 'assets/audio/music.mp3',
 
   // TODO Phase 13: a real number. Shown when a submission fails — an RSVP
   // that cannot reach the sheet must still reach a human.
