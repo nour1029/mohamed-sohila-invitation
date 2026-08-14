@@ -496,13 +496,27 @@ invitation should show the couple, send the unstickered original and it
 drops in under the same filenames with no code change. If they are meant to
 stay, nothing more is needed.
 
-## Rotation
+## Rotation — shipped un-rotated, on request
 
-It arrived sideways. The phone had recorded the quarter turn in EXIF rather
-than in the pixels, and the PNG export dropped the tag — the file even
-carries `Orientation: 1` ("upright"), which is why nothing auto-corrected
-it. Rotated 90° clockwise on the way in, so the pixels are now upright and
-no viewer has to be trusted to read a tag: 818×1280 → **1280×818**.
+The file is 818×1280 portrait with the couple lying sideways in the frame.
+The phone recorded the quarter turn in EXIF rather than in the pixels and
+the PNG export dropped the tag — it even carries `Orientation: 1`
+("upright"), which is why nothing auto-corrects it.
+
+It was briefly shipped rotated 90° clockwise to 1280×818, which puts them
+the right way up and reads as a normal room: sofa behind, wall and window
+above, throw hanging down. **That was reverted at your request** — the page
+now shows the original file at its own dimensions, so the couple appear
+sideways exactly as the file has them.
+
+To put the rotation back, it is one call in the encode step:
+
+```python
+Image.open('_source/couple-original.png').convert('RGB').rotate(-90, expand=True)
+```
+
+then swap the `width`/`height` attributes on `.closing__photo` to
+`1280`/`818` and the `max-width` on `.closing__figure` to match.
 
 ## Encoding: JPEG only, and why the WebP was removed
 
@@ -526,20 +540,18 @@ expensively as WebP. Whatever the cause, the numbers are the numbers: the
 48.2 dB is comfortably into visually-lossless territory — the average pixel
 is off by about 1 part in 255 from the original.
 
-## Shown whole, and edge to edge at any width
-
-Asked for explicitly, and both halves are worth knowing about because each
-looks like an oversight in the CSS:
+## Shown whole, at the original dimensions
 
 - **No `aspect-ratio`, no `object-fit`.** The box takes the photo's own
-  1.565:1 shape, so nothing is cropped off any edge — the sofa at the left
-  and the fleece at the right both survive, where a 3:2 box trimmed them.
-  The `width`/`height` attributes in the markup still supply the intrinsic
-  ratio, so the space is reserved before the file arrives and nothing below
-  jumps on load.
-- **No width cap.** `.closing__figure` spans the window at every size. Past
-  the photo's own 1280px that is enlargement rather than display — 1.15× at
-  1470px, 1.5× at 1920px, where it goes visibly soft. That is the accepted
-  trade: edge to edge everywhere beats sharp with cream margins either side.
-  A larger original drops in under the same filenames and the softness goes
-  away on its own, with no code change.
+  shape, so nothing is cropped off any edge. The `width`/`height` attributes
+  in the markup supply the intrinsic ratio, so the space is reserved before
+  the file arrives and nothing below jumps on load.
+- **Capped at 818px**, the file's own width. This is arithmetic, not taste:
+  the photo is portrait, so width and height trade off directly, and running
+  it edge to edge on a 1470px window would make it **2300px tall** — two and
+  a half screenfuls of one photograph — while enlarging it 1.8× to get
+  there. At native width it is still full-bleed on every phone (390px gives
+  a tall 390×610 band, measured) and never enlarged anywhere, which also
+  retires the softness the landscape version had on large monitors.
+
+Measured: 818×1280 at scale 1.000 on a 1470px window, 390×610 at 390px.

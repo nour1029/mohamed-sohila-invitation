@@ -1704,17 +1704,19 @@ body.is-gated {
   margin-top: var(--space-2);
 }
 
-/* Full-bleed at every width, uncropped — the photo runs edge to edge
-   however wide the window is, unlike everything above it.
+/* The photo at the original file's own dimensions, 818x1280, uncropped.
 
-   Deliberately uncapped. Past the photo's own 1280px it is being enlarged
-   rather than shown (1.5x on a 1920px monitor, which is visibly soft), and
-   that is the accepted trade: edge to edge everywhere beats sharp with
-   cream margins. A larger original drops in under the same filenames and
-   the softness goes away on its own. */
+   Capped at 818px, which is a real constraint rather than a preference:
+   the photo is portrait, so width and height trade off directly. Running
+   it edge to edge on a 1470px window would make it 2300px tall — two and a
+   half screenfuls of one photograph — and enlarge it 1.8x while doing it.
+   At its native width it is full-bleed on every phone (390px wide gives a
+   tall 390x610 band) and never enlarged anywhere, which also retires the
+   softness the landscape version had on big monitors. */
 .closing__figure {
   position: relative;
-  margin: var(--space-5) 0 0;
+  margin: var(--space-5) auto 0;
+  max-width: 818px;
 }
 
 /* No aspect-ratio and no object-fit: the box takes the photo's own shape,

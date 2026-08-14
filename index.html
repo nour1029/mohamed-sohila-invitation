@@ -312,13 +312,18 @@
     </div>
 
     <figure class="closing__figure" data-reveal>
-      <!-- Shot portrait and rotated a quarter turn upright; the phone wrote
-           the rotation into EXIF, which the PNG export then dropped. Shown
-           whole, at its own 1280x818 shape and edge to edge at any width —
-           see .closing__figure. -->
+      <!-- The original file's own 818x1280, un-rotated, at your request. The
+           couple therefore read sideways in the frame: the phone recorded a
+           quarter turn in EXIF that the export dropped, so the pixels were
+           never turned. Rotating on the way in is a one-line change here and
+           in the encode step (see assets/img/README.md) if you want it back.
+
+           Capped at 818px so it is never enlarged past its true size — see
+           .closing__figure for why a portrait photo cannot also be
+           edge-to-edge on a desktop. -->
       <img class="closing__photo" src="assets/img/couple.jpg"
            alt="The couple, leaning their heads together"
-           width="1280" height="818" loading="lazy" decoding="async">
+           width="818" height="1280" loading="lazy" decoding="async">
 
       <!-- TODO Phase 14: swap in the watercolour floral arch -->
       <div class="closing__arch closing__arch--start slot" aria-hidden="true">Floral</div>

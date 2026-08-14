@@ -218,11 +218,13 @@ The only part with a backend, and the only part that must not fail silently.
 
 ### Phase 12 · Closing `S`
 - [x] `Hope to see you there!` script + names in Cinzel
-- [x] Full-width couple photo — **your real photo is in**, rotated upright,
-      shown whole (nothing cropped off any edge) and running edge to edge at
-      every width. Above ~1280px it is being enlarged, so it softens on a
-      large monitor; a higher-resolution original fixes that with no code
-      change.
+- [x] Couple photo — **your real photo is in**, shown whole and at the
+      original file's own 818×1280, never enlarged. Full-bleed on a phone
+      (390×610); centred at native size on desktop, because a portrait photo
+      run edge to edge on a laptop would stand 2300px tall.
+      ⚠ Shipped **un-rotated at your request**, so the couple read sideways
+      in the frame — that is how the file's pixels sit. Reverting to upright
+      is one line in the encode step; see `assets/img/README.md`.
 - [ ] Floral arch overlapping its bottom corners — still a placeholder
 - [ ] **Your call:** the photo came with fire emoji over both faces, left
       exactly as supplied. If that was only for sending the file, send the
