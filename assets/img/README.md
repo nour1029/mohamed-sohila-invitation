@@ -504,18 +504,27 @@ carries `Orientation: 1` ("upright"), which is why nothing auto-corrected
 it. Rotated 90° clockwise on the way in, so the pixels are now upright and
 no viewer has to be trusted to read a tag: 818×1280 → **1280×818**.
 
-## Encoding and the width cap
+## Encoding
 
 JPEG quality 84 (136KB) with a WebP alternate at quality 82 (82KB), served
 through `<picture>`. Unlike the venue drawing — fine line art, where WebP
 lost to a quantised PNG — this is a photograph, which is what WebP is good
 at, so the 40% saving is real and worth the extra file.
 
-`.closing__figure` is capped at **1280px**, the photo's native width. It is
-a phone snapshot; past its own width a "full-bleed" band is just upscaling,
-and 1.5× by a 1920px monitor shows. The cap is wider than any phone or
-laptop, so the photo still runs edge to edge everywhere it matters, and on a
-wide desktop it reads as a centred composition rather than a soft one.
+## Shown whole, and edge to edge at any width
 
-Cover-cropping trims the sides, never the top: the photo is 1.565:1 against
-a 1.5:1 box, and both faces sit well inboard of the trim.
+Asked for explicitly, and both halves are worth knowing about because each
+looks like an oversight in the CSS:
+
+- **No `aspect-ratio`, no `object-fit`.** The box takes the photo's own
+  1.565:1 shape, so nothing is cropped off any edge — the sofa at the left
+  and the fleece at the right both survive, where a 3:2 box trimmed them.
+  The `width`/`height` attributes in the markup still supply the intrinsic
+  ratio, so the space is reserved before the file arrives and nothing below
+  jumps on load.
+- **No width cap.** `.closing__figure` spans the window at every size. Past
+  the photo's own 1280px that is enlargement rather than display — 1.15× at
+  1470px, 1.5× at 1920px, where it goes visibly soft. That is the accepted
+  trade: edge to edge everywhere beats sharp with cream margins either side.
+  A larger original drops in under the same filenames and the softness goes
+  away on its own, with no code change.

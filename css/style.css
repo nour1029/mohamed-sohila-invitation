@@ -1704,30 +1704,31 @@ body.is-gated {
   margin-top: var(--space-2);
 }
 
-/* Full-bleed: the photo runs edge to edge, unlike everything above it —
-   up to the photo's own native width. It is a phone snapshot, 1280px
-   across, and past that a "full-bleed" band is just upscaling: 1.5x by
-   1920px, which shows. Capping there keeps it edge to edge on every phone
-   and laptop, and on a wide desktop it reads as a deliberately centred
-   composition rather than a soft one. */
+/* Full-bleed at every width, uncropped — the photo runs edge to edge
+   however wide the window is, unlike everything above it.
+
+   Deliberately uncapped. Past the photo's own 1280px it is being enlarged
+   rather than shown (1.5x on a 1920px monitor, which is visibly soft), and
+   that is the accepted trade: edge to edge everywhere beats sharp with
+   cream margins. A larger original drops in under the same filenames and
+   the softness goes away on its own. */
 .closing__figure {
   position: relative;
-  margin: var(--space-5) auto 0;
-  max-width: 1280px;
+  margin: var(--space-5) 0 0;
 }
 
 /* A <picture> is inline by default, which leaves a strip of line-box
    descender space under the photo that the floral arches then sit in. */
 .closing__figure > picture { display: block; }
 
+/* No aspect-ratio and no object-fit: the box takes the photo's own shape,
+   so nothing is ever cropped off any edge. The width/height attributes in
+   the markup supply the intrinsic ratio, so the space is reserved before
+   the file arrives and nothing below it jumps on load. */
 .closing__photo {
   display: block;
   width: 100%;
-  aspect-ratio: 3 / 2;
-  /* The photo is 1.565:1 against a 1.5:1 box, so cover trims the sides,
-     never the top — both faces are well inboard of that. */
-  object-fit: cover;
-  object-position: center;
+  height: auto;
 }
 
 /* The arch overlaps the photo's bottom corners. */

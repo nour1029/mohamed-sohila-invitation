@@ -218,8 +218,11 @@ The only part with a backend, and the only part that must not fail silently.
 
 ### Phase 12 · Closing `S`
 - [x] `Hope to see you there!` script + names in Cinzel
-- [x] Full-width couple photo — **your real photo is in**, rotated upright and
-      capped at its native 1280px so it never upscales into softness
+- [x] Full-width couple photo — **your real photo is in**, rotated upright,
+      shown whole (nothing cropped off any edge) and running edge to edge at
+      every width. Above ~1280px it is being enlarged, so it softens on a
+      large monitor; a higher-resolution original fixes that with no code
+      change.
 - [ ] Floral arch overlapping its bottom corners — still a placeholder
 - [ ] **Your call:** the photo came with fire emoji over both faces, left
       exactly as supplied. If that was only for sending the file, send the
