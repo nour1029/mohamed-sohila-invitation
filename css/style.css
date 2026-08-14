@@ -1248,9 +1248,15 @@ body.is-gated {
 
 .timeline__time {
   font-family: var(--font-body);            /* the reference's weight 600 is Ovo */
-  font-size: clamp(1.375rem, 7.7vw, 1.875rem);   /* → 30px */
-  line-height: 1.57;                             /* → 47px */
-  letter-spacing: 0.02em;
+  /* Sized for a short reference time like "5 PM" (4 characters). Repurposed
+     as a full date — "01.05.2025", 10 characters — the old clamp(1.375rem,
+     7.7vw, 1.875rem) hit its 30px ceiling on every phone (its 7.7vw term
+     passes 30px before 390px width), so the date dominated the row and
+     crowded the divider. Brought down to sit close to .timeline__event
+     instead of a third again as large. */
+  font-size: clamp(1.05rem, 5.6vw, 1.375rem);    /* → 22.4px */
+  line-height: 1.3;
+  letter-spacing: 0.01em;
   color: #846F61;
   text-align: right;
 }
