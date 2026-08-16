@@ -606,6 +606,13 @@ function initMusic() {
   const label  = document.getElementById('music-label');
   if (!button || !audio) return;
 
+  // ?music=off — for a guest who wants to open the invitation somewhere
+  // sound would be unwelcome (a quiet room, at work) without it ever
+  // trying to play or the button appearing to offer a control that isn't
+  // there. Returning here leaves button.hidden at its markup default, so
+  // nothing further in this function runs.
+  if (new URLSearchParams(location.search).get('music') === 'off') return;
+
   // Nothing to play yet: leave the button hidden rather than offering a
   // control that does nothing.
   if (!WEDDING.audioSrc) return;
