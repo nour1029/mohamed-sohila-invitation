@@ -562,14 +562,33 @@ Measured: 818×1280 at scale 1.000 on a 1470px window, 390×610 at 390px.
 
 | File | Origin |
 |---|---|
-| `og-image.jpg` | Cropped from `_source/couple-original.png`, the same photo used in Closing |
+| `og-image.jpg` | `_source/og-image-with-link-icon-original.png`, supplied directly at 1200×630 |
+| `_source/og-image-with-link-icon-original.png` | As supplied |
+
+## The link icon is intentional
+
+The white chain-link badge over the centre is not a photo edit — it's the
+share-link icon a macOS app (Preview/Photos/Messages) stamps onto an image
+when generating a shareable link, and it made it into the file that was
+supplied for this. Flagged before installing it, since it reads as an
+accidental artifact rather than a design choice; confirmed it should ship
+as-is. If that ever changes, the plain version (no icon) is one crop away —
+see the superseded recipe kept below for exactly how to remake it.
+
+JPEG q92, 112KB. Source PNG had a fully-opaque alpha channel (checked:
+`(255, 255)` min/max), so flattening to RGB for JPEG lost nothing.
+
+## Superseded: the plain crop (no icon)
+
+The first version of this file was cropped in-repo from the Closing photo
+rather than supplied ready-made — kept here in case the icon-free version
+is wanted again:
 
 `couple-original.png` is portrait (818×1280) and sideways in the frame, per
 Closing's own README section above. A share-preview image can't be either of
 those — every platform crops portrait OG images unpredictably, and nobody
-should open a wedding link to see two sideways faces. So this one crop is
-rotated upright and cropped to the universal OG size (1200×630, 1.91:1) that
-this photo alone doesn't need to carry elsewhere:
+should open a wedding link to see two sideways faces. So that crop was
+rotated upright and cropped to the universal OG size (1200×630, 1.91:1):
 
 ```python
 Image.open('_source/couple-original.png').convert('RGB') \
@@ -580,13 +599,15 @@ Image.open('_source/couple-original.png').convert('RGB') \
 Top-aligned rather than centred: both faces sit in the upper two-thirds of
 the upright photo, so a top crop keeps them whole and only trims the lower
 strip of clothing and the ring hand — cropping from the centre would have
-cut into a forehead instead. JPEG q90, 109KB.
+cut into a forehead instead.
 
-**Not wired to an absolute URL yet.** `og:image` and `twitter:image` in
-`index.html` currently point at the relative path `assets/img/og-image.jpg`,
-which resolves fine in a local preview but does nothing once the link is
-actually shared — WhatsApp, iMessage, and Facebook all fetch the image
-server-side, with no page context to resolve a relative path against. This
-needs `https://<real domain>/assets/img/og-image.jpg` once Phase 16
-(deploy) gives the site a permanent home; `og:url` has the same requirement
-and was left out entirely rather than filled with a guess.
+## Absolute URL, confirmed live
+
+`og:image`, `twitter:image`, and `og:url` in `index.html` point at
+`https://solinvitations.com/…` — required, not stylistic, since
+WhatsApp/iMessage/Facebook fetch the image server-side with no page context
+to resolve a relative path against. Confirmed serving correctly straight
+from GitHub Pages (bypassing DNS, hit its IP directly with the right Host
+header): `200`, `image/jpeg`, exactly 1200×630. Public testing is still
+blocked on a Hostinger parking page intercepting the domain itself — see
+`PLAN.md` Phase 16.
