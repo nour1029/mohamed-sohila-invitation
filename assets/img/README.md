@@ -562,27 +562,48 @@ Measured: 818×1280 at scale 1.000 on a 1470px window, 390×610 at 390px.
 
 | File | Origin |
 |---|---|
-| `og-image.jpg` | `_source/og-image-with-link-icon-original.png`, supplied directly at 1200×630 |
-| `_source/og-image-with-link-icon-original.png` | As supplied |
+| `og-image.jpg` | `_source/og-image-childhood-original.png`, cropped in-repo |
+| `_source/og-image-childhood-original.png` | As supplied — a childhood polaroid of the two of you |
 
-## The link icon is intentional
+## Current: the childhood polaroid
 
-The white chain-link badge over the centre is not a photo edit — it's the
-share-link icon a macOS app (Preview/Photos/Messages) stamps onto an image
-when generating a shareable link, and it made it into the file that was
-supplied for this. Flagged before installing it, since it reads as an
-accidental artifact rather than a design choice; confirmed it should ship
-as-is. If that ever changes, the plain version (no icon) is one crop away —
-see the superseded recipe kept below for exactly how to remake it.
+Explicitly not the couple photo used in Closing — this is an old polaroid
+(two kids hugging, curtain backdrop) supplied separately and asked for by
+name as the OG image, nothing else. Scaled to 1200px wide (896→1200,
+×1.339) then cropped to the standard 1200×630 OG shape:
 
-JPEG q92, 112KB. Source PNG had a fully-opaque alpha channel (checked:
-`(255, 255)` min/max), so flattening to RGB for JPEG lost nothing.
+```python
+Image.open('_source/og-image-childhood-original.png').convert('RGB') \
+     .resize((1200, round(909 * 1200/896)), Image.LANCZOS)  # → 1200×1217
+     .crop((0, 260, 1200, 890))                              # → 1200×630
+```
 
-## Superseded: the plain crop (no icon)
+Crop chosen to keep both faces and the hug whole with a little headroom
+above; it trims the blank curtain at the top and the thick polaroid border
+and stuffed animal at the bottom. The thin polaroid edge left standing on
+the sides and top is kept deliberately — on a photo this square, cropping
+it away entirely would have meant cutting much tighter into the hug to
+still hit a 1.91:1 box, and the sliver of border reads as "this is a kept
+photograph" rather than as an accidental edge in a link-preview thumbnail.
 
-The first version of this file was cropped in-repo from the Closing photo
-rather than supplied ready-made — kept here in case the icon-free version
-is wanted again:
+JPEG q92, 116KB.
+
+## Superseded: the couple photo, with the link-icon watermark
+
+Used briefly before the childhood polaroid replaced it. Supplied directly
+at 1200×630 rather than cropped in-repo — `_source/
+og-image-with-link-icon-original.png`. Carried a white chain-link badge
+over the centre: the share-link icon a macOS app (Preview/Photos/Messages)
+stamps onto an image when generating a shareable link, present because it
+made it into the file that was supplied at the time. Flagged before
+installing it as a likely accidental artifact; confirmed it should ship
+as-is regardless. JPEG q92, 112KB, converted from a fully-opaque-alpha PNG.
+
+## Superseded: the plain couple-photo crop (no icon)
+
+The very first version of this file was cropped in-repo from the Closing
+photo rather than supplied ready-made — kept here in case a couple-photo
+OG image is wanted again:
 
 `couple-original.png` is portrait (818×1280) and sideways in the frame, per
 Closing's own README section above. A share-preview image can't be either of
