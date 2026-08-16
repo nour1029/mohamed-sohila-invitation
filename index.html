@@ -9,25 +9,25 @@
 <meta name="description" content="You're invited to Mazen &amp; Shams's Kattb Ketab.">
 
 <!-- Open Graph / Twitter Card — what a guest sees when this link is pasted
-     into WhatsApp, iMessage, or any chat app.
+     into WhatsApp, iMessage, or any chat app. Absolute URLs on the image
+     and og:url are required, not stylistic — WhatsApp/iMessage/Facebook
+     fetch the image server-side, with no browser to resolve a relative
+     path against. Pinned to the CNAME domain (solinvitations.com, apex —
+     GitHub Pages' own redirect target for this repo, confirmed live).
 
-     BLOCKED ON DEPLOY (Phase 16): og:image and twitter:image below are
-     relative paths, which is fine for local preview but WILL NOT WORK once
-     shared — WhatsApp/iMessage/Facebook fetch the image server-side, with
-     no browser to resolve "assets/img/og-image.jpg" against. They need to
-     become absolute, e.g. https://yourdomain.com/assets/img/og-image.jpg.
-     og:url has the same requirement and is left out entirely rather than
-     filled with a wrong guess — add all three once the domain is real. -->
+     If the domain ever changes, these four lines are the only ones that
+     need to move with it. -->
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://solinvitations.com/">
 <meta property="og:title" content="Mazen &amp; Shams">
 <meta property="og:description" content="You're invited to our Kattb Ketab.">
-<meta property="og:image" content="assets/img/og-image.jpg">
+<meta property="og:image" content="https://solinvitations.com/assets/img/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mazen &amp; Shams">
 <meta name="twitter:description" content="You're invited to our Kattb Ketab.">
-<meta name="twitter:image" content="assets/img/og-image.jpg">
+<meta name="twitter:image" content="https://solinvitations.com/assets/img/og-image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
