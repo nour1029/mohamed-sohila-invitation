@@ -69,7 +69,7 @@ const WEDDING = {
   schedule: [
     { time: '01.05.2025', event: 'Our First Meeting' },
     { time: '23.08.2025', event: 'She Said Yes'       },
-    { time: '23.08.2025', event: 'Engagement'         },
+    { time: '29.10.2025', event: 'Engagement'         },
     { time: '29.08.2026', event: 'Forever Begins'     },
   ],
 
