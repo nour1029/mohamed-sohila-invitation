@@ -271,10 +271,16 @@ Swap every placeholder for your actual details. Straight run through the checkli
 - [ ] Performance: lazy-load below-fold images, preload the script font, audit total weight
 - [ ] Accessibility: keyboard path through the whole page, focus visible, contrast on gold
       text, alt text, reduced-motion honored everywhere
-- [ ] **Share preview** — OG image + title/description, so the link looks right when
-      forwarded in WhatsApp. Guests will send this to each other; this matters more than
-      it sounds
-- [ ] `favicon`, page `<title>`
+- [x] `<title>` and `<meta name="description">` set for real
+- [~] **Share preview** — og:title/og:description/twitter:* + a 1200×630 crop of
+      the couple photo (`assets/img/og-image.jpg`) are wired into `index.html`.
+      **Still blocked on Phase 16 (deploy):** `og:image`/`twitter:image` are
+      relative paths, which do nothing once the link is actually shared —
+      WhatsApp/iMessage/Facebook fetch the image server-side with no page to
+      resolve a relative path against. Needs the real domain to become
+      absolute; `og:url` was left out rather than filled with a guess. See
+      `assets/img/README.md`.
+- [ ] `favicon`
 - [ ] Delete `_components.html`
 
 ### Phase 16 · Deploy `S`

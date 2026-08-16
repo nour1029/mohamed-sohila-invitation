@@ -555,3 +555,38 @@ is off by about 1 part in 255 from the original.
   retires the softness the landscape version had on large monitors.
 
 Measured: 818×1280 at scale 1.000 on a 1470px window, 390×610 at 390px.
+
+---
+
+# Link preview (Open Graph / Twitter Card)
+
+| File | Origin |
+|---|---|
+| `og-image.jpg` | Cropped from `_source/couple-original.png`, the same photo used in Closing |
+
+`couple-original.png` is portrait (818×1280) and sideways in the frame, per
+Closing's own README section above. A share-preview image can't be either of
+those — every platform crops portrait OG images unpredictably, and nobody
+should open a wedding link to see two sideways faces. So this one crop is
+rotated upright and cropped to the universal OG size (1200×630, 1.91:1) that
+this photo alone doesn't need to carry elsewhere:
+
+```python
+Image.open('_source/couple-original.png').convert('RGB') \
+     .rotate(-90, expand=True)                              # → 1280×818, upright
+     .crop((40, 0, 1240, 630))                               # center width, top-align height
+```
+
+Top-aligned rather than centred: both faces sit in the upper two-thirds of
+the upright photo, so a top crop keeps them whole and only trims the lower
+strip of clothing and the ring hand — cropping from the centre would have
+cut into a forehead instead. JPEG q90, 109KB.
+
+**Not wired to an absolute URL yet.** `og:image` and `twitter:image` in
+`index.html` currently point at the relative path `assets/img/og-image.jpg`,
+which resolves fine in a local preview but does nothing once the link is
+actually shared — WhatsApp, iMessage, and Facebook all fetch the image
+server-side, with no page context to resolve a relative path against. This
+needs `https://<real domain>/assets/img/og-image.jpg` once Phase 16
+(deploy) gives the site a permanent home; `og:url` has the same requirement
+and was left out entirely rather than filled with a guess.
