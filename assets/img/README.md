@@ -562,10 +562,25 @@ Measured: 818×1280 at scale 1.000 on a 1470px window, 390×610 at 390px.
 
 | File | Origin |
 |---|---|
-| `og-image.jpg` | `_source/og-image-childhood-original.png`, cropped in-repo |
-| `_source/og-image-childhood-original.png` | As supplied — a childhood polaroid of the two of you |
+| `og-image.jpg` | `_source/og-image-childhood-with-link-icon-original.jpg`, supplied ready-cropped |
+| `_source/og-image-childhood-with-link-icon-original.jpg` | As supplied — the same childhood polaroid, this time with a link-share icon baked in |
 
-## Current: the childhood polaroid
+## Current: the childhood polaroid, with the link-icon watermark
+
+Same photo as the version below (two kids hugging, curtain backdrop), but
+supplied a second time with a white chain-link badge over the centre — the
+same kind of share-link icon macOS stamps onto an image when generating a
+shareable link (seen once already on the couple photo, see "Superseded"
+below). Asked for explicitly, twice, "as it, with its water mark" — installed
+unmodified, no cropping needed since it arrived already at 1200×630.
+
+Re-encoded straight to JPEG q92 (no crop step, source was already the right
+shape): 94KB. The original PNG this was converted from lived only in this
+session's image cache and wasn't retained past it — `_source/
+og-image-childhood-with-link-icon-original.jpg` is the re-encoded JPEG
+itself, kept as the closest available record.
+
+## Superseded: the childhood polaroid, no icon
 
 Explicitly not the couple photo used in Closing — this is an old polaroid
 (two kids hugging, curtain backdrop) supplied separately and asked for by
