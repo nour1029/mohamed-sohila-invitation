@@ -24,8 +24,8 @@ const WEDDING = {
 
   couple: {
     // Order matters: `one` reads first in the hero stack.
-    one: 'Mazen',
-    two: 'Shams',
+    one: 'Mohamed',
+    two: 'Sohila',
     // Wax seal monogram (Phase 1 / Phase 2). NOTE: the envelope's still and
     // its opening film are photographed wax, not live text — they still
     // read "R&Z" and do not update from this value. See assets/img/README.md.
@@ -34,44 +34,27 @@ const WEDDING = {
 
   // ISO 8601 WITH offset. The offset is not optional — without it the
   // countdown silently shifts by the guest's own timezone.
-  // 29 Aug 2026, 5:00 PM, America/New_York (EDT, -04:00). Time carried over
-  // from the placeholder — confirm the actual ceremony start time.
-  datetime: '2026-08-29T17:00:00-04:00',
+  // 9 Oct 2026, 8:00 PM, Africa/Cairo. Egypt observes DST (EEST, +03:00)
+  // through late October, so +03:00 is correct for this date — verified
+  // against the IANA tz database (zoneinfo), not assumed.
+  datetime: '2026-10-09T20:00:00+03:00',
 
   // The wedding's own timezone. Everything printed on the page is rendered
   // in *this* zone, so a guest reading from Sydney still sees the date and
   // time the wedding actually happens at, not their local translation.
-  timezone: 'America/New_York',
+  timezone: 'Africa/Cairo',
 
   // How the date is printed in the hero. Mirrors the reference's `27.09.26`.
   dateFormat: 'dotted',
 
   venue: {
-    name: 'Laveora Wedding Hall',
-    addressLines: ['El Wahat Road, 6th of October City', 'Giza Governorate, Egypt'],
+    name: 'Romanica Hall',
+    addressLines: ['El-Mokattam, New Mokattam', 'Corniche, Cairo, Egypt'],
 
-    // Exact pin for the map embed and the Open in Maps link (Phase 8).
-    // Left null on purpose: nobody has supplied the hall's coordinates, and
-    // a guessed lat/lng drops a pin on the wrong building with complete
-    // confidence — worse than no pin. While this is null both the embed and
-    // the link fall back to searching the address text, which lands guests
-    // on the right road. Fill it in to pin the door exactly:
-    //   right-click the hall in Google Maps -> the first menu item is the
-    //   lat,lng -> paste as { lat: 29.97, lng: 30.93 }.
-    coords: null,
+    // Exact pin for the map embed and the Open in Maps link (Phase 8),
+    // from the Google Maps link supplied for this venue.
+    coords: { lat: 30.019312, lng: 31.320875 },
   },
-
-  // Rendered as "Our Love Timeline" in Phase 7. Originally the wedding-day
-  // run of show (times + events); repurposed as relationship milestones
-  // (dates + events) — the component only ever cared that each stop has a
-  // `time` label and an `event` line, so nothing else had to change.
-  // Add or remove stops freely.
-  schedule: [
-    { time: '01.05.2025', event: 'Our First Meeting' },
-    { time: '23.08.2025', event: 'She Said Yes'       },
-    { time: '29.10.2025', event: 'Engagement'         },
-    { time: '29.08.2026', event: 'Forever Begins'     },
-  ],
 
   // Phase 11. Relative path into assets/audio/, e.g. 'assets/audio/music.mp3'.
   // The player, the button and the start-on-open handoff are all built and
@@ -427,77 +410,6 @@ function initCountdown() {
   timer = window.setInterval(tick, MS.second);
 }
 
-/* ---------- 8 · Schedule (Phase 7) ------------------------- */
-
-function initSchedule() {
-  const list = document.getElementById('schedule-list');
-  if (!list) return;
-
-  const stops = WEDDING.schedule.map(({ time, event }) => {
-    const li = document.createElement('li');
-    li.className = 'timeline__stop';
-
-    const t = document.createElement('span');
-    t.className = 'timeline__time';
-    t.textContent = time;
-
-    const node = document.createElement('span');
-    node.className = 'timeline__node';
-    node.setAttribute('aria-hidden', 'true');
-
-    const e = document.createElement('span');
-    e.className = 'timeline__event';
-    e.textContent = event;
-
-    li.append(t, node, e);
-    return li;
-  });
-
-  list.replaceChildren(...stops);
-}
-
-/* The reference's peony is not pinned to the first stop — it migrates
-   down through every node as the guest scrolls (data-animate-sbs-event
-   "scroll", 5 keyframes at node-spaced offsets, triggered at the
-   viewport's midpoint). CSS alone can position it at the first node; the
-   travel itself needs scroll position, so it lives here as a
-   --rose-shift custom property .timeline::after reads.
-   Measures actual node centres rather than assuming the --row spacing,
-   so it holds if a label ever wraps to two lines and a row grows. */
-function initScheduleRose() {
-  const timeline = document.querySelector('.timeline');
-  const nodes = timeline?.querySelectorAll('.timeline__node');
-  if (!timeline || !nodes || nodes.length < 2) return;
-  if (prefersReducedMotion()) return;   // stays put at the first node
-
-  let ticking = false;
-
-  const update = () => {
-    ticking = false;
-    const rect = timeline.getBoundingClientRect();
-    const first = nodes[0].getBoundingClientRect();
-    const last = nodes[nodes.length - 1].getBoundingClientRect();
-    const travel = (last.top + last.height / 2) - (first.top + first.height / 2);
-
-    // 0 when the timeline's own top reaches mid-viewport, 1 once its
-    // bottom has — the same "trigger at 50%" the reference scrubs against.
-    let progress = (window.innerHeight * 0.5 - rect.top) / rect.height;
-    progress = Math.min(1, Math.max(0, progress));
-
-    timeline.style.setProperty('--rose-shift', `${(progress * travel).toFixed(1)}px`);
-  };
-
-  const onScroll = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(update);
-  };
-
-  update();
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-}
-
 /* ---------- 9 · Venue and map (Phase 8) --------------------
    The place lives only in WEDDING.venue; both the embed and the
    directions link are built from it here.
@@ -661,11 +573,6 @@ function initMusic() {
 document.addEventListener('DOMContentLoaded', () => {
   bindWeddingText();
   initGate();
-
-  // Schedule stops must exist before the observer numbers them for stagger,
-  // and before the rose can measure their positions.
-  initSchedule();
-  initScheduleRose();
   initCountdown();
   initVenue();
 

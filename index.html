@@ -6,26 +6,28 @@
 <meta name="theme-color" content="#F7EFDF">
 
 <title>Kattb Ketab Invitation</title>
-<meta name="description" content="You're invited to Mazen &amp; Shams's Kattb Ketab.">
+<meta name="description" content="You're invited to Mohamed &amp; Sohila's Kattb Ketab.">
 
 <!-- Open Graph / Twitter Card — what a guest sees when this link is pasted
      into WhatsApp, iMessage, or any chat app. Absolute URLs on the image
      and og:url are required, not stylistic — WhatsApp/iMessage/Facebook
      fetch the image server-side, with no browser to resolve a relative
-     path against. Pinned to the CNAME domain (solinvitations.com, apex —
-     GitHub Pages' own redirect target for this repo, confirmed live).
+     path against.
 
-     If the domain ever changes, these four lines are the only ones that
-     need to move with it. -->
+     This is the mohamed-tamer branch, not master — it is not deployed to
+     solinvitations.com (GitHub Pages only serves master; see PLAN.md /
+     the branch's own note below), so these still point at that domain
+     as inherited placeholders rather than a real link for this couple.
+     Update og:url once/if this branch ever gets its own deployment. -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://solinvitations.com/">
-<meta property="og:title" content="Mazen &amp; Shams">
+<meta property="og:title" content="Mohamed &amp; Sohila">
 <meta property="og:description" content="You're invited to our Kattb Ketab.">
 <meta property="og:image" content="https://solinvitations.com/assets/img/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Mazen &amp; Shams">
+<meta name="twitter:title" content="Mohamed &amp; Sohila">
 <meta name="twitter:description" content="You're invited to our Kattb Ketab.">
 <meta name="twitter:image" content="https://solinvitations.com/assets/img/og-image.jpg">
 
@@ -203,26 +205,6 @@
     </div>
   </section>
 
-  <!-- 5 · Schedule — Phase 7 -->
-  <section id="schedule" class="section">
-    <div class="section__inner">
-      <!-- card--paper: the reference's own photographed torn paper, as two
-           edge strips over a matching fill, so the card tears at top and
-           bottom at any height. -->
-      <article class="card card--paper">
-        <!-- heading--schedule swaps in the reference's own photographed gold
-             scrollwork (assets/img/schedule-flourish-*.png) in place of the
-             hand-drawn --filigree used by every other flourished heading. -->
-        <h2 class="heading heading--flourished heading--schedule" data-reveal>
-          <span>Our Love Timeline</span>
-        </h2>
-
-        <!-- Stops are generated from WEDDING.schedule -->
-        <ol class="timeline" id="schedule-list" role="list" data-reveal-stagger></ol>
-      </article>
-    </div>
-  </section>
-
   <!-- 6 · Venue + map — Phase 8 -->
   <section id="venue" class="section venue">
     <div class="section__inner">
@@ -284,18 +266,15 @@
     </div>
 
     <figure class="closing__figure" data-reveal>
-      <!-- The original file's own 818x1280, un-rotated, at your request. The
-           couple therefore read sideways in the frame: the phone recorded a
-           quarter turn in EXIF that the export dropped, so the pixels were
-           never turned. Rotating on the way in is a one-line change here and
-           in the encode step (see assets/img/README.md) if you want it back.
+      <!-- The polaroid photo you supplied, at its own 1024x1024, shipped
+           whole with its white border kept — see assets/img/README.md.
 
-           Capped at 818px so it is never enlarged past its true size — see
-           .closing__figure for why a portrait photo cannot also be
+           Capped at 1024px so it is never enlarged past its true size —
+           see .closing__figure for why a photo this shape cannot also be
            edge-to-edge on a desktop. -->
       <img class="closing__photo" src="assets/img/couple.jpg"
-           alt="The couple, leaning their heads together"
-           width="818" height="1280" loading="lazy" decoding="async">
+           alt="A polaroid-style photo of the two of you"
+           width="1024" height="1024" loading="lazy" decoding="async">
 
       <!-- TODO Phase 14: swap in the watercolour floral arch -->
       <div class="closing__arch closing__arch--start slot" aria-hidden="true">Floral</div>

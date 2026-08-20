@@ -475,6 +475,11 @@ else needs to change.
 
 # The couple photo (yours)
 
+> **Branch note:** on `mohamed-tamer`, `couple.jpg` is a different photo —
+> see "Mohamed & Sohila's closing photo" below. Everything else on this
+> page (rotation history, encoding rationale) describes the file as it
+> exists on `master`, for Mazen & Shams.
+
 | File | Origin |
 |---|---|
 | `couple.jpg` / `couple.webp` | Your own photo, supplied 2026-08-14 |
@@ -636,6 +641,33 @@ Top-aligned rather than centred: both faces sit in the upper two-thirds of
 the upright photo, so a top crop keeps them whole and only trims the lower
 strip of clothing and the ring hand — cropping from the centre would have
 cut into a forehead instead.
+
+---
+
+# Mohamed & Sohila's closing photo (`mohamed-tamer` branch only)
+
+| File | Origin |
+|---|---|
+| `couple.jpg` | Supplied for this branch — a polaroid-style photo of the two of you |
+| `_source/couple-mohamed-original.png` | As supplied, 1024×1024, before encoding |
+
+This overwrites `couple.jpg`, the same filename Mazen & Shams's photo used
+on `master`, so no code change was needed to swap it in — same pattern as
+every other asset swap in this project. The two files are unrelated;
+`master` keeps its own `couple.jpg` since branches don't share a working
+tree.
+
+Shipped whole, no crop: the photo already arrived at a clean square with
+its white polaroid-style border, and cropping the border off would have
+meant cutting into the border rather than the border being separate from
+the subjects — there was no clean line between "border" and "photo" to cut
+along that wouldn't also trim the kids. Re-encoded straight to JPEG q90
+(RGB, no transparency to preserve): 1024×1024, 89KB.
+
+`.closing__figure`'s `max-width` was moved from 818px (the old portrait
+photo's own width) to 1024px (this one's), and the `<img>`'s
+`width`/`height` attributes updated to match — same "never enlarge past
+native size" rule as before, just against a different native size.
 
 ## Absolute URL, confirmed live
 
